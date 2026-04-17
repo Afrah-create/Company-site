@@ -90,3 +90,50 @@ h6 {
     transform: translate(0, 0);
   }
 }
+
+.glitch-404 {
+  position: relative;
+  text-shadow:
+    0 0 0 transparent,
+    2px 0 var(--cyan),
+    -2px 0 var(--blue);
+  animation: glitchShift 2.2s infinite ease-in-out;
+}
+
+.glitch-404::before,
+.glitch-404::after {
+  content: "404";
+  position: absolute;
+  inset: 0;
+}
+
+.glitch-404::before {
+  color: var(--cyan);
+  transform: translate(2px, 0);
+  opacity: 0.45;
+}
+
+.glitch-404::after {
+  color: var(--blue);
+  transform: translate(-2px, 0);
+  opacity: 0.4;
+}
+
+@keyframes glitchShift {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  20% {
+    transform: translate(1px, -1px);
+  }
+  40% {
+    transform: translate(-1px, 1px);
+  }
+  60% {
+    transform: translate(1px, 1px);
+  }
+  80% {
+    transform: translate(-1px, -1px);
+  }
+}

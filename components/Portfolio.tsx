@@ -1,0 +1,164 @@
+"use client";
+
+import Link from "next/link";
+import Image from "next/image";
+import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
+import { useMemo, useState } from "react";
+
+type Category = "All" | "Web Apps" | "Mobile" | "Cybersecurity" | "Consulting";
+
+type Project = {
+  name: string;
+  stack: string[];
+  category: Exclude<Category, "All">;
+  imageClass: string;
+  spanClass: string;
+};
+
+const filters: Category[] = ["All", "Web Apps", "Mobile", "Cybersecurity", "Consulting"];
+
+const projects: Project[] = [
+  {
+    name: "E-Commerce Platform",
+    stack: ["React", "Node.js", "PostgreSQL"],
+    category: "Web Apps",
+    imageClass: "from-cyan-500/30 via-blue-500/20 to-indigo-600/25",
+    spanClass: "md:col-span-2 lg:col-span-1 lg:row-span-2",
+  },
+  {
+    name: "Banking Mobile App",
+    stack: ["Flutter", "Firebase"],
+    category: "Mobile",
+    imageClass: "from-blue-500/30 via-cyan-500/20 to-purple-600/25",
+    spanClass: "md:col-span-1 lg:col-span-1",
+  },
+  {
+    name: "Security Audit Dashboard",
+    stack: ["Next.js", "Python"],
+    category: "Cybersecurity",
+    imageClass: "from-purple-600/30 via-blue-600/20 to-cyan-500/20",
+    spanClass: "md:col-span-1 lg:col-span-1",
+  },
+  {
+    name: "Hospital Management System",
+    stack: ["React", "Express", "MySQL"],
+    category: "Web Apps",
+    imageClass: "from-cyan-400/25 via-sky-500/25 to-blue-700/30",
+    spanClass: "md:col-span-2 lg:col-span-2",
+  },
+  {
+    name: "DevOps Pipeline Tool",
+    stack: ["Docker", "Kubernetes", "CI/CD"],
+    category: "Consulting",
+    imageClass: "from-blue-700/30 via-indigo-600/25 to-cyan-500/25",
+    spanClass: "md:col-span-1 lg:col-span-1",
+  },
+  {
+    name: "Corporate Website Redesign",
+    stack: ["Next.js", "Framer Motion"],
+    category: "Consulting",
+    imageClass: "from-purple-500/25 via-cyan-500/20 to-blue-500/30",
+    spanClass: "md:col-span-1 lg:col-span-1",
+  },
+];
+
+export default function Portfolio() {
+  const [activeFilter, setActiveFilter] = useState<Category>("All");
+
+  const filteredProjects = useMemo(() => {
+    if (activeFilter === "All") return projects;
+    return projects.filter((project) => project.category === activeFilter);
+  }, [activeFilter]);
+
+  return (
+    <section id="portfolio" className="mx-auto mt-8 w-full max-w-6xl px-6 md:px-10">
+      <div className="text-center">
+        <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--cyan)]">
+          Portfolio
+        </p>
+        <h2 className="mt-3 text-3xl text-[var(--white)] sm:text-4xl">Our Work</h2>
+        <div className="mx-auto mt-4 flex items-center justify-center gap-3">
+          <span className="h-px w-10 bg-[var(--cyan)]/50" />
+          <span className="h-2 w-2 rounded-full bg-[var(--cyan)]" />
+          <span className="h-px w-10 bg-[var(--blue)]/60" />
+        </div>
+      </div>
+
+      <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
+        {filters.map((filter) => (
+          <button
+            key={filter}
+            type="button"
+            onClick={() => setActiveFilter(filter)}
+            className={`rounded-full border px-4 py-2 text-sm transition-all duration-300 ${
+              activeFilter === filter
+                ? "border-[var(--cyan)] bg-[var(--cyan)]/12 text-[var(--white)]"
+                : "border-[var(--border)] bg-[var(--surface)] text-[var(--muted)] hover:border-[var(--cyan)]/50 hover:text-[var(--white)]"
+            }`}
+          >
+            {filter}
+          </button>
+        ))}
+      </div>
+
+      <LayoutGroup>
+        <motion.div layout className="mt-8 grid auto-rows-[220px] grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+          <AnimatePresence mode="popLayout">
+            {filteredProjects.map((project) => (
+              <motion.article
+                key={project.name}
+                layout
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.35, ease: "easeOut" }}
+                className={`group relative overflow-hidden rounded-2xl border border-[var(--border)] bg-[#101010] ${project.spanClass}`}
+              >
+                <Image
+                  src="/project-placeholder.svg"
+                  alt={`${project.name} placeholder`}
+                  fill
+                  loading="lazy"
+                  className="object-cover opacity-30 transition-transform duration-500 group-hover:scale-105"
+                />
+                <div
+                  className={`absolute inset-0 bg-gradient-to-br ${project.imageClass} transition-transform duration-500 group-hover:scale-105`}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent opacity-90 transition-opacity duration-300 group-hover:opacity-100" />
+
+                <div className="absolute inset-x-0 bottom-0 z-10 p-5">
+                  <h3 className="font-heading text-xl text-[var(--white)]">{project.name}</h3>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {project.stack.map((item) => (
+                      <span
+                        key={`${project.name}-${item}`}
+                        className="rounded-full border border-[var(--cyan)]/70 bg-[var(--bg)]/40 px-2.5 py-1 text-xs text-[var(--cyan)]"
+                      >
+                        {item}
+                      </span>
+                    ))}
+                  </div>
+                  <button
+                    type="button"
+                    className="mt-4 inline-flex items-center text-sm font-medium text-[var(--white)] transition-transform duration-300 group-hover:translate-x-1"
+                  >
+                    View Project <span className="ml-1">→</span>
+                  </button>
+                </div>
+              </motion.article>
+            ))}
+          </AnimatePresence>
+        </motion.div>
+      </LayoutGroup>
+
+      <div className="mt-10 text-center">
+        <Link
+          href="#"
+          className="inline-flex items-center rounded-full border border-[var(--cyan)]/65 px-6 py-2.5 text-sm font-semibold text-[var(--white)] transition-colors duration-300 hover:bg-[var(--surface2)]"
+        >
+          View All Projects <span className="ml-1">→</span>
+        </Link>
+      </div>
+    </section>
+  );
+}

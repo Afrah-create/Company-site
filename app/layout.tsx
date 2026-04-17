@@ -15,8 +15,39 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "SlimCyberTech",
-  description: "Building the Future With Code",
+  metadataBase: new URL("https://slimcybertech.com"),
+  icons: {
+    icon: "/images/Logo.jpeg",
+    shortcut: "/images/Logo.jpeg",
+    apple: "/images/Logo.jpeg",
+  },
+  title: "SlimCyberTech | Software Development & Technology",
+  description:
+    "SlimCyberTech delivers software development, technology consulting, cybersecurity, and web/mobile app solutions for modern businesses.",
+  keywords: [
+    "SlimCyberTech",
+    "software development",
+    "technology consulting",
+    "cybersecurity",
+    "web development",
+    "mobile apps",
+    "Kampala software company",
+  ],
+  openGraph: {
+    title: "SlimCyberTech | Software Development & Technology",
+    description:
+      "Building the Future With Code through secure, scalable, and strategy-led engineering.",
+    images: ["/og-image.svg"],
+    type: "website",
+    siteName: "SlimCyberTech",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "SlimCyberTech | Software Development & Technology",
+    description:
+      "Software development, cybersecurity, and technology consulting for ambitious teams.",
+    images: ["/og-image.svg"],
+  },
 };
 
 export default function RootLayout({
