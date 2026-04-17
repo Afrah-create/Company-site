@@ -110,7 +110,7 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      className="relative flex min-h-[92svh] items-center overflow-hidden pb-14 pt-24 sm:min-h-screen sm:pb-16 sm:pt-32"
+      className="relative flex min-h-[94svh] items-center overflow-hidden pb-14 pt-24 sm:min-h-screen sm:pb-16 sm:pt-32"
     >
       <div className="absolute inset-0 -z-20">
         <Image
@@ -187,7 +187,7 @@ export default function Hero() {
           variants={itemVariants}
           initial="hidden"
           animate="visible"
-          className="max-w-full whitespace-nowrap text-[clamp(1rem,5.4vw,4.5rem)] font-bold leading-tight text-[var(--white)]"
+          className="mx-auto max-w-[16ch] text-balance text-[clamp(1.85rem,8.6vw,4.5rem)] font-bold leading-[1.12] text-[var(--white)] sm:max-w-full sm:whitespace-nowrap sm:leading-tight"
         >
           {heroHeading.slice(0, heroVisibleLength)}
           <span className="ml-1 inline-block h-[0.95em] w-[2px] animate-pulse bg-[var(--cyan)] align-[-0.1em]" />
@@ -198,7 +198,7 @@ export default function Hero() {
           variants={itemVariants}
           initial="hidden"
           animate="visible"
-          className="mt-5 max-w-3xl text-sm leading-7 text-[var(--muted)] sm:mt-6 sm:text-lg sm:leading-8"
+          className="mt-4 max-w-[34ch] text-sm leading-7 text-[var(--muted)] sm:mt-6 sm:max-w-3xl sm:text-lg sm:leading-8"
         >
           We craft cutting-edge software solutions that push the boundaries of what&apos;s
           possible.
@@ -211,7 +211,7 @@ export default function Hero() {
           animate="visible"
           className="mt-4 min-h-8 text-xs text-[var(--cyan)] sm:text-base"
         >
-          <span className="text-[var(--muted)]">Expertise: </span>
+          <span className="text-[var(--muted)]">Expertise:</span>{" "}
           <AnimatePresence mode="wait">
             <motion.span
               key={activeTextIndex}
@@ -219,7 +219,7 @@ export default function Hero() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.25 }}
-              className="inline-block min-w-[168px] text-left sm:min-w-[200px]"
+              className="inline-block min-w-[160px] text-left sm:min-w-[200px]"
             >
               {displayedText}
               <span className="ml-0.5 inline-block h-4 w-[2px] animate-pulse bg-[var(--cyan)] align-middle" />
@@ -232,17 +232,17 @@ export default function Hero() {
           variants={itemVariants}
           initial="hidden"
           animate="visible"
-          className="mt-8 flex w-full max-w-md flex-col gap-3 sm:mt-10 sm:flex-row sm:justify-center sm:gap-4"
+          className="mt-8 flex w-full max-w-xs flex-col gap-3 sm:mt-10 sm:max-w-md sm:flex-row sm:justify-center sm:gap-4"
         >
           <Link
             href="#contact"
-            className="rounded-full bg-[var(--gradient)] px-7 py-3 text-sm font-semibold text-[var(--white)] transition-transform duration-300 hover:-translate-y-0.5"
+            className="w-full rounded-full bg-[var(--gradient)] px-7 py-3 text-sm font-semibold text-[var(--white)] transition-transform duration-300 hover:-translate-y-0.5 sm:w-auto"
           >
             Start a Project
           </Link>
           <Link
             href="#portfolio"
-            className="rounded-full border border-[var(--cyan)]/60 bg-transparent px-7 py-3 text-sm font-semibold text-[var(--white)] transition-colors duration-300 hover:border-[var(--blue)] hover:bg-[var(--surface2)]"
+            className="w-full rounded-full border border-[var(--cyan)]/60 bg-transparent px-7 py-3 text-sm font-semibold text-[var(--white)] transition-colors duration-300 hover:border-[var(--blue)] hover:bg-[var(--surface2)] sm:w-auto"
           >
             View Our Work
           </Link>
@@ -253,9 +253,9 @@ export default function Hero() {
           variants={itemVariants}
           initial="hidden"
           animate="visible"
-          className="mt-7 w-full max-w-3xl sm:mt-8"
+          className="mt-8 w-full max-w-3xl sm:mt-8"
         >
-          <div className="relative h-[150px] overflow-hidden rounded-2xl border border-[var(--border)] bg-black/40 sm:h-[170px]">
+          <div className="relative h-[155px] overflow-hidden rounded-2xl border border-[var(--border)] bg-black/40 sm:h-[170px]">
             <Image
               src="/images/Gemini_Generated_Image_lyyz1qlyyz1qlyyz.png"
               alt="SlimCyberTech engineering control room"
@@ -269,7 +269,7 @@ export default function Hero() {
       </div>
 
       <motion.div
-        className="absolute bottom-5 left-1/2 z-10 -translate-x-1/2 text-[var(--cyan)]/75 sm:bottom-7"
+        className="absolute bottom-4 left-1/2 z-10 -translate-x-1/2 text-[var(--cyan)]/75 sm:bottom-7"
         animate={{ y: [0, 8, 0] }}
         transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
       >

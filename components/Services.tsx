@@ -65,8 +65,8 @@ export default function Services() {
       </div>
       <div className="absolute inset-0 -z-10 rounded-2xl bg-black/55" />
 
-      <div className="pointer-events-none absolute left-1/2 top-24 -z-10 -translate-x-1/2 select-none text-center sm:top-28">
-        <p className="font-heading text-4xl font-bold tracking-[0.22em] text-[var(--white)]/[0.04] sm:text-7xl sm:tracking-[0.3em] lg:text-8xl">
+      <div className="pointer-events-none absolute left-1/2 top-28 -z-10 hidden -translate-x-1/2 select-none text-center sm:top-28 sm:block">
+        <p className="font-heading text-7xl font-bold tracking-[0.3em] text-[var(--white)]/[0.03] lg:text-8xl">
           SERVICES
         </p>
       </div>
@@ -74,7 +74,7 @@ export default function Services() {
       <div className="mb-8 text-center sm:mb-10">
         <h2 className="text-2xl font-bold text-[var(--white)] sm:text-3xl md:text-4xl">Our Services</h2>
         <div className="mx-auto mt-3 h-1 w-28 rounded-full bg-[var(--gradient)]" />
-        <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-[var(--muted)] sm:text-base">
+        <p className="mx-auto mt-4 max-w-[34ch] text-sm leading-7 text-[var(--muted)] sm:max-w-2xl sm:text-base">
           End-to-end engineering expertise to design, build, secure, and scale modern products.
         </p>
       </div>
@@ -87,7 +87,7 @@ export default function Services() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.45, delay: index * 0.08, ease: "easeOut" }}
-            className="group relative overflow-hidden rounded-2xl border border-[#222] bg-[#111] p-5 sm:p-6 transition-all duration-300 hover:-translate-y-1 hover:border-[var(--cyan)]/70 hover:shadow-[0_16px_40px_-20px_rgba(0,198,255,0.55)]"
+            className="group relative min-h-[230px] overflow-hidden rounded-2xl border border-[#222] bg-[#111] p-5 sm:min-h-[250px] sm:p-6 transition-all duration-300 hover:-translate-y-1 hover:border-[var(--cyan)]/70 hover:shadow-[0_16px_40px_-20px_rgba(0,198,255,0.55)]"
           >
             <Image
               src={service.image}
@@ -120,7 +120,9 @@ export default function Services() {
               </svg>
             </div>
 
-            <h3 className="relative z-10 font-heading text-xl text-[var(--white)]">{service.title}</h3>
+            <h3 className="relative z-10 font-heading text-xl leading-snug text-[var(--white)]">
+              {service.title}
+            </h3>
             <p className="relative z-10 mt-3 text-sm leading-7 text-[var(--muted)]">{service.description}</p>
 
             <Link
