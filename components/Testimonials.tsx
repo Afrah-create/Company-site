@@ -172,7 +172,11 @@ export default function Testimonials() {
           whileInView="visible"
           viewport={VIEWPORT_ONCE}
         >
-          <p className="pointer-events-none absolute left-0 top-2 hidden select-none font-heading text-6xl font-bold tracking-[0.25em] text-[var(--white)]/[0.04] md:block">
+          <p
+            className="pointer-events-none absolute -top-3 left-0 -z-10 hidden select-none font-heading text-5xl font-bold tracking-[0.2em] lg:block"
+            style={{ color: "color-mix(in srgb, var(--white) 7%, transparent)" }}
+            aria-hidden="true"
+          >
             REVIEWS
           </p>
 

@@ -198,7 +198,7 @@ export default function Hero() {
           variants={itemVariants}
           initial="hidden"
           animate="visible"
-          className="mt-4 max-w-[34ch] text-sm leading-7 text-[var(--muted-strong)] sm:mt-6 sm:max-w-3xl sm:text-lg sm:leading-8"
+          className="mt-4 max-w-[34ch] text-sm leading-7 text-[var(--white)] sm:mt-6 sm:max-w-3xl sm:text-lg sm:leading-8"
         >
           We craft cutting-edge software solutions that push the boundaries of what&apos;s
           possible.
