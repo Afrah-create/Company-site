@@ -9,7 +9,7 @@ const team = [
   {
     name: "Lema Aaron",
     role: "CEO & Software Engineer",
-    image: "/images/Lema Aaron.jpeg",
+    image: "/images/Lema.jpeg",
     alt: "Lema Aaron portrait",
     specialties: ["Leadership", "Software Engineering"],
   },
