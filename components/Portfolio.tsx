@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
+import { X } from "lucide-react";
 import { useMemo, useState } from "react";
 import { fadeUp, VIEWPORT_ONCE } from "@/lib/motion";
 
@@ -15,6 +16,8 @@ type Project = {
   imageSrc: string;
   imageAlt: string;
   spanClass: string;
+  summary: string;
+  result: string;
 };
 
 const filters: Category[] = ["All", "Web Apps", "Mobile", "Cybersecurity", "Consulting"];
@@ -27,6 +30,8 @@ const projects: Project[] = [
     imageSrc: "/images/Gemini_Generated_Image_lrj1vslrj1vslrj1.png",
     imageAlt: "E-commerce dashboard development screens",
     spanClass: "md:col-span-2 lg:col-span-1 lg:row-span-2",
+    summary: "Rebuilt storefront and admin workflows for conversion, speed, and maintainability.",
+    result: "+42% checkout conversion",
   },
   {
     name: "Banking Mobile App",
@@ -35,6 +40,8 @@ const projects: Project[] = [
     imageSrc: "/images/Gemini_Generated_Image_v2mvw4v2mvw4v2mv.png",
     imageAlt: "Secure mobile application interface",
     spanClass: "md:col-span-1 lg:col-span-1",
+    summary: "Delivered a secure mobile banking flow with offline-safe architecture.",
+    result: "10k+ monthly active users",
   },
   {
     name: "Security Audit Dashboard",
@@ -43,6 +50,8 @@ const projects: Project[] = [
     imageSrc: "/images/Gemini_Generated_Image_b1llneb1llneb1ll.png",
     imageAlt: "Cybersecurity dashboard on mobile devices",
     spanClass: "md:col-span-1 lg:col-span-1",
+    summary: "Unified vulnerability reporting and remediation lifecycle across teams.",
+    result: "63% faster incident response",
   },
   {
     name: "Hospital Management System",
@@ -51,6 +60,8 @@ const projects: Project[] = [
     imageSrc: "/images/Gemini_Generated_Image_i7tu12i7tu12i7tu.png",
     imageAlt: "Analytics workstation for healthcare operations",
     spanClass: "md:col-span-2 lg:col-span-2",
+    summary: "Modernized legacy modules and introduced role-aware analytics workflows.",
+    result: "300% faster reporting",
   },
   {
     name: "DevOps Pipeline Tool",
@@ -59,6 +70,8 @@ const projects: Project[] = [
     imageSrc: "/images/Gemini_Generated_Image_j5kqdlj5kqdlj5kq.png",
     imageAlt: "Performance dashboard for infrastructure monitoring",
     spanClass: "md:col-span-1 lg:col-span-1",
+    summary: "Implemented deployment pipelines with observability and rollback protections.",
+    result: "75% fewer deployment errors",
   },
   {
     name: "Corporate Website Redesign",
@@ -67,11 +80,14 @@ const projects: Project[] = [
     imageSrc: "/images/Gemini_Generated_Image_fbrzw4fbrzw4fbrz (1).png",
     imageAlt: "Brand and interface design board on monitor",
     spanClass: "md:col-span-1 lg:col-span-1",
+    summary: "Redesigned UX hierarchy and brand system for trust and conversion.",
+    result: "+58% session engagement",
   },
 ];
 
 export default function Portfolio() {
   const [activeFilter, setActiveFilter] = useState<Category>("All");
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   const filteredProjects = useMemo(() => {
     if (activeFilter === "All") return projects;
@@ -152,6 +168,7 @@ export default function Portfolio() {
                   <h3 className="font-heading text-[1.05rem] leading-snug text-[var(--white)] sm:text-xl">
                     {project.name}
                   </h3>
+                  <p className="mt-2 text-xs text-[var(--cyan)]">{project.result}</p>
                   <div className="mt-3 flex flex-wrap gap-2">
                     {project.stack.map((item) => (
                       <span
@@ -164,6 +181,7 @@ export default function Portfolio() {
                   </div>
                   <button
                     type="button"
+                    onClick={() => setSelectedProject(project)}
                     className="mt-4 inline-flex items-center text-sm font-medium text-[var(--white)] transition-transform duration-300 group-hover:translate-x-1"
                   >
                     View Project <span className="ml-1">→</span>
@@ -183,6 +201,64 @@ export default function Portfolio() {
           View All Projects <span className="ml-1">→</span>
         </Link>
       </div>
+
+      <AnimatePresence>
+        {selectedProject && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[110] flex items-end justify-center bg-black/70 p-4 md:items-center"
+            onClick={() => setSelectedProject(null)}
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 24, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 18, scale: 0.98 }}
+              transition={{ duration: 0.25 }}
+              className="w-full max-w-2xl rounded-2xl border border-[var(--border)] bg-[#0f1115] p-5 sm:p-6"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <div className="mb-4 flex items-start justify-between gap-3">
+                <div>
+                  <h3 className="font-heading text-xl text-[var(--white)]">{selectedProject.name}</h3>
+                  <p className="mt-1 text-xs text-[var(--cyan)]">{selectedProject.result}</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setSelectedProject(null)}
+                  className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-[var(--border)] text-[var(--white)]"
+                  aria-label="Close project details"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+
+              <div className="relative h-44 overflow-hidden rounded-xl border border-[var(--border)]">
+                <Image
+                  src={selectedProject.imageSrc}
+                  alt={selectedProject.imageAlt}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+
+              <p className="mt-4 text-sm leading-7 text-[var(--muted)]">{selectedProject.summary}</p>
+
+              <div className="mt-4 flex flex-wrap gap-2">
+                {selectedProject.stack.map((item) => (
+                  <span
+                    key={`${selectedProject.name}-modal-${item}`}
+                    className="rounded-full border border-[var(--cyan)]/60 bg-[var(--bg)]/40 px-2.5 py-1 text-xs text-[var(--cyan)]"
+                  >
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }

@@ -8,8 +8,12 @@ import Navbar from "@/components/Navbar";
 import About from "@/components/About";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
+import AmbientBackground from "@/components/AmbientBackground";
+import CustomCursor from "@/components/CustomCursor";
 import FloatingChatButton from "@/components/FloatingChatButton";
 import Loader from "@/components/Loader";
+import ProcessTimeline from "@/components/ProcessTimeline";
+import ProofStrip from "@/components/ProofStrip";
 import ScrollToTop from "@/components/ScrollToTop";
 import Services from "@/components/Services";
 import Team from "@/components/Team";
@@ -33,13 +37,16 @@ export default function Home() {
   return (
     <MotionConfig reducedMotion="user">
       <main className="relative">
+        <AmbientBackground />
         <AnimatePresence>{isLoading && <Loader />}</AnimatePresence>
 
         <Navbar />
         <Hero />
+        <ProofStrip />
         <div style={{ contentVisibility: "auto" }}>
           <Services />
         </div>
+        <ProcessTimeline />
         <div style={{ contentVisibility: "auto" }}>
           <About />
         </div>
@@ -58,6 +65,7 @@ export default function Home() {
         <Footer />
         <ScrollToTop />
         <FloatingChatButton />
+        <CustomCursor />
       </main>
     </MotionConfig>
   );

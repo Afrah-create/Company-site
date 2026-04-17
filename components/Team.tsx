@@ -73,6 +73,8 @@ export default function Team() {
       key={key}
       variants={staggerItem}
       custom={index}
+      whileHover={{ rotateX: 1.8, rotateY: -1.8 }}
+      style={{ transformStyle: "preserve-3d" }}
       initial="hidden"
       whileInView="visible"
       viewport={VIEWPORT_ONCE}

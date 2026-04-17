@@ -5,6 +5,7 @@ import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
+import { useActiveSection } from "@/hooks/useActiveSection";
 import { useScrollPosition } from "@/hooks/useScrollPosition";
 
 const navLinks = [
@@ -39,6 +40,7 @@ const linkVariants = {
 export default function Navbar() {
   const isScrolled = useScrollPosition(24);
   const [isOpen, setIsOpen] = useState(false);
+  const activeSection = useActiveSection();
 
   return (
     <>
@@ -77,15 +79,28 @@ export default function Navbar() {
               <Link
                 key={item.label}
                 href={item.href}
-                className="group relative text-sm font-medium text-[var(--white)]/90 transition-colors hover:text-[var(--white)]"
+                className={`group relative text-sm font-medium transition-colors hover:text-[var(--white)] ${
+                  activeSection === item.href.replace("#", "")
+                    ? "text-[var(--white)]"
+                    : "text-[var(--white)]/90"
+                }`}
               >
                 {item.label}
-                <span className="absolute -bottom-1 left-0 h-[2px] w-full origin-left scale-x-0 bg-[var(--cyan)] transition-transform duration-300 ease-out group-hover:scale-x-100" />
+                <span
+                  className={`absolute -bottom-1 left-0 h-[2px] w-full origin-left bg-[var(--cyan)] transition-transform duration-300 ease-out ${
+                    activeSection === item.href.replace("#", "")
+                      ? "scale-x-100"
+                      : "scale-x-0 group-hover:scale-x-100"
+                  }`}
+                />
               </Link>
             ))}
           </div>
 
-          <div className="hidden md:block">
+          <div className="hidden items-center gap-3 md:flex">
+            <span className="rounded-full border border-[var(--cyan)]/40 bg-[var(--cyan)]/10 px-3 py-1 text-[10px] uppercase tracking-[0.12em] text-[var(--cyan)]">
+              {navLinks.find((item) => item.href.replace("#", "") === activeSection)?.label ?? "Home"}
+            </span>
             <Link
               href="#contact"
               className="group inline-flex rounded-full bg-[var(--gradient)] p-[1px] transition-transform duration-300 hover:-translate-y-0.5"

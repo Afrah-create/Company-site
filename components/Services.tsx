@@ -94,6 +94,8 @@ export default function Services() {
       key={key}
       variants={staggerItem}
       custom={index}
+      whileHover={{ rotateX: 1.6, rotateY: -1.6 }}
+      style={{ transformStyle: "preserve-3d" }}
       className="group relative overflow-hidden rounded-2xl border border-[#222] bg-[#0f1115] p-5 sm:p-6 transition-all duration-300 hover:-translate-y-1 hover:border-[var(--cyan)]/65 hover:shadow-[0_16px_40px_-24px_rgba(0,198,255,0.35)]"
     >
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.02),transparent_40%)]" />
