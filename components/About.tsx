@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion, useInView } from "framer-motion";
 import { CheckCircle2 } from "lucide-react";
 import { useRef } from "react";
@@ -107,36 +108,28 @@ export default function About() {
           className="relative"
         >
           <div className="pointer-events-none absolute -inset-2 -z-10 rounded-3xl bg-[radial-gradient(circle_at_center,rgba(0,198,255,0.2),transparent_62%)] blur-2xl" />
-          <div className="overflow-hidden rounded-2xl border border-[var(--border)] bg-[#0d0d0d] shadow-[0_0_0_1px_rgba(0,198,255,0.06),0_24px_60px_-32px_rgba(0,114,255,0.4)]">
-            <div className="flex items-center gap-2 border-b border-[var(--border)] bg-black/25 px-4 py-3">
-              <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f56]" />
-              <span className="h-2.5 w-2.5 rounded-full bg-[#ffbd2e]" />
-              <span className="h-2.5 w-2.5 rounded-full bg-[#27c93f]" />
+          <div className="relative overflow-hidden rounded-2xl border border-[var(--border)] bg-[#0d0d0d] shadow-[0_0_0_1px_rgba(0,198,255,0.06),0_24px_60px_-32px_rgba(0,114,255,0.4)]">
+            <div className="relative h-[360px]">
+              <Image
+                src="/images/Gemini_Generated_Image_59g3zf59g3zf59g3.png"
+                alt="SlimCyberTech engineering workspace"
+                fill
+                placeholder="blur"
+                blurDataURL="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxNicgaGVpZ2h0PSc5Jz48cmVjdCB3aWR0aD0nMTYnIGhlaWdodD0nOScgZmlsbD0nIzA1MGIxYScvPjwvc3ZnPg=="
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/35 to-transparent" />
             </div>
-            <pre className="overflow-x-auto p-5 text-sm leading-7 text-[var(--white)]">
-              <code>
-                <span className="text-[var(--cyan)]">const</span>{" "}
-                <span className="text-[var(--white)]">solution</span>{" "}
-                <span className="text-[var(--blue)]">=</span>{" "}
-                <span className="text-[var(--white)]">SlimCyberTech</span>
-                <span className="text-[var(--blue)]">.</span>
-                <span className="text-[var(--cyan)]">build</span>
-                <span className="text-[var(--white)]">({"{"}</span>
-                {"\n  "}
-                <span className="text-[var(--white)]">strategy:</span>{" "}
-                <span className="text-[var(--blue)]">&quot;outcome-driven&quot;</span>
-                <span className="text-[var(--white)]">,</span>
-                {"\n  "}
-                <span className="text-[var(--white)]">architecture:</span>{" "}
-                <span className="text-[var(--blue)]">&quot;secure-by-design&quot;</span>
-                <span className="text-[var(--white)]">,</span>
-                {"\n  "}
-                <span className="text-[var(--white)]">delivery:</span>{" "}
-                <span className="text-[var(--blue)]">&quot;scalable&quot;</span>
-                {"\n"}
-                <span className="text-[var(--white)]">{"}"});</span>
-              </code>
-            </pre>
+            <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between rounded-xl border border-[var(--border)] bg-black/70 px-4 py-3 backdrop-blur-sm">
+              <p className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">Secure by Design</p>
+              <Image
+                src="/images/Logo.jpeg"
+                alt="SlimCyberTech mark"
+                width={34}
+                height={34}
+                className="h-8 w-8 rounded-md object-cover"
+              />
+            </div>
           </div>
         </motion.div>
       </div>

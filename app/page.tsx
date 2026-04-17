@@ -12,6 +12,7 @@ import FloatingChatButton from "@/components/FloatingChatButton";
 import Loader from "@/components/Loader";
 import ScrollToTop from "@/components/ScrollToTop";
 import Services from "@/components/Services";
+import Team from "@/components/Team";
 
 const Portfolio = dynamic(() => import("@/components/Portfolio"), {
   loading: () => <div className="mx-auto mt-8 h-[320px] w-full max-w-6xl px-6 md:px-10" />,
@@ -40,6 +41,9 @@ export default function Home() {
       </div>
       <div style={{ contentVisibility: "auto" }}>
         <About />
+      </div>
+      <div style={{ contentVisibility: "auto" }}>
+        <Team />
       </div>
       <div style={{ contentVisibility: "auto" }}>
         <Portfolio />

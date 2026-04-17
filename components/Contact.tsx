@@ -1,6 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
+import Image from "next/image";
 import {
   CheckCircle2,
   LoaderCircle,
@@ -40,6 +41,15 @@ export default function Contact() {
   return (
     <section id="contact" className="mx-auto mt-8 w-full max-w-6xl px-6 md:px-10">
       <div className="relative overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface)]/80 p-6 md:p-8">
+        <Image
+          src="/images/Gemini_Generated_Image_gzo9l6gzo9l6gzo9.png"
+          alt="Circuit board background texture"
+          fill
+          loading="lazy"
+          className="object-cover opacity-22"
+        />
+        <div className="absolute inset-0 bg-black/60" />
+
         <AnimatePresence>
           {showSuccess && (
             <motion.div
@@ -55,7 +65,7 @@ export default function Contact() {
           )}
         </AnimatePresence>
 
-        <div className="mb-8 text-center">
+        <div className="relative z-10 mb-8 text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--cyan)]">
             Contact
           </p>
@@ -64,7 +74,7 @@ export default function Contact() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+        <div className="relative z-10 grid grid-cols-1 gap-8 lg:grid-cols-2">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <input

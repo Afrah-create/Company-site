@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 const rotatingText = [
   "Software Development",
@@ -36,9 +37,10 @@ const itemVariants = {
 export default function Hero() {
   const [activeTextIndex, setActiveTextIndex] = useState(0);
   const [visibleLength, setVisibleLength] = useState(0);
+  const [particles, setParticles] = useState<Particle[]>([]);
 
-  const particles = useMemo<Particle[]>(
-    () =>
+  useEffect(() => {
+    setParticles(
       Array.from({ length: 18 }).map((_, index) => ({
         id: index,
         size: 2 + Math.random() * 2.2,
@@ -47,8 +49,8 @@ export default function Hero() {
         dx: -0.018 + Math.random() * 0.036,
         dy: -0.02 + Math.random() * 0.04,
       })),
-    [],
-  );
+    );
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -82,6 +84,19 @@ export default function Hero() {
       id="home"
       className="relative flex min-h-screen items-center overflow-hidden pb-16 pt-28 sm:pt-32"
     >
+      <div className="absolute inset-0 -z-20">
+        <Image
+          src="/images/Gemini_Generated_Image_wsz9hbwsz9hbwsz9.png"
+          alt="Futuristic analytics visualization background"
+          fill
+          priority
+          placeholder="blur"
+          blurDataURL="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxNicgaGVpZ2h0PSc5Jz48cmVjdCB3aWR0aD0nMTYnIGhlaWdodD0nOScgZmlsbD0nIzA0MGExNScvPjwvc3ZnPg=="
+          className="object-cover"
+        />
+      </div>
+      <div className="absolute inset-0 -z-10 bg-black/65" />
+
       <div className="pointer-events-none absolute inset-0 opacity-35">
         <svg className="h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
           {particles.map((particle, index) => (
@@ -146,9 +161,7 @@ export default function Hero() {
           animate="visible"
           className="text-4xl font-bold leading-tight text-[var(--white)] sm:text-5xl lg:text-7xl"
         >
-          Building The Future
-          <br />
-          <span className="bg-[var(--gradient)] bg-clip-text text-transparent">With Code</span>
+          Building The Future with Code
         </motion.h1>
 
         <motion.p
@@ -204,6 +217,25 @@ export default function Hero() {
           >
             View Our Work
           </Link>
+        </motion.div>
+
+        <motion.div
+          custom={4}
+          variants={itemVariants}
+          initial="hidden"
+          animate="visible"
+          className="mt-8 w-full max-w-3xl"
+        >
+          <div className="relative h-[170px] overflow-hidden rounded-2xl border border-[var(--border)] bg-black/40">
+            <Image
+              src="/images/Gemini_Generated_Image_lyyz1qlyyz1qlyyz.png"
+              alt="SlimCyberTech engineering control room"
+              fill
+              loading="lazy"
+              className="object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/65 via-black/30 to-black/50" />
+          </div>
         </motion.div>
       </div>
 

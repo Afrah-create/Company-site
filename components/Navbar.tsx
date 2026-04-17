@@ -54,21 +54,22 @@ export default function Navbar() {
             <Image
               src="/images/Logo.jpeg"
               alt="SlimCyberTech logo"
-              width={44}
-              height={44}
+              width={42}
+              height={42}
               priority
               className="h-9 w-9 rounded-md object-cover sm:h-10 sm:w-10"
             />
-            <div className="min-w-0">
-              <p className="truncate font-heading text-sm leading-tight sm:text-base">
-                <span className="text-[var(--white)]">Slim</span>
-                <span className="text-[var(--cyan)]">Cyber</span>
-                <span className="text-[var(--white)]">Tech</span>
-              </p>
-              <p className="truncate font-heading text-[9px] uppercase tracking-[0.16em] text-[var(--muted)] sm:text-[10px]">
-                Building the future with code
-              </p>
-            </div>
+            <span className="leading-none">
+              <span className="text-base font-semibold tracking-[0.02em] text-[var(--white)] sm:text-lg">
+                Slim
+              </span>
+              <span className="text-base font-semibold tracking-[0.02em] text-[var(--cyan)] sm:text-lg">
+                Cyber
+              </span>
+              <span className="text-base font-semibold tracking-[0.02em] text-[var(--blue)] sm:text-lg">
+                Tech
+              </span>
+            </span>
           </Link>
 
           <div className="hidden items-center gap-8 md:flex">

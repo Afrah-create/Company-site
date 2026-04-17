@@ -1,6 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
+import Image from "next/image";
 import { ChevronLeft, ChevronRight, Quote, Star } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -9,8 +10,8 @@ type Testimonial = {
   name: string;
   role: string;
   company: string;
-  initials: string;
-  avatarGradient: string;
+  avatar: string;
+  avatarAlt: string;
 };
 
 const testimonials: Testimonial[] = [
@@ -20,8 +21,8 @@ const testimonials: Testimonial[] = [
     name: "Amina Patel",
     role: "Head of Product",
     company: "NorthBridge Commerce",
-    initials: "AP",
-    avatarGradient: "from-cyan-500 to-blue-600",
+    avatar: "/images/Gemini_Generated_Image_v9nafhv9nafhv9na.png",
+    avatarAlt: "Client representative portrait",
   },
   {
     quote:
@@ -29,8 +30,8 @@ const testimonials: Testimonial[] = [
     name: "Daniel Brooks",
     role: "CTO",
     company: "Summit Financial",
-    initials: "DB",
-    avatarGradient: "from-blue-500 to-indigo-600",
+    avatar: "/images/Gemini_Generated_Image_jlls3xjlls3xjlls.png",
+    avatarAlt: "Client technical lead portrait",
   },
   {
     quote:
@@ -38,8 +39,8 @@ const testimonials: Testimonial[] = [
     name: "Lina Romero",
     role: "Operations Director",
     company: "MediCore Systems",
-    initials: "LR",
-    avatarGradient: "from-sky-500 to-cyan-600",
+    avatar: "/images/Gemini_Generated_Image_i7tu12i7tu12i7tu.png",
+    avatarAlt: "Client operations lead at workstation",
   },
   {
     quote:
@@ -47,8 +48,8 @@ const testimonials: Testimonial[] = [
     name: "Ethan Cole",
     role: "VP Engineering",
     company: "Vertex Digital",
-    initials: "EC",
-    avatarGradient: "from-cyan-500 to-purple-600",
+    avatar: "/images/Gemini_Generated_Image_7jhpez7jhpez7jhp.png",
+    avatarAlt: "Engineering leader in remote collaboration setup",
   },
 ];
 
@@ -132,10 +133,8 @@ export default function Testimonials() {
                 </div>
 
                 <div className="mt-7 flex flex-col items-center">
-                  <div
-                    className={`flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br ${active.avatarGradient} text-sm font-semibold text-white`}
-                  >
-                    {active.initials}
+                  <div className="relative h-14 w-14 overflow-hidden rounded-full border border-[var(--border)]">
+                    <Image src={active.avatar} alt={active.avatarAlt} fill loading="lazy" className="object-cover" />
                   </div>
                   <p className="mt-4 font-heading text-lg text-[var(--white)]">{active.name}</p>
                   <p className="text-sm text-[var(--muted)]">

@@ -11,7 +11,8 @@ type Project = {
   name: string;
   stack: string[];
   category: Exclude<Category, "All">;
-  imageClass: string;
+  imageSrc: string;
+  imageAlt: string;
   spanClass: string;
 };
 
@@ -22,42 +23,48 @@ const projects: Project[] = [
     name: "E-Commerce Platform",
     stack: ["React", "Node.js", "PostgreSQL"],
     category: "Web Apps",
-    imageClass: "from-cyan-500/30 via-blue-500/20 to-indigo-600/25",
+    imageSrc: "/images/Gemini_Generated_Image_lrj1vslrj1vslrj1.png",
+    imageAlt: "E-commerce dashboard development screens",
     spanClass: "md:col-span-2 lg:col-span-1 lg:row-span-2",
   },
   {
     name: "Banking Mobile App",
     stack: ["Flutter", "Firebase"],
     category: "Mobile",
-    imageClass: "from-blue-500/30 via-cyan-500/20 to-purple-600/25",
+    imageSrc: "/images/Gemini_Generated_Image_v2mvw4v2mvw4v2mv.png",
+    imageAlt: "Secure mobile application interface",
     spanClass: "md:col-span-1 lg:col-span-1",
   },
   {
     name: "Security Audit Dashboard",
     stack: ["Next.js", "Python"],
     category: "Cybersecurity",
-    imageClass: "from-purple-600/30 via-blue-600/20 to-cyan-500/20",
+    imageSrc: "/images/Gemini_Generated_Image_b1llneb1llneb1ll.png",
+    imageAlt: "Cybersecurity dashboard on mobile devices",
     spanClass: "md:col-span-1 lg:col-span-1",
   },
   {
     name: "Hospital Management System",
     stack: ["React", "Express", "MySQL"],
     category: "Web Apps",
-    imageClass: "from-cyan-400/25 via-sky-500/25 to-blue-700/30",
+    imageSrc: "/images/Gemini_Generated_Image_i7tu12i7tu12i7tu.png",
+    imageAlt: "Analytics workstation for healthcare operations",
     spanClass: "md:col-span-2 lg:col-span-2",
   },
   {
     name: "DevOps Pipeline Tool",
     stack: ["Docker", "Kubernetes", "CI/CD"],
     category: "Consulting",
-    imageClass: "from-blue-700/30 via-indigo-600/25 to-cyan-500/25",
+    imageSrc: "/images/Gemini_Generated_Image_j5kqdlj5kqdlj5kq.png",
+    imageAlt: "Performance dashboard for infrastructure monitoring",
     spanClass: "md:col-span-1 lg:col-span-1",
   },
   {
     name: "Corporate Website Redesign",
     stack: ["Next.js", "Framer Motion"],
     category: "Consulting",
-    imageClass: "from-purple-500/25 via-cyan-500/20 to-blue-500/30",
+    imageSrc: "/images/Gemini_Generated_Image_fbrzw4fbrzw4fbrz (1).png",
+    imageAlt: "Brand and interface design board on monitor",
     spanClass: "md:col-span-1 lg:col-span-1",
   },
 ];
@@ -115,14 +122,11 @@ export default function Portfolio() {
                 className={`group relative overflow-hidden rounded-2xl border border-[var(--border)] bg-[#101010] ${project.spanClass}`}
               >
                 <Image
-                  src="/project-placeholder.svg"
-                  alt={`${project.name} placeholder`}
+                  src={project.imageSrc}
+                  alt={project.imageAlt}
                   fill
                   loading="lazy"
-                  className="object-cover opacity-30 transition-transform duration-500 group-hover:scale-105"
-                />
-                <div
-                  className={`absolute inset-0 bg-gradient-to-br ${project.imageClass} transition-transform duration-500 group-hover:scale-105`}
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent opacity-90 transition-opacity duration-300 group-hover:opacity-100" />
 

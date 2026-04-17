@@ -33,10 +33,10 @@ export default function Footer() {
         <div className="mb-10">
           <Link href="#home" className="inline-flex items-center gap-2">
             <Image
-              src="/images/Logo.jpeg"
-              alt="SlimCyberTech logo"
-              width={156}
-              height={44}
+              src="/images/Slim.jpeg"
+              alt="SlimCyberTech company wordmark"
+              width={260}
+              height={74}
               loading="lazy"
               className="h-10 w-auto object-contain"
             />
