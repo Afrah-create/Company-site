@@ -5,7 +5,7 @@ import Image from "next/image";
 import { CodeXml, MessageCircle, Waypoints } from "lucide-react";
 
 const quickLinks = [
-  { label: "Home", href: "#home" },
+  { label: "Home", href: "#hero" },
   { label: "About", href: "#about" },
   { label: "Portfolio", href: "#portfolio" },
   { label: "Contact", href: "#contact" },
@@ -31,7 +31,7 @@ export default function Footer() {
 
       <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 sm:py-12 md:px-10">
         <div className="mb-8 sm:mb-10">
-          <Link href="#home" className="inline-flex items-center gap-2">
+          <Link href="#hero" className="inline-flex items-center gap-2">
             <Image
               src="/images/Slim.jpeg"
               alt="SlimCyberTech company wordmark"

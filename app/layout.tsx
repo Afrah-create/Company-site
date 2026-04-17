@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Orbitron } from "next/font/google";
+import ScrollProgress from "@/components/ScrollProgress";
 import "./globals.css";
 
 const orbitron = Orbitron({
@@ -61,6 +62,7 @@ export default function RootLayout({
       className={`${orbitron.variable} ${inter.variable} h-full scroll-smooth antialiased`}
     >
       <body className="min-h-full bg-[var(--bg)] text-[var(--white)] font-sans">
+        <ScrollProgress />
         {children}
       </body>
     </html>

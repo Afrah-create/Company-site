@@ -8,7 +8,7 @@ import { useState } from "react";
 import { useScrollPosition } from "@/hooks/useScrollPosition";
 
 const navLinks = [
-  { label: "Home", href: "#home" },
+  { label: "Home", href: "#hero" },
   { label: "Services", href: "#services" },
   { label: "About", href: "#about" },
   { label: "Portfolio", href: "#portfolio" },
@@ -50,7 +50,7 @@ export default function Navbar() {
         }`}
       >
         <nav className="mx-auto flex h-18 w-full max-w-7xl items-center justify-between px-3 sm:h-20 sm:px-6 lg:px-10">
-          <Link href="#home" className="group flex min-w-0 items-center gap-2">
+          <Link href="#hero" className="group flex min-w-0 items-center gap-2">
             <Image
               src="/images/Logo.jpeg"
               alt="SlimCyberTech logo"
