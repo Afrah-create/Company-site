@@ -49,24 +49,24 @@ export default function Navbar() {
             : "border-b border-transparent bg-transparent"
         }`}
       >
-        <nav className="mx-auto flex h-20 w-full max-w-7xl items-center justify-between px-3 sm:px-6 lg:px-10">
-          <Link href="#home" className="group flex min-w-0 items-center gap-2 sm:gap-3">
+        <nav className="mx-auto flex h-18 w-full max-w-7xl items-center justify-between px-3 sm:h-20 sm:px-6 lg:px-10">
+          <Link href="#home" className="group flex min-w-0 items-center gap-2">
             <Image
               src="/images/Logo.jpeg"
               alt="SlimCyberTech logo"
               width={42}
               height={42}
               priority
-              className="h-9 w-9 rounded-md object-cover sm:h-10 sm:w-10"
+              className="h-8 w-8 rounded-md object-cover sm:h-10 sm:w-10"
             />
-            <span className="leading-none">
-              <span className="text-base font-semibold tracking-[0.02em] text-[var(--white)] sm:text-lg">
+            <span className="max-w-[130px] whitespace-nowrap leading-none sm:max-w-none">
+              <span className="text-sm font-semibold tracking-[0.01em] text-[var(--white)] sm:text-lg">
                 Slim
               </span>
-              <span className="text-base font-semibold tracking-[0.02em] text-[var(--cyan)] sm:text-lg">
+              <span className="text-sm font-semibold tracking-[0.01em] text-[var(--cyan)] sm:text-lg">
                 Cyber
               </span>
-              <span className="text-base font-semibold tracking-[0.02em] text-[var(--blue)] sm:text-lg">
+              <span className="text-sm font-semibold tracking-[0.01em] text-[var(--blue)] sm:text-lg">
                 Tech
               </span>
             </span>
@@ -99,7 +99,7 @@ export default function Navbar() {
           <button
             type="button"
             aria-label={isOpen ? "Close menu" : "Open menu"}
-            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)] text-[var(--white)] md:hidden"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)] text-[var(--white)] md:hidden"
             onClick={() => setIsOpen((prev) => !prev)}
           >
             {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}

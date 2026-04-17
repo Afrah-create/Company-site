@@ -53,7 +53,7 @@ const services = [
 
 export default function Services() {
   return (
-    <section id="services" className="relative mx-auto mt-12 w-full max-w-6xl px-6 md:px-10">
+    <section id="services" className="relative mx-auto mt-10 w-full max-w-6xl px-4 sm:px-6 md:mt-12 md:px-10">
       <div className="absolute inset-0 -z-20 overflow-hidden rounded-2xl">
         <Image
           src="/images/Gemini_Generated_Image_8alwwn8alwwn8alw.png"
@@ -65,21 +65,21 @@ export default function Services() {
       </div>
       <div className="absolute inset-0 -z-10 rounded-2xl bg-black/55" />
 
-      <div className="pointer-events-none absolute left-1/2 top-28 -z-10 -translate-x-1/2 select-none text-center">
-        <p className="font-heading text-6xl font-bold tracking-[0.3em] text-[var(--white)]/[0.04] sm:text-7xl lg:text-8xl">
+      <div className="pointer-events-none absolute left-1/2 top-24 -z-10 -translate-x-1/2 select-none text-center sm:top-28">
+        <p className="font-heading text-4xl font-bold tracking-[0.22em] text-[var(--white)]/[0.04] sm:text-7xl sm:tracking-[0.3em] lg:text-8xl">
           SERVICES
         </p>
       </div>
 
-      <div className="mb-10 text-center">
-        <h2 className="text-3xl font-bold text-[var(--white)] md:text-4xl">Our Services</h2>
+      <div className="mb-8 text-center sm:mb-10">
+        <h2 className="text-2xl font-bold text-[var(--white)] sm:text-3xl md:text-4xl">Our Services</h2>
         <div className="mx-auto mt-3 h-1 w-28 rounded-full bg-[var(--gradient)]" />
         <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-[var(--muted)] sm:text-base">
           End-to-end engineering expertise to design, build, secure, and scale modern products.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-3">
         {services.map((service, index) => (
           <motion.article
             key={service.title}
@@ -87,7 +87,7 @@ export default function Services() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.45, delay: index * 0.08, ease: "easeOut" }}
-            className="group relative overflow-hidden rounded-2xl border border-[#222] bg-[#111] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-[var(--cyan)]/70 hover:shadow-[0_16px_40px_-20px_rgba(0,198,255,0.55)]"
+            className="group relative overflow-hidden rounded-2xl border border-[#222] bg-[#111] p-5 sm:p-6 transition-all duration-300 hover:-translate-y-1 hover:border-[var(--cyan)]/70 hover:shadow-[0_16px_40px_-20px_rgba(0,198,255,0.55)]"
           >
             <Image
               src={service.image}

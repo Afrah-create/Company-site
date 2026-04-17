@@ -88,13 +88,13 @@ export default function Testimonials() {
 
   return (
     <section
-      className="relative mt-8 w-full overflow-hidden bg-[#0d0d0d] py-14"
+      className="relative mt-8 w-full overflow-hidden bg-[#0d0d0d] py-12 sm:py-14"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,198,255,0.12),transparent_55%)]" />
 
-      <div className="relative mx-auto w-full max-w-6xl px-6 md:px-10">
+      <div className="relative mx-auto w-full max-w-6xl px-4 sm:px-6 md:px-10">
         <div className="text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--cyan)]">
             Testimonials
@@ -102,7 +102,7 @@ export default function Testimonials() {
           <h2 className="mt-3 text-3xl text-[var(--white)] sm:text-4xl">What Clients Say</h2>
         </div>
 
-        <div className="relative mt-10 flex items-center justify-center">
+        <div className="relative mt-8 flex items-center justify-center sm:mt-10">
           <button
             type="button"
             onClick={goPrev}
@@ -120,11 +120,13 @@ export default function Testimonials() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: direction > 0 ? -50 : 50 }}
                 transition={{ duration: 0.42, ease: "easeOut" }}
-                className="rounded-2xl border border-[var(--border)] bg-[var(--surface)]/90 p-7 text-center shadow-[0_18px_50px_-30px_rgba(0,198,255,0.4)] md:p-10"
+                className="rounded-2xl border border-[var(--border)] bg-[var(--surface)]/90 p-5 text-center shadow-[0_18px_50px_-30px_rgba(0,198,255,0.4)] sm:p-7 md:p-10"
               >
                 <Quote className="mx-auto h-12 w-12 fill-current text-transparent [background:var(--gradient)] [background-clip:text]" />
 
-                <p className="mt-4 text-lg leading-8 text-[var(--white)]">{active.quote}</p>
+                <p className="mt-4 text-base leading-7 text-[var(--white)] sm:text-lg sm:leading-8">
+                  {active.quote}
+                </p>
 
                 <div className="mt-6 flex justify-center gap-1 text-[#facc15]">
                   {Array.from({ length: 5 }).map((_, index) => (
@@ -137,7 +139,7 @@ export default function Testimonials() {
                     <Image src={active.avatar} alt={active.avatarAlt} fill loading="lazy" className="object-cover" />
                   </div>
                   <p className="mt-4 font-heading text-lg text-[var(--white)]">{active.name}</p>
-                  <p className="text-sm text-[var(--muted)]">
+                  <p className="text-xs text-[var(--muted)] sm:text-sm">
                     {active.role} - {active.company}
                   </p>
                 </div>

@@ -12,6 +12,7 @@ const rotatingText = [
   "Mobile Apps",
   "Tech Consulting",
 ];
+const heroHeading = "Building The Future with Code";
 
 type Particle = {
   id: number;
@@ -37,6 +38,8 @@ const itemVariants = {
 export default function Hero() {
   const [activeTextIndex, setActiveTextIndex] = useState(0);
   const [visibleLength, setVisibleLength] = useState(0);
+  const [heroVisibleLength, setHeroVisibleLength] = useState(0);
+  const [isHeroDeleting, setIsHeroDeleting] = useState(false);
   const [particles, setParticles] = useState<Particle[]>([]);
 
   useEffect(() => {
@@ -51,6 +54,31 @@ export default function Hero() {
       })),
     );
   }, []);
+
+  useEffect(() => {
+    const atStart = heroVisibleLength === 0;
+    const atEnd = heroVisibleLength === heroHeading.length;
+
+    let timeoutDelay = isHeroDeleting ? 40 : 70;
+    if (atEnd && !isHeroDeleting) timeoutDelay = 1300;
+    if (atStart && isHeroDeleting) timeoutDelay = 500;
+
+    const timeout = window.setTimeout(() => {
+      if (atEnd && !isHeroDeleting) {
+        setIsHeroDeleting(true);
+        return;
+      }
+
+      if (atStart && isHeroDeleting) {
+        setIsHeroDeleting(false);
+        return;
+      }
+
+      setHeroVisibleLength((prev) => prev + (isHeroDeleting ? -1 : 1));
+    }, timeoutDelay);
+
+    return () => window.clearTimeout(timeout);
+  }, [heroVisibleLength, isHeroDeleting]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -82,7 +110,7 @@ export default function Hero() {
   return (
     <section
       id="home"
-      className="relative flex min-h-screen items-center overflow-hidden pb-16 pt-28 sm:pt-32"
+      className="relative flex min-h-[92svh] items-center overflow-hidden pb-14 pt-24 sm:min-h-screen sm:pb-16 sm:pt-32"
     >
       <div className="absolute inset-0 -z-20">
         <Image
@@ -153,15 +181,16 @@ export default function Hero() {
         </svg>
       </div>
 
-      <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center px-6 text-center md:px-10">
+      <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center px-4 text-center sm:px-6 md:px-10">
         <motion.h1
           custom={0}
           variants={itemVariants}
           initial="hidden"
           animate="visible"
-          className="text-4xl font-bold leading-tight text-[var(--white)] sm:text-5xl lg:text-7xl"
+          className="max-w-full whitespace-nowrap text-[clamp(1rem,5.4vw,4.5rem)] font-bold leading-tight text-[var(--white)]"
         >
-          Building The Future with Code
+          {heroHeading.slice(0, heroVisibleLength)}
+          <span className="ml-1 inline-block h-[0.95em] w-[2px] animate-pulse bg-[var(--cyan)] align-[-0.1em]" />
         </motion.h1>
 
         <motion.p
@@ -169,7 +198,7 @@ export default function Hero() {
           variants={itemVariants}
           initial="hidden"
           animate="visible"
-          className="mt-6 max-w-3xl text-base leading-8 text-[var(--muted)] sm:text-lg"
+          className="mt-5 max-w-3xl text-sm leading-7 text-[var(--muted)] sm:mt-6 sm:text-lg sm:leading-8"
         >
           We craft cutting-edge software solutions that push the boundaries of what&apos;s
           possible.
@@ -180,7 +209,7 @@ export default function Hero() {
           variants={itemVariants}
           initial="hidden"
           animate="visible"
-          className="mt-4 min-h-8 text-sm text-[var(--cyan)] sm:text-base"
+          className="mt-4 min-h-8 text-xs text-[var(--cyan)] sm:text-base"
         >
           <span className="text-[var(--muted)]">Expertise: </span>
           <AnimatePresence mode="wait">
@@ -190,7 +219,7 @@ export default function Hero() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.25 }}
-              className="inline-block min-w-[200px] text-left"
+              className="inline-block min-w-[168px] text-left sm:min-w-[200px]"
             >
               {displayedText}
               <span className="ml-0.5 inline-block h-4 w-[2px] animate-pulse bg-[var(--cyan)] align-middle" />
@@ -203,7 +232,7 @@ export default function Hero() {
           variants={itemVariants}
           initial="hidden"
           animate="visible"
-          className="mt-10 flex w-full max-w-md flex-col gap-4 sm:flex-row sm:justify-center"
+          className="mt-8 flex w-full max-w-md flex-col gap-3 sm:mt-10 sm:flex-row sm:justify-center sm:gap-4"
         >
           <Link
             href="#contact"
@@ -224,9 +253,9 @@ export default function Hero() {
           variants={itemVariants}
           initial="hidden"
           animate="visible"
-          className="mt-8 w-full max-w-3xl"
+          className="mt-7 w-full max-w-3xl sm:mt-8"
         >
-          <div className="relative h-[170px] overflow-hidden rounded-2xl border border-[var(--border)] bg-black/40">
+          <div className="relative h-[150px] overflow-hidden rounded-2xl border border-[var(--border)] bg-black/40 sm:h-[170px]">
             <Image
               src="/images/Gemini_Generated_Image_lyyz1qlyyz1qlyyz.png"
               alt="SlimCyberTech engineering control room"
@@ -240,7 +269,7 @@ export default function Hero() {
       </div>
 
       <motion.div
-        className="absolute bottom-7 left-1/2 z-10 -translate-x-1/2 text-[var(--cyan)]/75"
+        className="absolute bottom-5 left-1/2 z-10 -translate-x-1/2 text-[var(--cyan)]/75 sm:bottom-7"
         animate={{ y: [0, 8, 0] }}
         transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
       >

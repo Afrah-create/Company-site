@@ -29,8 +29,8 @@ export default function Footer() {
     <footer className="relative mt-10 bg-[#111111]">
       <div className="h-px w-full bg-[var(--gradient)]" />
 
-      <div className="mx-auto w-full max-w-6xl px-6 py-12 md:px-10">
-        <div className="mb-10">
+      <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 sm:py-12 md:px-10">
+        <div className="mb-8 sm:mb-10">
           <Link href="#home" className="inline-flex items-center gap-2">
             <Image
               src="/images/Slim.jpeg"
@@ -38,7 +38,7 @@ export default function Footer() {
               width={260}
               height={74}
               loading="lazy"
-              className="h-10 w-auto object-contain"
+              className="h-8 w-auto object-contain sm:h-10"
             />
           </Link>
           <p className="mt-3 max-w-md text-sm text-[var(--muted)]">
@@ -46,7 +46,7 @@ export default function Footer() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-7 sm:grid-cols-2 sm:gap-8 lg:grid-cols-3">
           <div>
             <h4 className="font-heading text-lg text-[var(--white)]">Quick Links</h4>
             <ul className="mt-4 space-y-2 text-sm text-[var(--muted)]">
@@ -98,7 +98,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-10 border-t border-[var(--border)] pt-5 text-xs text-[var(--muted)] sm:flex sm:items-center sm:justify-between">
+        <div className="mt-8 border-t border-[var(--border)] pt-5 text-xs text-[var(--muted)] sm:mt-10 sm:flex sm:items-center sm:justify-between">
           <p>© 2025 SlimCyberTech. All Rights Reserved.</p>
           <p className="mt-2 sm:mt-0">Built with ❤️ and Code</p>
         </div>

@@ -39,8 +39,8 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="mx-auto mt-8 w-full max-w-6xl px-6 md:px-10">
-      <div className="relative overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface)]/80 p-6 md:p-8">
+    <section id="contact" className="mx-auto mt-8 w-full max-w-6xl px-4 sm:px-6 md:px-10">
+      <div className="relative overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface)]/80 p-5 sm:p-6 md:p-8">
         <Image
           src="/images/Gemini_Generated_Image_gzo9l6gzo9l6gzo9.png"
           alt="Circuit board background texture"
@@ -65,7 +65,7 @@ export default function Contact() {
           )}
         </AnimatePresence>
 
-        <div className="relative z-10 mb-8 text-center">
+        <div className="relative z-10 mb-7 text-center sm:mb-8">
           <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--cyan)]">
             Contact
           </p>
@@ -74,7 +74,7 @@ export default function Contact() {
           </h2>
         </div>
 
-        <div className="relative z-10 grid grid-cols-1 gap-8 lg:grid-cols-2">
+        <div className="relative z-10 grid grid-cols-1 gap-6 sm:gap-8 lg:grid-cols-2">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <input
@@ -103,7 +103,7 @@ export default function Contact() {
               name="message"
               placeholder="Message"
               required
-              rows={6}
+              rows={5}
               className="w-full resize-none rounded-xl border border-[var(--border)] bg-[#111] px-4 py-3 text-sm text-[var(--white)] outline-none transition-all duration-300 placeholder:text-[var(--muted)] focus:border-[var(--cyan)] focus:shadow-[0_0_0_4px_rgba(0,198,255,0.12)]"
             />
             <button
@@ -122,8 +122,8 @@ export default function Contact() {
             </button>
           </form>
 
-          <div className="rounded-2xl border border-[var(--border)] bg-[#111] p-6">
-            <h3 className="font-heading text-2xl text-[var(--white)]">Contact Information</h3>
+          <div className="rounded-2xl border border-[var(--border)] bg-[#111] p-5 sm:p-6">
+            <h3 className="font-heading text-xl text-[var(--white)] sm:text-2xl">Contact Information</h3>
             <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
               Reach out for new projects, partnerships, and consulting engagements.
             </p>

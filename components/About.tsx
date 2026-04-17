@@ -58,8 +58,11 @@ export default function About() {
   const statsInView = useInView(statsRef, { once: true, amount: 0.35 });
 
   return (
-    <section id="about" className="mx-auto mt-12 w-full max-w-6xl rounded-2xl bg-[#111] px-6 py-10 md:px-10 md:py-12">
-      <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-12">
+    <section
+      id="about"
+      className="mx-auto mt-10 w-full max-w-6xl rounded-2xl bg-[#111] px-4 py-8 sm:px-6 sm:py-10 md:mt-12 md:px-10 md:py-12"
+    >
+      <div className="grid grid-cols-1 gap-8 sm:gap-10 lg:grid-cols-2 lg:gap-12">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
