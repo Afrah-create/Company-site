@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowUpRight, BriefcaseBusiness } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 const team = [
   {
@@ -37,6 +38,83 @@ const team = [
 ];
 
 export default function Team() {
+  const trackRef = useRef<HTMLDivElement | null>(null);
+  const [isPaused, setIsPaused] = useState(false);
+
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    let rafId = 0;
+
+    const step = () => {
+      if (!track || isPaused) {
+        rafId = requestAnimationFrame(step);
+        return;
+      }
+
+      // Native scroll-based marquee that still allows manual swipe/scroll.
+      track.scrollLeft += 0.55;
+      const maxScrollLeft = track.scrollWidth - track.clientWidth;
+      if (track.scrollLeft >= maxScrollLeft) {
+        track.scrollLeft = 0;
+      }
+
+      rafId = requestAnimationFrame(step);
+    };
+
+    rafId = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(rafId);
+  }, [isPaused]);
+
+  const renderMemberCard = (member: (typeof team)[number], index: number, key: string) => (
+    <motion.article
+      key={key}
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.45, delay: index * 0.08 }}
+      className="group relative overflow-hidden rounded-2xl border border-[var(--border)] bg-[#111] transition-all duration-300 hover:-translate-y-1 hover:border-[var(--cyan)]/60 hover:shadow-[0_16px_38px_-26px_rgba(0,198,255,0.7)]"
+    >
+      <div className="relative h-64 sm:h-72">
+        <Image
+          src={member.image}
+          alt={member.alt}
+          fill
+          loading="lazy"
+          className="object-cover transition-transform duration-500 group-hover:scale-105"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-transparent" />
+      </div>
+
+      <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
+        <p className="font-heading text-xl text-[var(--white)]">{member.name}</p>
+        <p className="mt-1 text-sm text-[var(--muted)]">{member.role}</p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          {member.specialties.map((specialty) => (
+            <span
+              key={`${member.name}-${specialty}`}
+              className="rounded-full border border-[var(--cyan)]/45 bg-black/35 px-2.5 py-1 text-xs text-[var(--white)]/90 backdrop-blur-sm"
+            >
+              {specialty}
+            </span>
+          ))}
+        </div>
+        <div className="mt-3">
+          <Link
+            href="#contact"
+            className="inline-flex items-center gap-2 text-sm font-medium text-[var(--cyan)] transition-colors duration-300 hover:text-[var(--white)]"
+            aria-label={`Contact ${member.name}`}
+          >
+            <BriefcaseBusiness className="h-4 w-4" />
+            Work With {member.name.split(" ")[0]}
+            <ArrowUpRight className="h-3.5 w-3.5" />
+          </Link>
+        </div>
+      </div>
+    </motion.article>
+  );
+
   return (
     <section id="team" className="mx-auto mt-10 w-full max-w-6xl px-4 sm:px-6 md:px-10">
       <div className="text-center">
@@ -44,54 +122,26 @@ export default function Team() {
         <h2 className="mt-3 text-3xl text-[var(--white)] sm:text-4xl">The People Behind The Build</h2>
       </div>
 
-      <div className="mt-8 grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-3">
-        {team.map((member, index) => (
-          <motion.article
-            key={member.name}
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.45, delay: index * 0.08 }}
-            className="group relative overflow-hidden rounded-2xl border border-[var(--border)] bg-[#111] transition-all duration-300 hover:-translate-y-1 hover:border-[var(--cyan)]/60 hover:shadow-[0_16px_38px_-26px_rgba(0,198,255,0.7)]"
-          >
-            <div className="relative h-64 sm:h-72">
-              <Image
-                src={member.image}
-                alt={member.alt}
-                fill
-                loading="lazy"
-                className="object-cover transition-transform duration-500 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-transparent" />
+      <div
+        ref={trackRef}
+        className="relative mt-8 overflow-x-auto overflow-y-hidden [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => setIsPaused(false)}
+        onTouchStart={() => setIsPaused(true)}
+        onTouchEnd={() => setIsPaused(false)}
+        onPointerDown={() => setIsPaused(true)}
+        onPointerUp={() => setIsPaused(false)}
+      >
+        <div className="flex w-max gap-5 pb-1">
+          {team.map((member, index) => (
+            <div
+              key={member.name}
+              className="w-[84vw] max-w-[300px] shrink-0 sm:w-[320px] lg:w-[340px]"
+            >
+              {renderMemberCard(member, index, member.name)}
             </div>
-
-            <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
-              <p className="font-heading text-xl text-[var(--white)]">{member.name}</p>
-              <p className="mt-1 text-sm text-[var(--muted)]">{member.role}</p>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {member.specialties.map((specialty) => (
-                  <span
-                    key={`${member.name}-${specialty}`}
-                    className="rounded-full border border-[var(--cyan)]/45 bg-black/35 px-2.5 py-1 text-xs text-[var(--white)]/90 backdrop-blur-sm"
-                  >
-                    {specialty}
-                  </span>
-                ))}
-              </div>
-              <div className="mt-3">
-                <Link
-                  href="#contact"
-                  className="inline-flex items-center gap-2 text-sm font-medium text-[var(--cyan)] transition-colors duration-300 hover:text-[var(--white)]"
-                  aria-label={`Contact ${member.name}`}
-                >
-                  <BriefcaseBusiness className="h-4 w-4" />
-                  Work With {member.name.split(" ")[0]}
-                  <ArrowUpRight className="h-3.5 w-3.5" />
-                </Link>
-              </div>
-            </div>
-          </motion.article>
-        ))}
+          ))}
+        </div>
       </div>
     </section>
   );
