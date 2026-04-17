@@ -149,21 +149,9 @@ export default function Services() {
         </p>
       </motion.div>
 
-      <motion.div
-        className="grid grid-cols-1 gap-4 sm:gap-5 md:hidden"
-        variants={staggerContainer}
-        initial="hidden"
-        whileInView="visible"
-        viewport={VIEWPORT_ONCE}
-      >
-        {services.map((service, index) => (
-          <motion.div key={service.title}>{renderServiceCard(service, index, service.title)}</motion.div>
-        ))}
-      </motion.div>
-
       <div
         ref={trackRef}
-        className="relative mt-2 hidden overflow-x-auto overflow-y-hidden [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:block"
+        className="relative mt-2 overflow-x-auto overflow-y-hidden [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
         onTouchStart={() => setIsPaused(true)}
@@ -175,7 +163,7 @@ export default function Services() {
           {marqueeServices.map((service, index) => (
             <motion.div
               key={`${service.title}-${index}`}
-              className="w-[340px] shrink-0 lg:w-[360px]"
+              className="w-[86vw] max-w-[340px] shrink-0 sm:w-[340px] lg:w-[360px]"
               animate={{ y: [0, -4, 0] }}
               transition={{
                 duration: 3.8,
