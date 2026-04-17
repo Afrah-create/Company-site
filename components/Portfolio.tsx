@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
 import { useMemo, useState } from "react";
+import { fadeUp, VIEWPORT_ONCE } from "@/lib/motion";
 
 type Category = "All" | "Web Apps" | "Mobile" | "Cybersecurity" | "Consulting";
 
@@ -79,7 +80,13 @@ export default function Portfolio() {
 
   return (
     <section id="portfolio" className="mx-auto mt-10 w-full max-w-6xl px-4 sm:mt-8 sm:px-6 md:px-10">
-      <div className="text-center">
+      <motion.div
+        className="text-center"
+        variants={fadeUp}
+        initial="hidden"
+        whileInView="visible"
+        viewport={VIEWPORT_ONCE}
+      >
         <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--cyan)]">
           Portfolio
         </p>
@@ -89,9 +96,15 @@ export default function Portfolio() {
           <span className="h-2 w-2 rounded-full bg-[var(--cyan)]" />
           <span className="h-px w-10 bg-[var(--blue)]/60" />
         </div>
-      </div>
+      </motion.div>
 
-      <div className="mt-7 -mx-4 overflow-x-auto px-4 sm:mt-8 sm:mx-0 sm:px-0">
+      <motion.div
+        className="mt-7 -mx-4 overflow-x-auto px-4 sm:mt-8 sm:mx-0 sm:px-0"
+        variants={fadeUp}
+        initial="hidden"
+        whileInView="visible"
+        viewport={VIEWPORT_ONCE}
+      >
         <div className="flex min-w-max snap-x snap-mandatory items-center justify-start gap-2 pb-1 sm:min-w-0 sm:flex-wrap sm:justify-center">
           {filters.map((filter) => (
             <button
@@ -108,7 +121,7 @@ export default function Portfolio() {
             </button>
           ))}
         </div>
-      </div>
+      </motion.div>
 
       <LayoutGroup>
         <motion.div

@@ -25,6 +25,8 @@ const socialLinks = [
 ];
 
 export default function Footer() {
+  const currentYear = new Date().getFullYear();
+
   return (
     <footer className="relative mt-10 bg-[#111111]">
       <div className="h-px w-full bg-[var(--gradient)]" />
@@ -99,7 +101,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-8 border-t border-[var(--border)] pt-5 text-center text-xs text-[var(--muted)] sm:mt-10 sm:flex sm:items-center sm:justify-between sm:text-left">
-          <p>© 2025 SlimCyberTech. All Rights Reserved.</p>
+          <p>© {currentYear} SlimCyberTech. All Rights Reserved.</p>
           <p className="mt-2 sm:mt-0">Built with ❤️ and Code</p>
         </div>
       </div>

@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { slideInLeft, slideInRight, staggerItem, VIEWPORT_ONCE } from "@/lib/motion";
 
 type FormData = {
   firstName: string;
@@ -351,7 +352,7 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="relative mt-14 overflow-hidden bg-[#0a0a0a] px-4 py-16 sm:px-5 md:px-8 md:py-24"
+      className="relative mt-8 overflow-hidden bg-[#0a0a0a] px-4 py-16 sm:mt-10 sm:px-5 md:mt-10 md:px-8 md:py-24 lg:mt-10"
       style={{
         backgroundImage:
           "radial-gradient(circle at 1px 1px, rgba(255,255,255,0.08) 1px, transparent 0)",
@@ -381,10 +382,10 @@ export default function Contact() {
 
       <div className="relative mx-auto grid w-full max-w-6xl grid-cols-1 gap-8 md:grid-cols-[45%_55%] md:gap-10">
         <motion.div
-          initial={{ opacity: 0, x: -60 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, amount: 0.25 }}
-          transition={{ duration: 0.7 }}
+          variants={slideInLeft}
+          initial="hidden"
+          whileInView="visible"
+          viewport={VIEWPORT_ONCE}
           className="relative z-10 text-center md:text-left"
         >
           <div className="flex items-center justify-center gap-3 md:justify-start">
@@ -420,10 +421,11 @@ export default function Contact() {
             ].map((item, index) => (
               <motion.div
                 key={item.label}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.25 }}
-                transition={{ duration: 0.45, delay: index * 0.1 }}
+                variants={staggerItem}
+                custom={index}
+                initial="hidden"
+                whileInView="visible"
+                viewport={VIEWPORT_ONCE}
                 className="group relative overflow-hidden rounded-xl border border-[#222] bg-[#111] p-3 sm:p-4 md:p-4"
               >
                 <span className="absolute left-0 top-0 h-full w-1 origin-top scale-y-0 bg-[var(--gradient)] transition-transform duration-300 group-hover:scale-y-100" />
@@ -467,10 +469,10 @@ export default function Contact() {
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, x: 60 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.7, delay: 0.2 }}
+          variants={slideInRight}
+          initial="hidden"
+          whileInView="visible"
+          viewport={VIEWPORT_ONCE}
           animate={isShaking ? { x: [0, -8, 8, -8, 0] } : { x: 0 }}
           className="relative z-10"
         >

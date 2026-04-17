@@ -3,6 +3,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { BadgeCheck, ChevronLeft, ChevronRight, Star } from "lucide-react";
 import { TouchEvent, useEffect, useRef, useState } from "react";
+import { slideInLeft, slideInRight, VIEWPORT_ONCE } from "@/lib/motion";
 
 const testimonials = [
   {
@@ -165,7 +166,13 @@ export default function Testimonials() {
       </div>
 
       <div className="relative mx-auto flex w-full max-w-6xl flex-col gap-7 md:flex-row md:items-stretch md:gap-10">
-        <div className="relative w-full md:w-2/5">
+        <motion.div
+          className="relative w-full md:w-2/5"
+          variants={slideInLeft}
+          initial="hidden"
+          whileInView="visible"
+          viewport={VIEWPORT_ONCE}
+        >
           <p className="pointer-events-none absolute left-0 top-2 hidden select-none font-heading text-6xl font-bold tracking-[0.25em] text-white/[0.04] md:block">
             REVIEWS
           </p>
@@ -217,10 +224,14 @@ export default function Testimonials() {
               />
             </div>
           </div>
-        </div>
+        </motion.div>
 
-        <div
+        <motion.div
           className="relative w-full md:w-3/5"
+          variants={slideInRight}
+          initial="hidden"
+          whileInView="visible"
+          viewport={VIEWPORT_ONCE}
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
           onTouchStart={handleTouchStart}
@@ -292,7 +303,7 @@ export default function Testimonials() {
               />
             ))}
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { fadeUp, staggerContainer, staggerItem, VIEWPORT_ONCE } from "@/lib/motion";
 import {
   AppWindowMac,
   CloudCog,
@@ -65,28 +66,32 @@ export default function Services() {
       </div>
       <div className="absolute inset-0 -z-10 rounded-2xl bg-black/55" />
 
-      <div className="pointer-events-none absolute left-1/2 top-28 -z-10 hidden -translate-x-1/2 select-none text-center sm:top-28 sm:block">
-        <p className="font-heading text-7xl font-bold tracking-[0.3em] text-[var(--white)]/[0.03] lg:text-8xl">
-          SERVICES
-        </p>
-      </div>
-
-      <div className="mb-8 text-center sm:mb-10">
+      <motion.div
+        className="mb-8 text-center sm:mb-10"
+        variants={fadeUp}
+        initial="hidden"
+        whileInView="visible"
+        viewport={VIEWPORT_ONCE}
+      >
         <h2 className="text-2xl font-bold text-[var(--white)] sm:text-3xl md:text-4xl">Our Services</h2>
         <div className="mx-auto mt-3 h-1 w-28 rounded-full bg-[var(--gradient)]" />
         <p className="mx-auto mt-4 max-w-[34ch] text-sm leading-7 text-[var(--muted)] sm:max-w-2xl sm:text-base">
           End-to-end engineering expertise to design, build, secure, and scale modern products.
         </p>
-      </div>
+      </motion.div>
 
-      <div className="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-3">
+      <motion.div
+        className="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-3"
+        variants={staggerContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={VIEWPORT_ONCE}
+      >
         {services.map((service, index) => (
           <motion.article
             key={service.title}
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.45, delay: index * 0.08, ease: "easeOut" }}
+            variants={staggerItem}
+            custom={index}
             className="group relative min-h-[230px] overflow-hidden rounded-2xl border border-[#222] bg-[#111] p-5 sm:min-h-[250px] sm:p-6 transition-all duration-300 hover:-translate-y-1 hover:border-[var(--cyan)]/70 hover:shadow-[0_16px_40px_-20px_rgba(0,198,255,0.55)]"
           >
             <Image
@@ -136,7 +141,7 @@ export default function Services() {
             </Link>
           </motion.article>
         ))}
-      </div>
+      </motion.div>
     </section>
   );
 }

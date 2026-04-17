@@ -1,6 +1,6 @@
 "use client";
 
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, MotionConfig } from "framer-motion";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import Hero from "@/components/Hero";
@@ -31,32 +31,34 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="relative">
-      <AnimatePresence>{isLoading && <Loader />}</AnimatePresence>
+    <MotionConfig reducedMotion="user">
+      <main className="relative">
+        <AnimatePresence>{isLoading && <Loader />}</AnimatePresence>
 
-      <Navbar />
-      <Hero />
-      <div style={{ contentVisibility: "auto" }}>
-        <Services />
-      </div>
-      <div style={{ contentVisibility: "auto" }}>
-        <About />
-      </div>
-      <div style={{ contentVisibility: "auto" }}>
-        <Team />
-      </div>
-      <div style={{ contentVisibility: "auto" }}>
-        <Portfolio />
-      </div>
-      <div style={{ contentVisibility: "auto" }}>
-        <Testimonials />
-      </div>
-      <div style={{ contentVisibility: "auto" }}>
-        <Contact />
-      </div>
-      <Footer />
-      <ScrollToTop />
-      <FloatingChatButton />
-    </main>
+        <Navbar />
+        <Hero />
+        <div style={{ contentVisibility: "auto" }}>
+          <Services />
+        </div>
+        <div style={{ contentVisibility: "auto" }}>
+          <About />
+        </div>
+        <div style={{ contentVisibility: "auto" }}>
+          <Team />
+        </div>
+        <div style={{ contentVisibility: "auto" }}>
+          <Portfolio />
+        </div>
+        <div style={{ contentVisibility: "auto" }}>
+          <Testimonials />
+        </div>
+        <div style={{ contentVisibility: "auto" }}>
+          <Contact />
+        </div>
+        <Footer />
+        <ScrollToTop />
+        <FloatingChatButton />
+      </main>
+    </MotionConfig>
   );
 }

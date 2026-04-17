@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowUpRight, BriefcaseBusiness } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { fadeUp, staggerItem, VIEWPORT_ONCE } from "@/lib/motion";
 
 const team = [
   {
@@ -70,10 +71,11 @@ export default function Team() {
   const renderMemberCard = (member: (typeof team)[number], index: number, key: string) => (
     <motion.article
       key={key}
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.45, delay: index * 0.08 }}
+      variants={staggerItem}
+      custom={index}
+      initial="hidden"
+      whileInView="visible"
+      viewport={VIEWPORT_ONCE}
       className="group relative overflow-hidden rounded-2xl border border-[var(--border)] bg-[#111] transition-all duration-300 hover:-translate-y-1 hover:border-[var(--cyan)]/60 hover:shadow-[0_16px_38px_-26px_rgba(0,198,255,0.7)]"
     >
       <div className="relative h-60 sm:h-72">
@@ -117,10 +119,16 @@ export default function Team() {
 
   return (
     <section id="team" className="mx-auto mt-10 w-full max-w-6xl px-4 sm:px-6 md:px-10">
-      <div className="text-center">
+      <motion.div
+        className="text-center"
+        variants={fadeUp}
+        initial="hidden"
+        whileInView="visible"
+        viewport={VIEWPORT_ONCE}
+      >
         <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--cyan)]">Team</p>
         <h2 className="mt-3 text-2xl text-[var(--white)] sm:text-4xl">The People Behind The Build</h2>
-      </div>
+      </motion.div>
 
       <div
         ref={trackRef}

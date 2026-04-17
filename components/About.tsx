@@ -6,6 +6,7 @@ import { motion, useInView } from "framer-motion";
 import { CheckCircle2 } from "lucide-react";
 import { useRef } from "react";
 import { useCountUp } from "@/hooks/useCountUp";
+import { slideInLeft, slideInRight, VIEWPORT_ONCE } from "@/lib/motion";
 
 const differentiators = [
   "Deep engineering paired with strategic business thinking",
@@ -64,10 +65,10 @@ export default function About() {
     >
       <div className="grid grid-cols-1 gap-8 sm:gap-10 lg:grid-cols-2 lg:gap-12">
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.25 }}
-          transition={{ duration: 0.55 }}
+          variants={slideInLeft}
+          initial="hidden"
+          whileInView="visible"
+          viewport={VIEWPORT_ONCE}
         >
           <p className="mb-3 text-xs font-semibold uppercase tracking-[0.25em] text-[var(--cyan)]">
             ABOUT US
@@ -104,10 +105,10 @@ export default function About() {
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.25 }}
-          transition={{ duration: 0.55, delay: 0.08 }}
+          variants={slideInRight}
+          initial="hidden"
+          whileInView="visible"
+          viewport={VIEWPORT_ONCE}
           className="relative"
         >
           <div className="pointer-events-none absolute -inset-2 -z-10 rounded-3xl bg-[radial-gradient(circle_at_center,rgba(0,198,255,0.2),transparent_62%)] blur-2xl" />
