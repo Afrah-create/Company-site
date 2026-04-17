@@ -43,7 +43,7 @@ function StatItem({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.5 }}
       transition={{ duration: 0.45, delay }}
-      className="rounded-xl border border-[var(--border)] bg-[var(--bg)]/65 px-4 py-5 text-center"
+      className="rounded-xl border border-[var(--border)] bg-[var(--card-bg)] px-4 py-5 text-center"
     >
       <p className="font-heading text-3xl text-[var(--white)]">
         {count}
@@ -61,7 +61,7 @@ export default function About() {
   return (
     <section
       id="about"
-      className="mx-auto mt-10 w-full max-w-6xl rounded-2xl bg-[#111] px-4 py-8 sm:px-6 sm:py-10 md:mt-12 md:px-10 md:py-12"
+      className="mx-auto mt-10 w-full max-w-6xl rounded-2xl bg-[var(--surface)] px-4 py-8 sm:px-6 sm:py-10 md:mt-12 md:px-10 md:py-12"
     >
       <div className="grid grid-cols-1 gap-8 sm:gap-10 lg:grid-cols-2 lg:gap-12">
         <motion.div
@@ -112,7 +112,7 @@ export default function About() {
           className="relative"
         >
           <div className="pointer-events-none absolute -inset-2 -z-10 rounded-3xl bg-[radial-gradient(circle_at_center,rgba(0,198,255,0.2),transparent_62%)] blur-2xl" />
-          <div className="relative overflow-hidden rounded-2xl border border-[var(--border)] bg-[#0d0d0d] shadow-[0_0_0_1px_rgba(0,198,255,0.06),0_24px_60px_-32px_rgba(0,114,255,0.4)]">
+          <div className="relative overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface)] shadow-[0_0_0_1px_rgba(0,198,255,0.06),0_24px_60px_-32px_rgba(0,114,255,0.4)]">
             <div className="relative h-[280px] sm:h-[320px] md:h-[360px]">
               <Image
                 src="/images/Gemini_Generated_Image_59g3zf59g3zf59g3.png"
@@ -122,9 +122,18 @@ export default function About() {
                 blurDataURL="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxNicgaGVpZ2h0PSc5Jz48cmVjdCB3aWR0aD0nMTYnIGhlaWdodD0nOScgZmlsbD0nIzA1MGIxYScvPjwvc3ZnPg=="
                 className="object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/35 to-transparent" />
+              <div
+                className="absolute inset-0"
+                style={{
+                  background:
+                    "linear-gradient(180deg,var(--image-gradient-to),var(--image-overlay-medium),transparent)",
+                }}
+              />
             </div>
-            <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between rounded-xl border border-[var(--border)] bg-black/70 px-3 py-2.5 backdrop-blur-sm sm:px-4 sm:py-3">
+            <div
+              className="absolute bottom-4 left-4 right-4 flex items-center justify-between rounded-xl border border-[var(--border)] px-3 py-2.5 backdrop-blur-sm sm:px-4 sm:py-3"
+              style={{ backgroundColor: "var(--header-bg)" }}
+            >
               <p className="text-[10px] uppercase tracking-[0.16em] text-[var(--muted)] sm:text-xs sm:tracking-[0.2em]">
                 Secure by Design
               </p>

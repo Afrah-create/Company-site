@@ -154,10 +154,9 @@ export default function Testimonials() {
     <section
       id="testimonials"
       ref={sectionRef}
-      className="relative mt-12 overflow-hidden bg-[#0a0a0a] px-4 py-14 md:px-8 md:py-24"
+      className="relative mt-12 overflow-hidden bg-[var(--bg)] px-4 py-14 md:px-8 md:py-24"
       style={{
-        backgroundImage:
-          "radial-gradient(circle at 1px 1px, rgba(255,255,255,0.08) 1px, transparent 0)",
+        backgroundImage: "radial-gradient(circle at 1px 1px, var(--grid-line) 1px, transparent 0)",
         backgroundSize: "22px 22px",
       }}
     >
@@ -173,7 +172,7 @@ export default function Testimonials() {
           whileInView="visible"
           viewport={VIEWPORT_ONCE}
         >
-          <p className="pointer-events-none absolute left-0 top-2 hidden select-none font-heading text-6xl font-bold tracking-[0.25em] text-white/[0.04] md:block">
+          <p className="pointer-events-none absolute left-0 top-2 hidden select-none font-heading text-6xl font-bold tracking-[0.25em] text-[var(--white)]/[0.04] md:block">
             REVIEWS
           </p>
 
@@ -198,7 +197,7 @@ export default function Testimonials() {
                 type="button"
                 onClick={goPrev}
                 aria-label="Previous testimonial"
-                className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[var(--cyan)]/70 bg-[#101010] text-[var(--white)] transition-all duration-300 hover:bg-[var(--gradient)] md:h-12 md:w-12"
+                className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[var(--cyan)]/70 bg-[var(--card-bg)] text-[var(--white)] transition-all duration-300 hover:bg-[var(--gradient)] md:h-12 md:w-12"
               >
                 <ChevronLeft className="h-5 w-5" />
               </button>
@@ -206,7 +205,7 @@ export default function Testimonials() {
                 type="button"
                 onClick={goNext}
                 aria-label="Next testimonial"
-                className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[var(--cyan)]/70 bg-[#101010] text-[var(--white)] transition-all duration-300 hover:bg-[var(--gradient)] md:h-12 md:w-12"
+                className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[var(--cyan)]/70 bg-[var(--card-bg)] text-[var(--white)] transition-all duration-300 hover:bg-[var(--gradient)] md:h-12 md:w-12"
               >
                 <ChevronRight className="h-5 w-5" />
               </button>
@@ -216,7 +215,7 @@ export default function Testimonials() {
               {currentDisplay} / {totalDisplay}
             </div>
 
-            <div className="mt-5 hidden h-28 w-[2px] overflow-hidden rounded-full bg-white/15 md:block">
+            <div className="mt-5 hidden h-28 w-[2px] overflow-hidden rounded-full bg-[var(--track-muted)] md:block">
               <motion.div
                 className="w-full origin-top bg-[var(--gradient)]"
                 animate={{ height: `${progressPercent}%` }}
@@ -246,7 +245,7 @@ export default function Testimonials() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: direction > 0 ? -80 : 80 }}
               transition={{ duration: 0.45, ease: "easeOut" }}
-              className="relative overflow-hidden rounded-2xl border border-[#222] bg-[#111] p-5 md:p-8"
+              className="relative overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--card-bg-strong)] p-5 md:p-8"
             >
               <p className="pointer-events-none absolute left-4 top-2 font-heading text-8xl text-transparent opacity-30 [background:var(--gradient)] [background-clip:text] md:text-9xl">
                 &quot;
@@ -298,7 +297,7 @@ export default function Testimonials() {
                 onClick={() => goToIndex(index)}
                 aria-label={`Go to testimonial ${index + 1}`}
                 className={`h-2.5 rounded-full transition-all duration-300 ${
-                  activeIndex === index ? "w-7 bg-[var(--cyan)]" : "w-2.5 bg-white/30"
+                  activeIndex === index ? "w-7 bg-[var(--cyan)]" : "w-2.5 bg-[var(--dot-inactive)]"
                 }`}
               />
             ))}

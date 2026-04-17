@@ -28,7 +28,7 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="relative mt-10 bg-[#111111]">
+    <footer className="relative mt-10 bg-[var(--card-bg-strong)]">
       <div className="h-px w-full bg-[var(--gradient)]" />
 
       <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 sm:py-12 md:px-10">

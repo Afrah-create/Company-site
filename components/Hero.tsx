@@ -123,7 +123,7 @@ export default function Hero() {
           className="object-cover"
         />
       </div>
-      <div className="absolute inset-0 -z-10 bg-black/65" />
+      <div className="absolute inset-0 -z-10" style={{ backgroundColor: "var(--image-overlay-strong)" }} />
 
       <div className="pointer-events-none absolute inset-0 opacity-35">
         <svg className="h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
@@ -187,7 +187,7 @@ export default function Hero() {
           variants={itemVariants}
           initial="hidden"
           animate="visible"
-          className="mx-auto max-w-[16ch] text-balance text-[clamp(1.85rem,8.6vw,4.5rem)] font-bold leading-[1.12] text-[var(--white)] sm:max-w-full sm:whitespace-nowrap sm:leading-tight"
+          className="mx-auto max-w-[16ch] text-balance text-[clamp(1.75rem,7.4vw,3.8rem)] font-bold leading-[1.12] text-[var(--white)] sm:max-w-full sm:whitespace-nowrap sm:leading-tight"
         >
           {heroHeading.slice(0, heroVisibleLength)}
           <span className="ml-1 inline-block h-[0.95em] w-[2px] animate-pulse bg-[var(--cyan)] align-[-0.1em]" />
@@ -198,7 +198,7 @@ export default function Hero() {
           variants={itemVariants}
           initial="hidden"
           animate="visible"
-          className="mt-4 max-w-[34ch] text-sm leading-7 text-[var(--muted)] sm:mt-6 sm:max-w-3xl sm:text-lg sm:leading-8"
+          className="mt-4 max-w-[34ch] text-sm leading-7 text-[var(--muted-strong)] sm:mt-6 sm:max-w-3xl sm:text-lg sm:leading-8"
         >
           We craft cutting-edge software solutions that push the boundaries of what&apos;s
           possible.
@@ -255,7 +255,10 @@ export default function Hero() {
           animate="visible"
           className="mt-8 w-full max-w-3xl sm:mt-8"
         >
-          <div className="relative h-[155px] overflow-hidden rounded-2xl border border-[var(--border)] bg-black/40 sm:h-[170px]">
+          <div
+            className="relative h-[155px] overflow-hidden rounded-2xl border border-[var(--border)] sm:h-[170px]"
+            style={{ backgroundColor: "var(--image-overlay-soft)" }}
+          >
             <Image
               src="/images/Gemini_Generated_Image_lyyz1qlyyz1qlyyz.png"
               alt="SlimCyberTech engineering control room"
@@ -263,7 +266,13 @@ export default function Hero() {
               loading="lazy"
               className="object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/65 via-black/30 to-black/50" />
+            <div
+              className="absolute inset-0"
+              style={{
+                background:
+                  "linear-gradient(90deg,var(--image-gradient-from),var(--image-gradient-via),var(--image-gradient-to))",
+              }}
+            />
           </div>
         </motion.div>
       </div>

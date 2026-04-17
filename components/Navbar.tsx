@@ -49,7 +49,7 @@ export default function Navbar() {
       <header
         className={`fixed inset-x-0 top-0 z-[60] transition-all duration-300 ${
           isScrolled
-            ? "border-b border-[var(--cyan)]/55 bg-[rgba(10,10,10,0.7)] backdrop-blur-md"
+            ? "border-b border-[var(--cyan)]/55 bg-[var(--header-bg)] backdrop-blur-md"
             : "border-b border-transparent bg-transparent"
         }`}
       >
@@ -145,7 +145,7 @@ export default function Navbar() {
       <AnimatePresence>
         {isOpen && (
           <motion.aside
-            className="fixed inset-0 z-[70] flex min-h-screen flex-col bg-[rgba(10,10,10,0.96)] px-8 pb-10 pt-24 md:hidden"
+            className="fixed inset-0 z-[70] flex min-h-screen flex-col bg-[var(--header-mobile-bg)] px-8 pb-10 pt-24 md:hidden"
             variants={overlayVariants}
             initial="hidden"
             animate="visible"

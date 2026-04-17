@@ -253,11 +253,11 @@ export default function Contact() {
   const messageCountClass = useMemo(() => {
     if (charCount > 500) return "text-red-400";
     if (charCount >= 400) return "text-[var(--cyan)]";
-    return "text-[#666]";
+    return "text-[var(--muted)]";
   }, [charCount]);
 
   const fieldBaseClasses =
-    "peer w-full rounded-[10px] border bg-[#0a0a0a] px-4 py-[15px] text-sm text-[var(--white)] outline-none transition-all duration-200 placeholder:text-[#555]";
+    "peer w-full rounded-[10px] border bg-[var(--bg)] px-4 py-[15px] text-sm text-[var(--white)] outline-none transition-all duration-200 placeholder:text-[var(--muted)]";
 
   const renderField = (field: FieldName, isTextarea = false, isSelect = false, options: string[] = []) => {
     const Icon = fieldIcons[field];
@@ -266,7 +266,7 @@ export default function Contact() {
     const hasError = Boolean(errors[field]);
     const showFloating = isSelect || isFocused || hasValue;
 
-    const borderClass = hasError ? "border-[#ef4444]" : "border-[#222]";
+    const borderClass = hasError ? "border-[#ef4444]" : "border-[var(--border)]";
     const focusClass = hasError
       ? "focus:border-[#ef4444] focus:shadow-[0_0_0_3px_rgba(239,68,68,0.1)]"
       : "focus:border-[var(--cyan)] focus:shadow-[0_0_0_3px_rgba(0,198,255,0.1)]";
@@ -297,13 +297,13 @@ export default function Contact() {
                   <option
                     key={`${field}-option-${option}`}
                     value={index === 0 ? "" : option}
-                    className="bg-[#1a1a1a] text-[var(--white)]"
+                    className="bg-[var(--surface)] text-[var(--white)]"
                   >
                     {option}
                   </option>
                 ))}
               </select>
-              <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6a6a6a]" />
+              <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--muted-soft)]" />
             </div>
           ) : (
             <input
@@ -320,8 +320,8 @@ export default function Contact() {
           <label
             className={`pointer-events-none absolute left-4 z-10 flex items-center gap-1.5 text-xs transition-all duration-200 ${
               showFloating
-                ? "-top-3 translate-y-0 rounded bg-[#0f0f0f] px-1.5 text-[11px] text-[var(--cyan)]"
-                : "top-1/2 -translate-y-1/2 text-[#777]"
+                ? "-top-3 translate-y-0 rounded bg-[var(--card-bg)] px-1.5 text-[11px] text-[var(--cyan)]"
+                : "top-1/2 -translate-y-1/2 text-[var(--muted-soft)]"
             }`}
           >
             {showFloating && <Icon className="h-3.5 w-3.5" />}
@@ -352,16 +352,18 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="relative mt-8 overflow-hidden bg-[#0a0a0a] px-4 py-16 sm:mt-10 sm:px-5 md:mt-10 md:px-8 md:py-24 lg:mt-10"
+      className="relative mt-8 overflow-hidden bg-[var(--bg)] px-4 py-16 sm:mt-10 sm:px-5 md:mt-10 md:px-8 md:py-24 lg:mt-10"
       style={{
-        backgroundImage:
-          "radial-gradient(circle at 1px 1px, rgba(255,255,255,0.08) 1px, transparent 0)",
+        backgroundImage: "radial-gradient(circle at 1px 1px, var(--grid-line) 1px, transparent 0)",
         backgroundSize: "22px 22px",
       }}
     >
       <div className="absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,var(--cyan),transparent)]" />
       <div className="pointer-events-none absolute left-[-12%] top-1/2 h-[360px] w-[360px] -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(0,198,255,0.08),rgba(0,114,255,0.04),transparent_70%)] blur-3xl md:h-[520px] md:w-[520px]" />
-      <p className="pointer-events-none absolute left-1/2 top-8 hidden -translate-x-1/2 select-none font-heading text-[130px] tracking-[0.25em] text-white/[0.03] md:block">
+      <p
+        className="pointer-events-none absolute inset-x-0 -top-5 hidden select-none text-center font-heading text-[84px] leading-none tracking-[0.14em] md:block lg:text-[102px]"
+        style={{ color: "color-mix(in srgb, var(--white) 8%, transparent)" }}
+      >
         CONTACT
       </p>
 
@@ -372,7 +374,7 @@ export default function Contact() {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -100, opacity: 0 }}
             transition={{ duration: 0.28, ease: "easeOut" }}
-            className="fixed left-4 right-4 top-5 z-[120] mx-auto flex w-full max-w-md items-center gap-2 rounded-xl border border-[#1f3f2a] border-l-4 border-l-[#10b981] bg-[#0f1310] px-4 py-3 text-sm text-[var(--white)] shadow-xl"
+            className="fixed left-4 right-4 top-5 z-[120] mx-auto flex w-full max-w-md items-center gap-2 rounded-xl border border-[#1f3f2a] border-l-4 border-l-[#10b981] bg-[var(--card-bg)] px-4 py-3 text-sm text-[var(--white)] shadow-xl"
           >
             <CheckCircle className="h-4 w-4 text-[#10b981]" />
             We&apos;ll be in touch within 24 hours!
@@ -404,7 +406,7 @@ export default function Contact() {
             Together
           </h2>
 
-          <p className="mx-auto mt-5 max-w-xl text-sm leading-7 text-[#888] md:mx-0 md:text-base">
+          <p className="mx-auto mt-5 max-w-xl text-sm leading-7 text-[var(--muted-strong)] md:mx-0 md:text-base">
             Have a project in mind? We&apos;d love to hear about it. Send us a message and
             we&apos;ll get back to you within 24 hours.
           </p>
@@ -426,7 +428,7 @@ export default function Contact() {
                 initial="hidden"
                 whileInView="visible"
                 viewport={VIEWPORT_ONCE}
-                className="group relative overflow-hidden rounded-xl border border-[#222] bg-[#111] p-3 sm:p-4 md:p-4"
+                className="group relative overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--card-bg-strong)] p-3 sm:p-4 md:p-4"
               >
                 <span className="absolute left-0 top-0 h-full w-1 origin-top scale-y-0 bg-[var(--gradient)] transition-transform duration-300 group-hover:scale-y-100" />
                 <div className="flex items-center gap-3">
@@ -434,7 +436,9 @@ export default function Contact() {
                     <item.icon className="h-4 w-4 text-white" />
                   </div>
                   <div>
-                    <p className="text-[10px] uppercase tracking-[0.16em] text-[#7b7b7b]">{item.label}</p>
+                    <p className="text-[10px] uppercase tracking-[0.16em] text-[var(--muted-soft)]">
+                      {item.label}
+                    </p>
                     <p className="break-all text-sm text-[var(--white)]">{item.value}</p>
                   </div>
                 </div>
@@ -443,7 +447,7 @@ export default function Contact() {
           </div>
 
           <div className="mt-7">
-            <p className="text-xs uppercase tracking-[0.18em] text-[#888]">Follow Us</p>
+            <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted-strong)]">Follow Us</p>
             <div className="mt-3 flex items-center justify-center gap-3 md:justify-start">
               {socials.map((social) => (
                 <Link
@@ -452,7 +456,7 @@ export default function Contact() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={social.label}
-                  className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[#222] bg-[#111] text-[#777] transition-all duration-300 hover:scale-110 hover:border-[var(--cyan)] hover:text-[var(--cyan)] hover:shadow-[0_0_16px_rgba(0,198,255,0.25)]"
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card-bg-strong)] text-[var(--muted-soft)] transition-all duration-300 hover:scale-110 hover:border-[var(--cyan)] hover:text-[var(--cyan)] hover:shadow-[0_0_16px_rgba(0,198,255,0.25)]"
                 >
                   <social.icon className="h-4 w-4" />
                 </Link>
@@ -461,7 +465,7 @@ export default function Contact() {
           </div>
 
           <div className="mt-7 flex justify-center md:justify-start">
-            <span className="inline-flex items-center gap-2 rounded-full border border-[#1a3a1a] bg-[#111] px-3 py-1.5 text-xs text-green-400">
+            <span className="inline-flex items-center gap-2 rounded-full border border-[#1a3a1a] bg-[var(--card-bg-strong)] px-3 py-1.5 text-xs text-green-400">
               <span className="h-2 w-2 rounded-full bg-green-400 animate-pulse" />
               Available for new projects
             </span>
@@ -476,13 +480,13 @@ export default function Contact() {
           animate={isShaking ? { x: [0, -8, 8, -8, 0] } : { x: 0 }}
           className="relative z-10"
         >
-          <div className="overflow-hidden rounded-[20px] border border-[#1e1e1e] bg-[#0f0f0f] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)] transition-colors duration-300 hover:border-[#2a2a2a] sm:p-5 md:p-10">
+          <div className="overflow-hidden rounded-[20px] border border-[var(--border)] bg-[var(--card-bg)] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)] transition-colors duration-300 hover:border-[var(--cyan)]/30 sm:p-5 md:p-10">
             <div className="mb-5">
-              <div className="mb-2 flex items-center justify-between text-xs text-[#777]">
+              <div className="mb-2 flex items-center justify-between text-xs text-[var(--muted-soft)]">
                 <span>Form completion</span>
                 <span className="text-[var(--cyan)]">{completionPercent}%</span>
               </div>
-              <div className="h-1.5 w-full overflow-hidden rounded-full bg-[#1a1a1a]">
+              <div className="h-1.5 w-full overflow-hidden rounded-full bg-[var(--track-muted)]">
                 <motion.div
                   animate={{ width: `${completionPercent}%` }}
                   transition={{ duration: 0.3 }}
@@ -520,7 +524,7 @@ export default function Contact() {
                       initial={{ opacity: 0, y: 6 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 6 }}
-                      className="mt-2 flex items-center gap-2 text-xs text-[#8a8a8a]"
+                      className="mt-2 flex items-center gap-2 text-xs text-[var(--muted)]"
                     >
                       <span className="flex items-center gap-1">
                         <span className="h-1.5 w-1.5 rounded-full bg-[var(--cyan)] animate-bounce [animation-delay:0ms]" />

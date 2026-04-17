@@ -92,7 +92,7 @@ export default function ScrollProgress() {
                 animate={{ x: 0, opacity: 1 }}
                 exit={{ x: 6, opacity: 0 }}
                 transition={{ duration: 0.2 }}
-                className="hidden rounded-full border border-[var(--cyan)]/70 bg-[#111] px-3 py-1 text-xs font-heading text-[var(--white)] md:flex"
+                className="hidden rounded-full border border-[var(--border)] bg-[var(--card-bg-strong)] px-3 py-1 text-xs font-heading text-[var(--white)] md:flex"
               >
                 {currentSection}
               </motion.div>
@@ -107,11 +107,11 @@ export default function ScrollProgress() {
               onMouseLeave={() => setIsHovered(false)}
               whileHover={{ scale: 1.1 }}
               aria-label="Scroll to top"
-              className="relative inline-flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-[#222] bg-[#111] md:h-14 md:w-14"
+              className="relative inline-flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card-bg-strong)] md:h-14 md:w-14"
               style={{
                 boxShadow: isHovered
-                  ? "0 0 16px #00c6ff44, 0 8px 20px rgba(0,0,0,0.45)"
-                  : "0 8px 20px rgba(0,0,0,0.4)",
+                  ? "0 0 16px #00c6ff44, 0 8px 20px rgba(15,23,42,0.2)"
+                  : "0 8px 20px rgba(15,23,42,0.16)",
               }}
             >
               <svg className="absolute inset-0 h-full w-full -rotate-90" viewBox="0 0 56 56" aria-hidden="true">
@@ -121,7 +121,14 @@ export default function ScrollProgress() {
                     <stop offset="100%" stopColor="#0072ff" />
                   </linearGradient>
                 </defs>
-                <circle cx="28" cy="28" r={CIRCLE_RADIUS} fill="none" stroke="#222" strokeWidth="3" />
+                <circle
+                  cx="28"
+                  cy="28"
+                  r={CIRCLE_RADIUS}
+                  fill="none"
+                  stroke="var(--border)"
+                  strokeWidth="3"
+                />
                 <circle
                   cx="28"
                   cy="28"

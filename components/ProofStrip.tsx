@@ -18,7 +18,7 @@ export default function ProofStrip() {
         initial="hidden"
         whileInView="visible"
         viewport={VIEWPORT_ONCE}
-        className="rounded-2xl border border-[var(--border)] bg-[#0f1115]/85 p-4 backdrop-blur-sm sm:p-5"
+        className="rounded-2xl border border-[var(--border)] bg-[var(--card-bg)]/90 p-4 backdrop-blur-sm sm:p-5"
       >
         <motion.div
           variants={staggerContainer}

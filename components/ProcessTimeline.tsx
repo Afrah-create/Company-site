@@ -31,7 +31,7 @@ export default function ProcessTimeline() {
             key={step.title}
             variants={staggerItem}
             custom={index}
-            className="relative rounded-xl border border-[var(--border)] bg-[#0f1115] p-4 md:p-5"
+            className="relative rounded-xl border border-[var(--border)] bg-[var(--card-bg)] p-4 md:p-5"
           >
             <div className="mb-3 inline-flex h-8 w-8 items-center justify-center rounded-full border border-[var(--cyan)]/60 bg-[var(--bg)] text-xs font-semibold text-[var(--cyan)]">
               {index + 1}

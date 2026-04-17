@@ -78,7 +78,7 @@ export default function Team() {
       initial="hidden"
       whileInView="visible"
       viewport={VIEWPORT_ONCE}
-      className="group relative overflow-hidden rounded-2xl border border-[var(--border)] bg-[#111] transition-all duration-300 hover:-translate-y-1 hover:border-[var(--cyan)]/60 hover:shadow-[0_16px_38px_-26px_rgba(0,198,255,0.7)]"
+      className="group relative overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface)] transition-all duration-300 hover:-translate-y-1 hover:border-[var(--cyan)]/60 hover:shadow-[0_16px_38px_-26px_rgba(0,198,255,0.7)]"
     >
       <div className="relative h-60 sm:h-72">
         <Image
@@ -88,17 +88,23 @@ export default function Team() {
           loading="lazy"
           className="object-cover transition-transform duration-500 group-hover:scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-transparent" />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(180deg,var(--image-gradient-to),var(--image-overlay-medium),transparent)",
+          }}
+        />
       </div>
 
       <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
-        <p className="font-heading text-lg leading-tight text-[var(--white)] sm:text-xl">{member.name}</p>
-        <p className="mt-1 text-xs text-[var(--muted)] sm:text-sm">{member.role}</p>
+        <p className="font-heading text-lg leading-tight text-white sm:text-xl">{member.name}</p>
+        <p className="mt-1 text-xs text-white/85 sm:text-sm">{member.role}</p>
         <div className="mt-3 flex flex-wrap gap-2">
           {member.specialties.map((specialty) => (
             <span
               key={`${member.name}-${specialty}`}
-              className="rounded-full border border-[var(--cyan)]/45 bg-black/35 px-2.5 py-1 text-xs text-[var(--white)]/90 backdrop-blur-sm"
+              className="rounded-full border border-[var(--cyan)]/55 bg-black/35 px-2.5 py-1 text-xs text-white/95 backdrop-blur-sm"
             >
               {specialty}
             </span>
@@ -107,7 +113,7 @@ export default function Team() {
         <div className="mt-3">
           <Link
             href="#contact"
-            className="inline-flex items-center gap-2 text-xs font-medium text-[var(--cyan)] transition-colors duration-300 hover:text-[var(--white)] sm:text-sm"
+            className="inline-flex items-center gap-2 text-xs font-medium text-[var(--cyan)] transition-colors duration-300 hover:text-white sm:text-sm"
             aria-label={`Contact ${member.name}`}
           >
             <BriefcaseBusiness className="h-4 w-4" />

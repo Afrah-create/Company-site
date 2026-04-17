@@ -130,7 +130,7 @@ export default function Portfolio() {
               className={`snap-start whitespace-nowrap rounded-full border px-3.5 py-2 text-xs transition-all duration-300 sm:px-4 sm:text-sm ${
                 activeFilter === filter
                   ? "border-[var(--cyan)] bg-[var(--cyan)]/12 text-[var(--white)]"
-                  : "border-[var(--border)] bg-[var(--surface)] text-[var(--muted)] hover:border-[var(--cyan)]/50 hover:text-[var(--white)]"
+                  : "border-[var(--border)] bg-[var(--surface)] text-[var(--muted)] hover:border-[var(--cyan)]/50 hover:text-[var(--white)]/90"
               }`}
             >
               {filter}
@@ -153,7 +153,7 @@ export default function Portfolio() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.35, ease: "easeOut" }}
-                className={`group relative overflow-hidden rounded-2xl border border-[var(--border)] bg-[#101010] ${project.spanClass}`}
+                className={`group relative overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface)] ${project.spanClass}`}
               >
                 <Image
                   src={project.imageSrc}
@@ -162,18 +162,24 @@ export default function Portfolio() {
                   loading="lazy"
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent opacity-90 transition-opacity duration-300 group-hover:opacity-100" />
+                <div
+                  className="absolute inset-0 opacity-90 transition-opacity duration-300 group-hover:opacity-100"
+                  style={{
+                    background:
+                      "linear-gradient(180deg,var(--image-gradient-to),var(--image-overlay-medium),transparent)",
+                  }}
+                />
 
-                <div className="absolute inset-x-0 bottom-0 z-10 p-4 sm:p-5">
-                  <h3 className="font-heading text-[1.05rem] leading-snug text-[var(--white)] sm:text-xl">
+                <div className="absolute inset-x-0 bottom-0 z-10 p-4 [text-shadow:0_1px_2px_rgba(0,0,0,0.55)] sm:p-5">
+                  <h3 className="font-heading text-[1.05rem] leading-snug text-white sm:text-xl">
                     {project.name}
                   </h3>
-                  <p className="mt-2 text-xs text-[var(--cyan)]">{project.result}</p>
+                  <p className="mt-2 text-xs font-medium text-[var(--cyan)]">{project.result}</p>
                   <div className="mt-3 flex flex-wrap gap-2">
                     {project.stack.map((item) => (
                       <span
                         key={`${project.name}-${item}`}
-                        className="rounded-full border border-[var(--cyan)]/70 bg-[var(--bg)]/40 px-2 py-1 text-[11px] text-[var(--cyan)] sm:px-2.5 sm:text-xs"
+                        className="rounded-full border border-[var(--cyan)]/75 bg-black/45 px-2 py-1 text-[11px] text-[var(--cyan)] sm:px-2.5 sm:text-xs"
                       >
                         {item}
                       </span>
@@ -182,7 +188,7 @@ export default function Portfolio() {
                   <button
                     type="button"
                     onClick={() => setSelectedProject(project)}
-                    className="mt-4 inline-flex items-center text-sm font-medium text-[var(--white)] transition-transform duration-300 group-hover:translate-x-1"
+                    className="mt-4 inline-flex items-center text-sm font-medium text-white transition-transform duration-300 group-hover:translate-x-1"
                   >
                     View Project <span className="ml-1">→</span>
                   </button>
@@ -208,7 +214,8 @@ export default function Portfolio() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[110] flex items-end justify-center bg-black/70 p-4 md:items-center"
+            className="fixed inset-0 z-[110] flex items-end justify-center p-4 md:items-center"
+            style={{ backgroundColor: "var(--image-overlay-strong)" }}
             onClick={() => setSelectedProject(null)}
           >
             <motion.div
@@ -216,7 +223,7 @@ export default function Portfolio() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 18, scale: 0.98 }}
               transition={{ duration: 0.25 }}
-              className="w-full max-w-2xl rounded-2xl border border-[var(--border)] bg-[#0f1115] p-5 sm:p-6"
+              className="w-full max-w-2xl rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5 sm:p-6"
               onClick={(event) => event.stopPropagation()}
             >
               <div className="mb-4 flex items-start justify-between gap-3">
