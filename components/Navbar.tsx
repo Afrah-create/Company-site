@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, type Variants } from "framer-motion";
 import { Menu, Moon, Sun, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useActiveSection } from "@/hooks/useActiveSection";
@@ -44,7 +44,7 @@ const backdropVariants = {
   exit: { opacity: 0, transition: { duration: 0.15 } },
 };
 
-const sheetVariants = {
+const sheetVariants: Variants = {
   hidden: { x: "100%", opacity: 0.98 },
   visible: {
     x: 0,
