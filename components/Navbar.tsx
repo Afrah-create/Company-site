@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, Moon, Sun, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useActiveSection } from "@/hooks/useActiveSection";
 import { useTheme } from "@/components/ThemeProvider";
 import { useScrollPosition } from "@/hooks/useScrollPosition";
@@ -38,11 +38,60 @@ const linkVariants = {
   exit: { opacity: 0, y: 14, transition: { duration: 0.2 } },
 };
 
+const backdropVariants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { duration: 0.2 } },
+  exit: { opacity: 0, transition: { duration: 0.15 } },
+};
+
+const sheetVariants = {
+  hidden: { x: "100%", opacity: 0.98 },
+  visible: {
+    x: 0,
+    opacity: 1,
+    transition: {
+      type: "spring",
+      stiffness: 360,
+      damping: 34,
+      mass: 0.8,
+      when: "beforeChildren",
+      staggerChildren: 0.06,
+    },
+  },
+  exit: {
+    x: "100%",
+    opacity: 0.98,
+    transition: { duration: 0.22, ease: "easeInOut", when: "afterChildren" },
+  },
+};
+
 export default function Navbar() {
   const isScrolled = useScrollPosition(24);
   const [isOpen, setIsOpen] = useState(false);
   const activeSection = useActiveSection();
   const { theme, toggleTheme } = useTheme();
+  const activeLabel =
+    navLinks.find((item) => item.href.replace("#", "") === activeSection)?.label ?? "Home";
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsOpen(false);
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [isOpen]);
 
   return (
     <>
@@ -109,7 +158,7 @@ export default function Navbar() {
               {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </button>
             <span className="rounded-full border border-[var(--cyan)]/40 bg-[var(--cyan)]/10 px-3 py-1 text-[10px] uppercase tracking-[0.12em] text-[var(--cyan)]">
-              {navLinks.find((item) => item.href.replace("#", "") === activeSection)?.label ?? "Home"}
+              {activeLabel}
             </span>
             <Link
               href="#contact"
@@ -144,50 +193,110 @@ export default function Navbar() {
 
       <AnimatePresence>
         {isOpen && (
-          <motion.aside
-            className="fixed inset-0 z-[70] flex min-h-screen flex-col bg-[var(--header-mobile-bg)] px-8 pb-10 pt-24 md:hidden"
-            variants={overlayVariants}
+          <motion.div
+            className="fixed inset-0 z-[70] md:hidden"
+            variants={backdropVariants}
             initial="hidden"
             animate="visible"
             exit="exit"
+            aria-hidden={!isOpen}
           >
-            <div className="absolute right-4 top-4">
-              <button
-                type="button"
-                aria-label="Close menu"
-                className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)] text-[var(--white)]"
-                onClick={() => setIsOpen(false)}
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
+            <button
+              type="button"
+              aria-label="Close menu backdrop"
+              className="absolute inset-0 bg-black/45 backdrop-blur-[1px]"
+              onClick={() => setIsOpen(false)}
+            />
 
-            <div className="mt-8 flex flex-1 flex-col justify-center gap-7">
-              {navLinks.map((item) => (
-                <motion.div key={item.label} variants={linkVariants}>
-                  <Link
-                    href={item.href}
-                    className="text-3xl font-semibold text-[var(--white)]"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    {item.label}
-                  </Link>
-                </motion.div>
-              ))}
-            </div>
+            <motion.aside
+              className="absolute inset-y-0 right-0 flex w-full max-w-sm flex-col border-l border-[var(--border)] bg-[var(--header-mobile-bg)] shadow-2xl"
+              variants={sheetVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Mobile navigation menu"
+            >
+              <div className="flex items-center justify-between border-b border-[var(--border)] px-5 py-4">
+                <Link href="#hero" className="group flex min-w-0 items-center gap-2" onClick={() => setIsOpen(false)}>
+                  <Image
+                    src="/images/Logo.jpeg"
+                    alt="SlimCyberTech logo"
+                    width={36}
+                    height={36}
+                    className="h-9 w-9 rounded-md object-cover"
+                  />
+                  <span className="max-w-[150px] whitespace-nowrap leading-none">
+                    <span className="text-sm font-semibold tracking-[0.01em] text-[var(--white)]">Slim</span>
+                    <span className="text-sm font-semibold tracking-[0.01em] text-[var(--cyan)]">Cyber</span>
+                    <span className="text-sm font-semibold tracking-[0.01em] text-[var(--blue)]">Tech</span>
+                  </span>
+                </Link>
+                <button
+                  type="button"
+                  aria-label="Close menu"
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)] text-[var(--white)]"
+                  onClick={() => setIsOpen(false)}
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
 
-            <motion.div variants={linkVariants} className="pt-6">
-              <Link
-                href="#contact"
-                onClick={() => setIsOpen(false)}
-                className="inline-flex w-full justify-center rounded-full bg-[var(--gradient)] p-[1px]"
-              >
-                <span className="w-full rounded-full bg-[var(--bg)] px-6 py-3 text-center text-base font-semibold text-[var(--white)]">
-                  Get Started
+              <div className="border-b border-[var(--border)] px-5 py-3">
+                <span className="rounded-full border border-[var(--cyan)]/35 bg-[var(--cyan)]/10 px-3 py-1 text-[10px] uppercase tracking-[0.12em] text-[var(--cyan)]">
+                  Now viewing: {activeLabel}
                 </span>
-              </Link>
-            </motion.div>
-          </motion.aside>
+              </div>
+
+              <motion.div className="flex-1 px-5 pb-4 pt-3" variants={overlayVariants}>
+                <div className="mb-3 text-[11px] uppercase tracking-[0.12em] text-[var(--white)]/60">Navigation</div>
+                <div className="space-y-1">
+                  {navLinks.map((item) => {
+                    const isActive = activeSection === item.href.replace("#", "");
+                    return (
+                      <motion.div key={item.label} variants={linkVariants}>
+                        <Link
+                          href={item.href}
+                          onClick={() => setIsOpen(false)}
+                          className={`flex items-center justify-between rounded-xl border px-4 py-3.5 text-base font-medium transition-colors ${
+                            isActive
+                              ? "border-[var(--cyan)]/55 bg-[var(--cyan)]/12 text-[var(--white)]"
+                              : "border-[var(--border)] bg-[var(--surface)] text-[var(--white)]/90 hover:border-[var(--cyan)]/45 hover:text-[var(--white)]"
+                          }`}
+                        >
+                          <span>{item.label}</span>
+                          {isActive ? <span className="h-2 w-2 rounded-full bg-[var(--cyan)]" /> : null}
+                        </Link>
+                      </motion.div>
+                    );
+                  })}
+                </div>
+              </motion.div>
+
+              <motion.div variants={linkVariants} className="border-t border-[var(--border)] px-5 py-5">
+                <Link
+                  href="#contact"
+                  onClick={() => setIsOpen(false)}
+                  className="inline-flex w-full justify-center rounded-full bg-[var(--gradient)] p-[1px]"
+                >
+                  <span className="w-full rounded-full bg-[var(--bg)] px-6 py-3 text-center text-base font-semibold text-[var(--white)]">
+                    Get Started
+                  </span>
+                </Link>
+                <div className="mt-4 rounded-xl border border-[var(--border)] bg-[var(--surface)] p-4">
+                  <p className="mb-1 text-[11px] uppercase tracking-[0.12em] text-[var(--white)]/55">Quick contact</p>
+                  <a
+                    href="mailto:hello@slimcybertech.com"
+                    className="block text-sm font-medium text-[var(--white)]/90 hover:text-[var(--cyan)]"
+                  >
+                    hello@slimcybertech.com
+                  </a>
+                  <p className="mt-1 text-xs text-[var(--white)]/65">We usually reply within 1-2 business days.</p>
+                </div>
+              </motion.div>
+            </motion.aside>
+          </motion.div>
         )}
       </AnimatePresence>
     </>

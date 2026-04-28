@@ -183,12 +183,19 @@ export default function Hero() {
       </div>
 
       <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center px-4 text-center sm:px-6 md:px-10">
+        <div
+          className="w-full max-w-5xl rounded-3xl px-3 py-4 sm:px-6 sm:py-7"
+          style={{
+            background: "linear-gradient(180deg,var(--image-overlay-medium),rgba(255,255,255,0))",
+            backdropFilter: "blur(1px)",
+          }}
+        >
         <motion.h1
           custom={0}
           variants={itemVariants}
           initial="hidden"
           animate="visible"
-          className="mx-auto max-w-[16ch] text-balance text-[clamp(1.75rem,7.4vw,3.8rem)] font-bold leading-[1.12] text-[var(--white)] sm:max-w-full sm:whitespace-nowrap sm:leading-tight"
+          className="mx-auto max-w-[16ch] text-balance text-[clamp(1.75rem,7.4vw,3.8rem)] font-bold leading-[1.12] text-[var(--white)] [text-shadow:0_2px_8px_rgba(0,0,0,0.18)] sm:max-w-full sm:whitespace-nowrap sm:leading-tight"
         >
           {heroHeading.slice(0, heroVisibleLength)}
           <span className="ml-1 inline-block h-[0.95em] w-[2px] animate-pulse bg-[var(--cyan)] align-[-0.1em]" />
@@ -199,7 +206,7 @@ export default function Hero() {
           variants={itemVariants}
           initial="hidden"
           animate="visible"
-          className="mt-4 max-w-[34ch] text-sm leading-7 text-[var(--white)] sm:mt-6 sm:max-w-3xl sm:text-lg sm:leading-8"
+          className="mt-4 max-w-[34ch] text-sm leading-7 text-[var(--white)] [text-shadow:0_1px_5px_rgba(0,0,0,0.12)] sm:mt-6 sm:max-w-3xl sm:text-lg sm:leading-8"
         >
           We craft cutting-edge software solutions that push the boundaries of what&apos;s
           possible.
@@ -210,7 +217,7 @@ export default function Hero() {
           variants={itemVariants}
           initial="hidden"
           animate="visible"
-          className="mt-4 min-h-8 text-xs text-[var(--cyan)] sm:text-base"
+          className="mt-4 min-h-8 text-xs text-[var(--cyan)] [text-shadow:0_1px_4px_rgba(255,255,255,0.32)] sm:text-base"
         >
           <span className="text-[var(--muted)]">Expertise:</span>{" "}
           <AnimatePresence mode="wait">
@@ -243,11 +250,12 @@ export default function Hero() {
           </Link>
           <Link
             href="#portfolio"
-            className="w-full rounded-full border border-[var(--cyan)]/60 bg-transparent px-7 py-3 text-sm font-semibold text-[var(--white)] transition-colors duration-300 hover:border-[var(--blue)] hover:bg-[var(--surface2)] sm:w-auto"
+            className="w-full rounded-full border border-[var(--cyan)]/65 bg-[var(--surface)]/55 px-7 py-3 text-sm font-semibold text-[var(--white)] shadow-sm transition-colors duration-300 hover:border-[var(--blue)] hover:bg-[var(--surface2)] sm:w-auto"
           >
             View Our Work
           </Link>
         </motion.div>
+        </div>
 
         <motion.div
           custom={4}

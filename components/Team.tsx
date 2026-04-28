@@ -32,7 +32,7 @@ const team = [
   {
     name: "Akuma Dalil",
     role: "IT Operations & Support Specialist",
-    image: "/images/Akuma Dalil.jpeg",
+    image: "/images/Akuma Dalil.jpg",
     alt: "Akuma Dalil portrait",
     specialties: ["Infrastructure Support", "Systems Administration"],
   },

@@ -21,6 +21,7 @@ export default function ScrollProgress() {
   const scrollPercent = useScrollProgress();
   const [isHovered, setIsHovered] = useState(false);
   const [currentSection, setCurrentSection] = useState("Hero");
+  const displayPercent = Math.max(0, Math.min(100, scrollPercent));
 
   useEffect(() => {
     const sectionElements = sectionMap
@@ -53,18 +54,18 @@ export default function ScrollProgress() {
   }, []);
 
   const strokeDashoffset = useMemo(
-    () => CIRCUMFERENCE - (scrollPercent / 100) * CIRCUMFERENCE,
-    [scrollPercent],
+    () => CIRCUMFERENCE - (displayPercent / 100) * CIRCUMFERENCE,
+    [displayPercent],
   );
 
-  const showWidget = scrollPercent >= 5;
+  const showWidget = displayPercent >= 5;
 
   return (
     <>
       <div className="pointer-events-none fixed inset-x-0 top-0 z-[9999] h-[3px] bg-transparent">
         <div
           className="relative h-full bg-[linear-gradient(90deg,#00c6ff,#0072ff)] transition-[width] duration-100 ease-linear will-change-transform"
-          style={{ width: `${scrollPercent}%` }}
+          style={{ width: `${displayPercent}%` }}
         >
           <div
             className="absolute right-0 top-0 h-full w-[4px] rounded-full bg-cyan-300"
@@ -157,15 +158,15 @@ export default function ScrollProgress() {
                   </motion.span>
                 ) : (
                   <motion.span
-                    key={`percent-${scrollPercent}`}
+                    key="percent"
                     initial={{ opacity: 0.6 }}
                     animate={{ opacity: [0.6, 1] }}
                     exit={{ opacity: 0.5 }}
                     transition={{ duration: 0.2 }}
-                    className="relative z-10 flex flex-col items-center leading-none"
+                    className="relative z-10 flex min-w-[26px] flex-col items-end leading-none tabular-nums md:min-w-[32px]"
                   >
                     <span className="font-heading text-[9px] font-bold text-[var(--white)] md:text-[11px]">
-                      {scrollPercent}
+                      {displayPercent}
                     </span>
                     <span className="mt-[1px] text-[7px] text-[var(--cyan)] md:text-[8px]">%</span>
                   </motion.span>
