@@ -1,4 +1,4 @@
-import nodemailer from "nodemailer";
+﻿import nodemailer from "nodemailer";
 import { NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
@@ -15,18 +15,27 @@ type ContactPayload = {
   message?: string;
 };
 
-const gmailUser = process.env.GMAIL_USER ?? process.env.SMTP_USER ?? process.env.EMAIL_USER;
+const gmailUser =
+  process.env.GMAIL_USER ?? process.env.SMTP_USER ?? process.env.EMAIL_USER;
 const gmailAppPassword =
-  process.env.GMAIL_APP_PASSWORD ?? process.env.SMTP_APP_PASSWORD ?? process.env.EMAIL_APP_PASSWORD;
+  process.env.GMAIL_APP_PASSWORD ??
+  process.env.SMTP_APP_PASSWORD ??
+  process.env.EMAIL_APP_PASSWORD;
 const recipientEmails =
-  process.env.CONTACT_RECIPIENTS ?? process.env.CONTACT_TO_EMAILS ?? process.env.CONTACT_EMAILS;
+  process.env.CONTACT_RECIPIENTS ??
+  process.env.CONTACT_TO_EMAILS ??
+  process.env.CONTACT_EMAILS;
+
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
 
 function escapeHtml(value: string) {
   return value
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
-    .replace(/\"/g, "&quot;")
+    .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
 }
 
@@ -37,29 +46,39 @@ function parseRecipients(value: string | undefined) {
     .filter(Boolean);
 }
 
+type LogoAsset = {
+  fileName: string;
+  content: Buffer;
+  mimeType: string;
+  cid: string;
+};
+
 /**
- * Reads the company logo from the public folder and returns a Base64 data URI.
- * Embedding as Base64 ensures the image renders in ALL email clients without
- * needing an external HTTP request (which many clients block by default).
- * Falls back to null so the template can render a styled text logo instead.
+ * Reads a local logo file and returns an embeddable CID attachment payload.
+ * CID attachments are better supported by email clients than base64 data URIs.
  */
-function getLogoDataUri(): string | null {
+function getLogoAsset(): LogoAsset | null {
   const candidates = [
-    path.join(process.cwd(), "public", "images", "Logo.jpeg"),
-    path.join(process.cwd(), "public", "images", "Logo.jpg"),
-    path.join(process.cwd(), "public", "images", "Logo.png"),
-    path.join(process.cwd(), "public", "images", "logo.jpeg"),
-    path.join(process.cwd(), "public", "images", "logo.jpg"),
-    path.join(process.cwd(), "public", "images", "logo.png"),
-  ];
+    "Logo.png",
+    "Logo.jpeg",
+    "Logo.jpg",
+    "logo.png",
+    "logo.jpeg",
+    "logo.jpg",
+  ].map((f) => path.join(process.cwd(), "public", "images", f));
 
   for (const filePath of candidates) {
     try {
       if (fs.existsSync(filePath)) {
-        const buffer = fs.readFileSync(filePath);
+        const content = fs.readFileSync(filePath);
         const ext = path.extname(filePath).toLowerCase();
         const mimeType = ext === ".png" ? "image/png" : "image/jpeg";
-        return `data:${mimeType};base64,${buffer.toString("base64")}`;
+        return {
+          fileName: path.basename(filePath),
+          content,
+          mimeType,
+          cid: "slimcybertech-logo",
+        };
       }
     } catch {
       // try next candidate
@@ -69,10 +88,8 @@ function getLogoDataUri(): string | null {
 }
 
 /**
- * Converts raw message text into clean HTML.
- * - Splits on blank lines to create paragraphs
- * - Preserves intentional single line breaks within paragraphs
- * - Handles both short one-liners and long multi-paragraph messages
+ * Converts raw message text into clean HTML paragraphs, preserving intentional
+ * line breaks within paragraphs.
  */
 function formatMessageHtml(raw: string): string {
   const paragraphs = raw
@@ -91,15 +108,544 @@ function formatMessageHtml(raw: string): string {
   return paragraphs
     .map(
       (p) =>
-        `<p style="margin:0 0 16px;padding:0;font-size:15px;color:#1c2e44;line-height:1.85;word-break:break-word;word-wrap:break-word;">${p}</p>`,
+        `<p style="margin:0 0 16px;padding:0;font-size:15px;color:#1a2e44;line-height:1.85;word-break:break-word;">${p}</p>`,
     )
     .join("");
 }
 
+// ---------------------------------------------------------------------------
+// Shared design tokens (kept in one place so both templates stay consistent)
+// ---------------------------------------------------------------------------
+
+const BRAND = {
+  navy: "#0d1f3c",
+  navySoft: "#13294b",
+  blue: "#1a56db",
+  blueLight: "#4a8ef5",
+  bluePale: "#eef3ff",
+  blueBorder: "#c5d8fa",
+  text: "#0d1f3c",
+  textMuted: "#5a7299",
+  textLight: "#8fa3be",
+  bg: "#f0f4fa",
+  white: "#ffffff",
+  accentGreen: "#10b981",
+  divider: "#e2ebf7",
+};
+
+// ---------------------------------------------------------------------------
+// Template builders
+// ---------------------------------------------------------------------------
+
+/**
+ * Builds the notification email sent to the website owners.
+ */
+function buildOwnerEmail(params: {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  subject: string;
+  budget: string;
+  message: string;
+  logoHtml: string;
+  replySubject: string;
+}): string {
+  const {
+    firstName,
+    lastName,
+    email,
+    phone,
+    subject,
+    budget,
+    message,
+    logoHtml,
+    replySubject,
+  } = params;
+
+  const initials = `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
+  const messageHtml = formatMessageHtml(message);
+
+  return `<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>New Inquiry — SlimCyberTech</title>
+</head>
+<body style="margin:0;padding:0;background-color:${BRAND.bg};
+             font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+             -webkit-font-smoothing:antialiased;">
+
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"
+    style="background-color:${BRAND.bg};padding:40px 16px 56px;">
+    <tr>
+      <td align="center">
+
+        <!-- CARD -->
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0"
+          style="max-width:600px;width:100%;border-radius:16px;overflow:hidden;
+                 box-shadow:0 8px 32px rgba(13,31,60,0.12);">
+
+          <!-- HEADER -->
+          <tr>
+            <td style="background-color:${BRAND.navySoft};padding:26px 32px 24px;">
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+                <tr>
+                  <td style="vertical-align:middle;">
+                    ${logoHtml}
+                  </td>
+                  <td style="text-align:right;vertical-align:middle;">
+                    <span style="display:inline-block;
+                                 background:rgba(255,255,255,0.12);
+                                 color:#dbe8ff;
+                                 font-size:9px;font-weight:700;letter-spacing:2px;
+                                 text-transform:uppercase;
+                                 padding:5px 14px;border-radius:20px;
+                                 border:1px solid rgba(255,255,255,0.20);">
+                      New Inquiry
+                    </span>
+                  </td>
+                </tr>
+              </table>
+
+              <div style="margin-top:22px;padding-top:20px;
+                          border-top:1px solid rgba(255,255,255,0.16);">
+                <h1 style="margin:0 0 6px;font-size:20px;font-weight:700;color:#ffffff;
+                           line-height:1.3;letter-spacing:-0.2px;">
+                  You have a new message
+                </h1>
+                <p style="margin:0;font-size:13px;color:#d0def7;line-height:1.5;">
+                  A new customer enquiry was submitted through your website.
+                </p>
+              </div>
+            </td>
+          </tr>
+
+          <!-- ACCENT LINE -->
+          <tr>
+            <td style="height:3px;
+                       background:linear-gradient(90deg,${BRAND.blue} 0%,${BRAND.blueLight} 50%,${BRAND.blue} 100%);">
+            </td>
+          </tr>
+
+          <!-- BODY -->
+          <tr>
+            <td style="background:${BRAND.white};padding:30px 36px 32px;">
+
+              <!-- Sender card -->
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"
+                style="background:#f4f8ff;border-radius:12px;
+                       border:1px solid ${BRAND.blueBorder};margin-bottom:20px;">
+                <tr>
+                  <td style="padding:18px 20px;">
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+                      <tr>
+                        <!-- Avatar -->
+                        <td style="vertical-align:middle;width:52px;padding-right:14px;">
+                          <div style="width:48px;height:48px;border-radius:50%;
+                                      background:linear-gradient(135deg,${BRAND.blue} 0%,${BRAND.blueLight} 100%);
+                                      text-align:center;line-height:48px;
+                                      font-size:15px;font-weight:800;color:#ffffff;">
+                            ${initials}
+                          </div>
+                        </td>
+                        <!-- Name + email -->
+                        <td style="vertical-align:middle;">
+                          <div style="font-size:15px;font-weight:700;color:${BRAND.text};
+                                      margin-bottom:4px;line-height:1.3;">
+                            ${escapeHtml(`${firstName} ${lastName}`.trim())}
+                          </div>
+                          <a href="mailto:${escapeHtml(email)}"
+                            style="font-size:13px;color:${BRAND.blue};text-decoration:none;font-weight:500;">
+                            ${escapeHtml(email)}
+                          </a>
+                        </td>
+                        ${
+                          phone
+                            ? `<td style="text-align:right;vertical-align:middle;padding-left:10px;">
+                            <span style="display:inline-block;background:#deeafc;color:${BRAND.blue};
+                                         font-size:11.5px;font-weight:600;padding:5px 12px;
+                                         border-radius:20px;white-space:nowrap;
+                                         border:1px solid #bcd4f8;">
+                              &#128222;&nbsp;${escapeHtml(phone)}
+                            </span>
+                          </td>`
+                            : ""
+                        }
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Service / Budget row -->
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"
+                style="margin-bottom:20px;">
+                <tr>
+                  <td style="width:50%;padding-right:8px;vertical-align:top;">
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"
+                      style="background:${BRAND.bluePale};border-radius:10px;
+                             border:1px solid ${BRAND.blueBorder};border-left:4px solid ${BRAND.blue};">
+                      <tr>
+                        <td style="padding:14px 16px;">
+                          <div style="font-size:9px;font-weight:800;letter-spacing:1.5px;
+                                      text-transform:uppercase;color:${BRAND.textMuted};margin-bottom:6px;">
+                            Service Requested
+                          </div>
+                          <div style="font-size:14px;font-weight:700;color:${BRAND.text};line-height:1.4;">
+                            ${escapeHtml(subject)}
+                          </div>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                  <td style="width:50%;padding-left:8px;vertical-align:top;">
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"
+                      style="background:${BRAND.bluePale};border-radius:10px;
+                             border:1px solid ${BRAND.blueBorder};border-left:4px solid ${BRAND.blueLight};">
+                      <tr>
+                        <td style="padding:14px 16px;">
+                          <div style="font-size:9px;font-weight:800;letter-spacing:1.5px;
+                                      text-transform:uppercase;color:${BRAND.textMuted};margin-bottom:6px;">
+                            Budget Range
+                          </div>
+                          <div style="font-size:14px;font-weight:700;color:${BRAND.text};line-height:1.4;">
+                            ${escapeHtml(budget || "Not specified")}
+                          </div>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Message block -->
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"
+                style="margin-bottom:28px;">
+                <tr>
+                  <td>
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"
+                      style="margin-bottom:10px;">
+                      <tr>
+                        <td>
+                          <span style="font-size:9px;font-weight:800;letter-spacing:1.5px;
+                                       text-transform:uppercase;color:${BRAND.textMuted};">
+                            Their Message
+                          </span>
+                        </td>
+                        <td style="text-align:right;">
+                          <span style="font-size:11px;color:${BRAND.textLight};">
+                            ${message.length} characters
+                          </span>
+                        </td>
+                      </tr>
+                    </table>
+                    <div style="background:#f7f9fd;border-radius:10px;
+                                border:1px solid #dde8f5;border-left:4px solid #c5d8fa;
+                                padding:20px 22px 6px;">
+                      ${messageHtml}
+                    </div>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Reply CTA -->
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+                <tr>
+                  <td align="center">
+                    <a href="mailto:${escapeHtml(email)}?subject=${encodeURIComponent("Re: " + replySubject)}"
+                      style="display:inline-block;
+                             background:linear-gradient(135deg,${BRAND.blue} 0%,${BRAND.blueLight} 100%);
+                             color:#ffffff;font-size:14px;font-weight:700;
+                             text-decoration:none;padding:14px 40px;border-radius:8px;
+                             letter-spacing:0.3px;
+                             box-shadow:0 4px 16px rgba(26,86,219,0.28);">
+                      Reply to ${escapeHtml(firstName)} &nbsp;&#8594;
+                    </a>
+                  </td>
+                </tr>
+              </table>
+
+            </td>
+          </tr>
+
+          <!-- FOOTER -->
+          <tr>
+            <td style="background:#f5f8fd;padding:18px 36px 22px;
+                       border-top:1px solid #dde8f5;">
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+                <tr>
+                  <td style="vertical-align:middle;">
+                    <div style="font-size:13px;font-weight:700;color:${BRAND.text};">SlimCyberTech</div>
+                    <div style="font-size:11px;color:${BRAND.textMuted};margin-top:2px;">
+                      Arua, West Nile &middot; Uganda
+                    </div>
+                  </td>
+                  <td style="text-align:right;vertical-align:middle;">
+                    <div style="font-size:11px;color:${BRAND.textLight};line-height:1.65;">
+                      via&nbsp;
+                      <a href="https://slimcybertech.com"
+                        style="color:${BRAND.blue};text-decoration:none;font-weight:600;">
+                        slimcybertech.com
+                      </a>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+        </table>
+
+        <!-- Disclaimer -->
+        <p style="margin:18px 0 0;font-size:11px;color:#8aa0b8;text-align:center;line-height:1.75;">
+          Automated notification from your website contact form.<br />
+          Use the reply button above or write directly to <strong>${escapeHtml(email)}</strong>.
+        </p>
+
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>`;
+}
+
+/**
+ * Builds the confirmation email sent back to the person who filled in the form.
+ * Tone is warm, reassuring, and human — not robotic.
+ */
+function buildConfirmationEmail(params: {
+  firstName: string;
+  subject: string;
+  budget: string;
+  message: string;
+  logoHtml: string;
+  ownerEmail: string;
+}): string {
+  const { firstName, subject, budget, message, logoHtml, ownerEmail } = params;
+  const messageHtml = formatMessageHtml(message);
+
+  return `<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>We got your message — SlimCyberTech</title>
+</head>
+<body style="margin:0;padding:0;background-color:${BRAND.bg};
+             font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+             -webkit-font-smoothing:antialiased;">
+
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"
+    style="background-color:${BRAND.bg};padding:40px 16px 56px;">
+    <tr>
+      <td align="center">
+
+        <!-- CARD -->
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0"
+          style="max-width:600px;width:100%;border-radius:16px;overflow:hidden;
+                 box-shadow:0 8px 32px rgba(13,31,60,0.12);">
+
+          <!-- HEADER -->
+          <tr>
+            <td style="background-color:${BRAND.navySoft};padding:26px 32px 24px;">
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+                <tr>
+                  <td style="vertical-align:middle;">
+                    ${logoHtml}
+                  </td>
+                  <td style="text-align:right;vertical-align:middle;">
+                    <span style="display:inline-block;
+                                 background:rgba(255,255,255,0.12);
+                                 color:#baf2df;
+                                 font-size:9px;font-weight:700;letter-spacing:2px;
+                                 text-transform:uppercase;
+                                 padding:5px 14px;border-radius:20px;
+                                 border:1px solid rgba(255,255,255,0.20);">
+                      &#10003;&nbsp; Received
+                    </span>
+                  </td>
+                </tr>
+              </table>
+
+              <div style="margin-top:22px;padding-top:20px;
+                          border-top:1px solid rgba(255,255,255,0.16);">
+                <h1 style="margin:0 0 8px;font-size:20px;font-weight:700;color:#ffffff;
+                           line-height:1.3;letter-spacing:-0.2px;">
+                  Thanks for reaching out, ${escapeHtml(firstName)}!
+                </h1>
+                <p style="margin:0;font-size:13px;color:#d0def7;line-height:1.6;">
+                  We have received your message and our team will respond shortly.
+                </p>
+              </div>
+            </td>
+          </tr>
+
+          <!-- ACCENT LINE (green tint for confirmation) -->
+          <tr>
+            <td style="height:3px;
+                       background:linear-gradient(90deg,${BRAND.accentGreen} 0%,${BRAND.blueLight} 50%,${BRAND.accentGreen} 100%);">
+            </td>
+          </tr>
+
+          <!-- BODY -->
+          <tr>
+            <td style="background:${BRAND.white};padding:30px 36px 32px;">
+
+              <!-- What happens next -->
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"
+                style="background:${BRAND.bluePale};border-radius:12px;
+                       border:1px solid ${BRAND.blueBorder};
+                       border-left:4px solid ${BRAND.accentGreen};
+                       margin-bottom:22px;">
+                <tr>
+                  <td style="padding:18px 20px;">
+                    <div style="font-size:13px;font-weight:700;color:${BRAND.text};margin-bottom:6px;">
+                      What happens next?
+                    </div>
+                    <p style="margin:0;font-size:13.5px;color:${BRAND.textMuted};line-height:1.7;">
+                      Our team will review your request and reach out within
+                      <strong style="color:${BRAND.text};">1&ndash;2 business days</strong>.
+                      If your request is urgent, feel free to reply directly to this email.
+                    </p>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Summary of what they submitted -->
+              <div style="font-size:9px;font-weight:800;letter-spacing:1.5px;
+                          text-transform:uppercase;color:${BRAND.textMuted};margin-bottom:10px;">
+                Your Submission Summary
+              </div>
+
+              <!-- Service / Budget row -->
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"
+                style="margin-bottom:18px;">
+                <tr>
+                  <td style="width:50%;padding-right:8px;vertical-align:top;">
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"
+                      style="background:${BRAND.bluePale};border-radius:10px;
+                             border:1px solid ${BRAND.blueBorder};border-left:4px solid ${BRAND.blue};">
+                      <tr>
+                        <td style="padding:13px 15px;">
+                          <div style="font-size:9px;font-weight:800;letter-spacing:1.4px;
+                                      text-transform:uppercase;color:${BRAND.textMuted};margin-bottom:5px;">
+                            Service
+                          </div>
+                          <div style="font-size:14px;font-weight:700;color:${BRAND.text};line-height:1.4;">
+                            ${escapeHtml(subject)}
+                          </div>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                  <td style="width:50%;padding-left:8px;vertical-align:top;">
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"
+                      style="background:${BRAND.bluePale};border-radius:10px;
+                             border:1px solid ${BRAND.blueBorder};border-left:4px solid ${BRAND.blueLight};">
+                      <tr>
+                        <td style="padding:13px 15px;">
+                          <div style="font-size:9px;font-weight:800;letter-spacing:1.4px;
+                                      text-transform:uppercase;color:${BRAND.textMuted};margin-bottom:5px;">
+                            Budget
+                          </div>
+                          <div style="font-size:14px;font-weight:700;color:${BRAND.text};line-height:1.4;">
+                            ${escapeHtml(budget || "Not specified")}
+                          </div>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Their message (so they have a record) -->
+              <div style="font-size:9px;font-weight:800;letter-spacing:1.5px;
+                          text-transform:uppercase;color:${BRAND.textMuted};margin-bottom:10px;">
+                Your Message
+              </div>
+              <div style="background:#f7f9fd;border-radius:10px;
+                          border:1px solid #dde8f5;border-left:4px solid #c5d8fa;
+                          padding:20px 22px 6px;margin-bottom:28px;">
+                ${messageHtml}
+              </div>
+
+              <!-- Contact team CTA -->
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+                <tr>
+                  <td align="center">
+                    <a href="mailto:${escapeHtml(ownerEmail)}"
+                      style="display:inline-block;
+                             background:linear-gradient(135deg,${BRAND.blue} 0%,${BRAND.blueLight} 100%);
+                             color:#ffffff;font-size:14px;font-weight:700;
+                             text-decoration:none;padding:14px 40px;border-radius:8px;
+                             letter-spacing:0.3px;
+                             box-shadow:0 4px 16px rgba(26,86,219,0.28);">
+                      Contact the Team &nbsp;&#8594;
+                    </a>
+                  </td>
+                </tr>
+              </table>
+
+            </td>
+          </tr>
+
+          <!-- FOOTER -->
+          <tr>
+            <td style="background:#f5f8fd;padding:18px 36px 22px;
+                       border-top:1px solid #dde8f5;">
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+                <tr>
+                  <td style="vertical-align:middle;">
+                    <div style="font-size:13px;font-weight:700;color:${BRAND.text};">SlimCyberTech</div>
+                    <div style="font-size:11px;color:${BRAND.textMuted};margin-top:2px;">
+                      Arua, West Nile &middot; Uganda
+                    </div>
+                  </td>
+                  <td style="text-align:right;vertical-align:middle;">
+                    <div style="font-size:11px;color:${BRAND.textLight};line-height:1.65;">
+                      <a href="https://slimcybertech.com"
+                        style="color:${BRAND.blue};text-decoration:none;font-weight:600;">
+                        slimcybertech.com
+                      </a>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+        </table>
+
+        <!-- Disclaimer -->
+        <p style="margin:18px 0 0;font-size:11px;color:#8aa0b8;text-align:center;line-height:1.75;">
+          You received this confirmation because you submitted our contact form.<br />
+          If anything should be updated, simply reply and we will help.
+        </p>
+
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>`;
+}
+
+// ---------------------------------------------------------------------------
+// Route handler
+// ---------------------------------------------------------------------------
+
 export async function POST(request: Request) {
   if (!gmailUser || !gmailAppPassword) {
     return NextResponse.json(
-      { error: "Missing email credentials. Set GMAIL_USER and GMAIL_APP_PASSWORD in .env." },
+      {
+        error:
+          "Email credentials are not configured. Please set GMAIL_USER and GMAIL_APP_PASSWORD.",
+      },
       { status: 500 },
     );
   }
@@ -118,16 +664,33 @@ export async function POST(request: Request) {
   const message = body.message?.trim() || "";
 
   if (!firstName || !lastName || !email || !subject || !message) {
-    return NextResponse.json({ error: "Missing required form fields." }, { status: 400 });
+    return NextResponse.json({ error: "Please fill in all required fields." }, { status: 400 });
   }
 
   const recipients = parseRecipients(recipientEmails);
   if (recipients.length === 0) {
     return NextResponse.json(
-      { error: "Missing recipient emails. Set CONTACT_RECIPIENTS in .env." },
+      {
+        error:
+          "Recipient emails are not configured. Please set CONTACT_RECIPIENTS in your environment.",
+      },
       { status: 500 },
     );
   }
+
+  // Build logo attachment once and share across both emails
+  const logoAsset = getLogoAsset();
+  const logoHtml = logoAsset
+    ? `<img
+         src="cid:${logoAsset.cid}"
+         alt="SlimCyberTech"
+         width="140"
+         style="display:block;border:0;width:140px;height:auto;max-height:44px;"
+       />`
+    : `<span style="font-size:19px;font-weight:800;color:#ffffff;letter-spacing:-0.3px;
+                    font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;">
+         Slim<span style="color:#4a8ef5;">Cyber</span>Tech
+       </span>`;
 
   const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -137,315 +700,106 @@ export async function POST(request: Request) {
     },
   });
 
-  const emailSubject = `${subject || "Website Inquiry"} — ${firstName} ${lastName}`.trim();
+  const replySubject = `${subject || "Website Inquiry"} — ${firstName} ${lastName}`.trim();
 
-  const textBody = [
-    `Name: ${firstName} ${lastName}`.trim(),
+  // Plain-text fallback (always include for spam-score reasons)
+  const ownerTextBody = [
+    `New enquiry from: ${firstName} ${lastName}`,
     `Email: ${email}`,
     `Phone: ${phone || "Not provided"}`,
     `Service: ${subject}`,
     `Budget: ${budget || "Not specified"}`,
     "",
-    "Message:",
+    "--- Message ---",
     message,
   ].join("\n");
 
-  // ── Logo: Base64 inline (renders in Gmail, Outlook, Apple Mail, etc.) ──
-  const logoDataUri = getLogoDataUri();
-  const logoHtml = logoDataUri
-    ? `<img
-         src="${logoDataUri}"
-         alt="SlimCyberTech"
-         width="130"
-         height="auto"
-         style="display:block;border:0;border-radius:5px;max-height:46px;object-fit:contain;"
-       />`
-    : `<span style="font-size:20px;font-weight:800;color:#ffffff;letter-spacing:-0.4px;
-                    font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;">
-         Slim<span style="color:#60b0ff;">Cyber</span>Tech
-       </span>`;
+  const confirmationTextBody = [
+    `Hi ${firstName},`,
+    "",
+    "Thanks for getting in touch with SlimCyberTech!",
+    "",
+    "We received your message and will review it shortly. Our team typically responds within 1-2 business days.",
+    "",
+    `Service: ${subject}`,
+    `Budget: ${budget || "Not specified"}`,
+    "",
+    "--- Your Message ---",
+    message,
+    "",
+    "If you have any urgent questions, feel free to reply to this email.",
+    "",
+    "— The SlimCyberTech Team",
+  ].join("\n");
 
-  const initials = `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
-  const messageHtml = formatMessageHtml(message);
+  const ownerHtml = buildOwnerEmail({
+    firstName,
+    lastName,
+    email,
+    phone,
+    subject,
+    budget,
+    message,
+    logoHtml,
+    replySubject,
+  });
 
-  // Determine message length category for adaptive padding
-  const isShortMessage = message.length < 120;
-
-  const htmlBody = `
-<!doctype html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>New Contact Inquiry — SlimCyberTech</title>
-  <!--[if mso]>
-  <noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript>
-  <![endif]-->
-</head>
-<body style="margin:0;padding:0;background-color:#e6ecf5;
-             font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
-             -webkit-font-smoothing:antialiased;">
-
-  <!-- OUTER WRAPPER -->
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"
-    style="background-color:#e6ecf5;padding:36px 12px 52px;">
-    <tr>
-      <td align="center">
-
-        <!-- ╔══════════════════════════════════╗
-             ║  CARD                            ║
-             ╚══════════════════════════════════╝ -->
-        <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0"
-          style="max-width:600px;width:100%;border-radius:14px;overflow:hidden;
-                 box-shadow:0 10px 40px rgba(6,17,42,0.14);">
-
-          <!-- ▓▓ HEADER ▓▓ -->
-          <tr>
-            <td style="background:linear-gradient(150deg,#060f24 0%,#0c2558 40%,#1648a8 100%);
-                       padding:26px 36px 24px;">
-
-              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
-                <tr>
-                  <td style="vertical-align:middle;">
-                    ${logoHtml}
-                  </td>
-                  <td style="text-align:right;vertical-align:middle;">
-                    <span style="display:inline-block;
-                                 background:rgba(96,176,255,0.14);
-                                 color:#a8d4ff;
-                                 font-size:9px;font-weight:800;letter-spacing:2px;
-                                 text-transform:uppercase;
-                                 padding:5px 13px;border-radius:20px;
-                                 border:1px solid rgba(96,176,255,0.26);">
-                      New Inquiry
-                    </span>
-                  </td>
-                </tr>
-              </table>
-
-              <div style="margin-top:20px;padding-top:18px;border-top:1px solid rgba(255,255,255,0.09);">
-                <h1 style="margin:0 0 6px;font-size:21px;font-weight:700;color:#ffffff;
-                           line-height:1.25;letter-spacing:-0.2px;">
-                  You have a new contact request
-                </h1>
-                <p style="margin:0;font-size:12.5px;color:#8ab4d8;line-height:1.5;">
-                  Submitted via the SlimCyberTech website contact form
-                </p>
-              </div>
-            </td>
-          </tr>
-
-          <!-- ▓▓ ACCENT BAR ▓▓ -->
-          <tr>
-            <td style="height:3px;
-                       background:linear-gradient(90deg,#1648a8 0%,#60b0ff 50%,#1648a8 100%);">
-            </td>
-          </tr>
-
-          <!-- ▓▓ BODY ▓▓ -->
-          <tr>
-            <td style="background:#ffffff;padding:28px 36px 30px;">
-
-              <!-- ── Sender card ── -->
-              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"
-                style="background:#f4f7fd;border-radius:10px;border:1px solid #dce7f5;
-                       margin-bottom:18px;">
-                <tr>
-                  <td style="padding:16px 20px;">
-                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
-                      <tr>
-                        <!-- Avatar initials -->
-                        <td style="vertical-align:middle;width:50px;padding-right:14px;">
-                          <div style="width:48px;height:48px;border-radius:50%;
-                                      background:linear-gradient(135deg,#1648a8 0%,#60b0ff 100%);
-                                      text-align:center;line-height:48px;
-                                      font-size:16px;font-weight:800;color:#ffffff;">
-                            ${initials}
-                          </div>
-                        </td>
-                        <!-- Name + email -->
-                        <td style="vertical-align:middle;">
-                          <div style="font-size:15px;font-weight:700;color:#06112a;
-                                      margin-bottom:3px;line-height:1.3;">
-                            ${escapeHtml(`${firstName} ${lastName}`.trim())}
-                          </div>
-                          <a href="mailto:${escapeHtml(email)}"
-                            style="font-size:13px;color:#1648a8;text-decoration:none;font-weight:500;">
-                            ${escapeHtml(email)}
-                          </a>
-                        </td>
-                        ${
-                          phone
-                            ? `<td style="text-align:right;vertical-align:middle;padding-left:10px;">
-                            <span style="display:inline-block;background:#e4eefb;color:#1648a8;
-                                         font-size:11.5px;font-weight:600;padding:5px 11px;
-                                         border-radius:20px;white-space:nowrap;
-                                         border:1px solid #c2d8f5;">
-                              &#128222;&nbsp;${escapeHtml(phone)}
-                            </span>
-                          </td>`
-                            : ""
-                        }
-                      </tr>
-                    </table>
-                  </td>
-                </tr>
-              </table>
-
-              <!-- ── Service / Budget row ── -->
-              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"
-                style="margin-bottom:18px;">
-                <tr>
-                  <td style="width:50%;padding-right:8px;vertical-align:top;">
-                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"
-                      style="background:#eef4ff;border-radius:9px;
-                             border:1px solid #ccddf5;border-left:4px solid #1648a8;">
-                      <tr>
-                        <td style="padding:13px 15px;">
-                          <div style="font-size:9px;font-weight:800;letter-spacing:1.5px;
-                                      text-transform:uppercase;color:#5a7fae;margin-bottom:6px;">
-                            Service Requested
-                          </div>
-                          <div style="font-size:14px;font-weight:700;color:#06112a;line-height:1.4;">
-                            ${escapeHtml(subject)}
-                          </div>
-                        </td>
-                      </tr>
-                    </table>
-                  </td>
-                  <td style="width:50%;padding-left:8px;vertical-align:top;">
-                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"
-                      style="background:#eef4ff;border-radius:9px;
-                             border:1px solid #ccddf5;border-left:4px solid #60b0ff;">
-                      <tr>
-                        <td style="padding:13px 15px;">
-                          <div style="font-size:9px;font-weight:800;letter-spacing:1.5px;
-                                      text-transform:uppercase;color:#5a7fae;margin-bottom:6px;">
-                            Budget Range
-                          </div>
-                          <div style="font-size:14px;font-weight:700;color:#06112a;line-height:1.4;">
-                            ${escapeHtml(budget || "Not specified")}
-                          </div>
-                        </td>
-                      </tr>
-                    </table>
-                  </td>
-                </tr>
-              </table>
-
-              <!-- ── Message block ── -->
-              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"
-                style="margin-bottom:26px;">
-                <tr>
-                  <td>
-                    <!-- Label -->
-                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"
-                      style="margin-bottom:9px;">
-                      <tr>
-                        <td>
-                          <span style="font-size:9px;font-weight:800;letter-spacing:1.5px;
-                                       text-transform:uppercase;color:#5a7fae;">
-                            Message
-                          </span>
-                        </td>
-                        <td style="text-align:right;">
-                          <span style="font-size:10.5px;color:#9ab2cc;">
-                            ${message.length} chars
-                          </span>
-                        </td>
-                      </tr>
-                    </table>
-
-                    <!-- Message body container
-                         min-height ensures short messages don't look sparse;
-                         long messages expand naturally with no max-height cap. -->
-                    <div style="background:#f7f9fc;border-radius:10px;
-                                border:1px solid #dce7f5;border-left:4px solid #dce7f5;
-                                padding:${isShortMessage ? "20px 22px 8px" : "20px 22px 6px"};">
-                      ${messageHtml}
-                    </div>
-                  </td>
-                </tr>
-              </table>
-
-              <!-- ── Reply CTA ── -->
-              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
-                <tr>
-                  <td align="center">
-                    <a href="mailto:${escapeHtml(email)}?subject=${encodeURIComponent("Re: " + emailSubject)}"
-                      style="display:inline-block;
-                             background:linear-gradient(135deg,#1648a8 0%,#3a7ee8 100%);
-                             color:#ffffff;font-size:14px;font-weight:700;
-                             text-decoration:none;padding:13px 36px;border-radius:8px;
-                             letter-spacing:0.2px;
-                             box-shadow:0 4px 18px rgba(22,72,168,0.30);">
-                      Reply to ${escapeHtml(firstName)}&nbsp;&nbsp;&#8594;
-                    </a>
-                  </td>
-                </tr>
-              </table>
-
-            </td>
-          </tr>
-
-          <!-- ▓▓ FOOTER ▓▓ -->
-          <tr>
-            <td style="background:#f2f6fb;padding:16px 36px 20px;
-                       border-top:1px solid #dce7f5;">
-              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
-                <tr>
-                  <td style="vertical-align:middle;">
-                    <div style="font-size:12.5px;font-weight:700;color:#06112a;">SlimCyberTech</div>
-                    <div style="font-size:11px;color:#7a96b4;margin-top:2px;">
-                      Arua, West Nile &middot; Uganda
-                    </div>
-                  </td>
-                  <td style="text-align:right;vertical-align:middle;">
-                    <div style="font-size:11px;color:#8aa0ba;line-height:1.65;">
-                      Sent from<br />
-                      <a href="https://slimcybertech.com"
-                        style="color:#1648a8;text-decoration:none;font-weight:600;">
-                        slimcybertech.com
-                      </a>
-                    </div>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-
-        </table>
-        <!-- end card -->
-
-        <!-- Bottom disclaimer -->
-        <p style="margin:16px 0 0;font-size:11px;color:#8aa0b8;text-align:center;line-height:1.7;">
-          Automated notification &mdash; do not reply directly to this email.<br />
-          Use the <strong>Reply to ${escapeHtml(firstName)}</strong> button above to respond.
-        </p>
-
-      </td>
-    </tr>
-  </table>
-
-</body>
-</html>
-`;
+  const confirmationHtml = buildConfirmationEmail({
+    firstName,
+    subject,
+    budget,
+    message,
+    logoHtml,
+    ownerEmail: recipients[0] || gmailUser,
+  });
 
   try {
-    await transporter.sendMail({
-      from: `SlimCyberTech Website <${gmailUser}>`,
-      to: recipients.join(", "),
-      replyTo: email,
-      subject: emailSubject,
-      text: textBody,
-      html: htmlBody,
-    });
+    await Promise.all([
+      // Notification to site owners
+      transporter.sendMail({
+        from: `SlimCyberTech Website <${gmailUser}>`,
+        to: recipients.join(", "),
+        replyTo: email,
+        subject: replySubject,
+        text: ownerTextBody,
+        html: ownerHtml,
+        attachments: logoAsset
+          ? [
+              {
+                filename: logoAsset.fileName,
+                content: logoAsset.content,
+                contentType: logoAsset.mimeType,
+                cid: logoAsset.cid,
+              },
+            ]
+          : [],
+      }),
+      // Confirmation to the enquirer
+      transporter.sendMail({
+        from: `SlimCyberTech <${gmailUser}>`,
+        to: email,
+        replyTo: recipients[0] || gmailUser,
+        subject: "We got your message — SlimCyberTech",
+        text: confirmationTextBody,
+        html: confirmationHtml,
+        attachments: logoAsset
+          ? [
+              {
+                filename: logoAsset.fileName,
+                content: logoAsset.content,
+                contentType: logoAsset.mimeType,
+                cid: logoAsset.cid,
+              },
+            ]
+          : [],
+      }),
+    ]);
 
     return NextResponse.json({ ok: true });
-  } catch {
+  } catch (err) {
+    console.error("[contact-route] sendMail error:", err);
     return NextResponse.json(
-      { error: "Message delivery failed. Please try again later." },
+      { error: "We could not deliver your message. Please try again in a moment." },
       { status: 500 },
     );
   }
