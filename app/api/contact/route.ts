@@ -127,7 +127,7 @@ const BRAND = {
   text: "#0d1f3c",
   textMuted: "#5a7299",
   textLight: "#8fa3be",
-  bg: "#f0f4fa",
+  bg: "#f6f8fc",
   white: "#ffffff",
   accentGreen: "#10b981",
   divider: "#e2ebf7",
@@ -177,84 +177,60 @@ function buildOwnerEmail(params: {
 <body style="margin:0;padding:0;background-color:${BRAND.bg};
              font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
              -webkit-font-smoothing:antialiased;">
-
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"
     style="background-color:${BRAND.bg};padding:40px 16px 56px;">
     <tr>
       <td align="center">
-
-        <!-- CARD -->
-        <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0"
-          style="max-width:600px;width:100%;border-radius:16px;overflow:hidden;
-                 box-shadow:0 8px 32px rgba(13,31,60,0.12);">
-
-          <!-- HEADER -->
+        <table role="presentation" width="620" cellpadding="0" cellspacing="0" border="0"
+          style="max-width:620px;width:100%;border-radius:14px;overflow:hidden;
+                 background:${BRAND.white};border:1px solid ${BRAND.divider};
+                 box-shadow:0 6px 20px rgba(15,23,42,0.05);">
           <tr>
-            <td style="background-color:${BRAND.navySoft};padding:26px 32px 24px;">
-              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+            <td style="height:4px;background:linear-gradient(90deg,${BRAND.blue} 0%,${BRAND.blueLight} 100%);"></td>
+          </tr>
+          <tr>
+            <td style="padding:22px 28px;border-bottom:1px solid ${BRAND.divider};">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
                 <tr>
                   <td style="vertical-align:middle;">
                     ${logoHtml}
                   </td>
                   <td style="text-align:right;vertical-align:middle;">
-                    <span style="display:inline-block;
-                                 background:rgba(255,255,255,0.12);
-                                 color:#dbe8ff;
-                                 font-size:9px;font-weight:700;letter-spacing:2px;
-                                 text-transform:uppercase;
-                                 padding:5px 14px;border-radius:20px;
-                                 border:1px solid rgba(255,255,255,0.20);">
+                    <span style="display:inline-block;background:#eff6ff;color:${BRAND.blue};
+                                 font-size:11px;font-weight:700;letter-spacing:0.4px;
+                                 padding:6px 12px;border-radius:999px;border:1px solid #dbeafe;">
                       New Inquiry
                     </span>
                   </td>
                 </tr>
               </table>
-
-              <div style="margin-top:22px;padding-top:20px;
-                          border-top:1px solid rgba(255,255,255,0.16);">
-                <h1 style="margin:0 0 6px;font-size:20px;font-weight:700;color:#ffffff;
-                           line-height:1.3;letter-spacing:-0.2px;">
+              <div style="margin-top:14px;">
+                <div style="margin:0 0 4px;font-size:22px;font-weight:700;color:${BRAND.text};line-height:1.3;">
                   You have a new message
-                </h1>
-                <p style="margin:0;font-size:13px;color:#d0def7;line-height:1.5;">
-                  A new customer enquiry was submitted through your website.
+                </div>
+                <p style="margin:0;font-size:14px;color:${BRAND.textMuted};line-height:1.65;">
+                  A customer submitted a new enquiry through your website contact form.
                 </p>
               </div>
             </td>
           </tr>
-
-          <!-- ACCENT LINE -->
           <tr>
-            <td style="height:3px;
-                       background:linear-gradient(90deg,${BRAND.blue} 0%,${BRAND.blueLight} 50%,${BRAND.blue} 100%);">
-            </td>
-          </tr>
-
-          <!-- BODY -->
-          <tr>
-            <td style="background:${BRAND.white};padding:30px 36px 32px;">
-
-              <!-- Sender card -->
+            <td style="padding:26px 28px 30px;background:${BRAND.white};">
               <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"
-                style="background:#f4f8ff;border-radius:12px;
-                       border:1px solid ${BRAND.blueBorder};margin-bottom:20px;">
+                style="background:#f8fbff;border-radius:12px;border:1px solid ${BRAND.blueBorder};margin-bottom:20px;">
                 <tr>
-                  <td style="padding:18px 20px;">
+                  <td style="padding:18px 18px;">
                     <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
                       <tr>
-                        <!-- Avatar -->
                         <td style="vertical-align:middle;width:52px;padding-right:14px;">
                           <div style="width:48px;height:48px;border-radius:50%;
                                       background:linear-gradient(135deg,${BRAND.blue} 0%,${BRAND.blueLight} 100%);
-                                      text-align:center;line-height:48px;
-                                      font-size:15px;font-weight:800;color:#ffffff;">
+                                      text-align:center;line-height:48px;font-size:15px;font-weight:800;color:#ffffff;">
                             ${initials}
                           </div>
                         </td>
-                        <!-- Name + email -->
                         <td style="vertical-align:middle;">
-                          <div style="font-size:15px;font-weight:700;color:${BRAND.text};
-                                      margin-bottom:4px;line-height:1.3;">
+                          <div style="font-size:15px;font-weight:700;color:${BRAND.text};margin-bottom:4px;line-height:1.3;">
                             ${escapeHtml(`${firstName} ${lastName}`.trim())}
                           </div>
                           <a href="mailto:${escapeHtml(email)}"
@@ -265,10 +241,9 @@ function buildOwnerEmail(params: {
                         ${
                           phone
                             ? `<td style="text-align:right;vertical-align:middle;padding-left:10px;">
-                            <span style="display:inline-block;background:#deeafc;color:${BRAND.blue};
-                                         font-size:11.5px;font-weight:600;padding:5px 12px;
-                                         border-radius:20px;white-space:nowrap;
-                                         border:1px solid #bcd4f8;">
+                            <span style="display:inline-block;background:#eaf2ff;color:${BRAND.blue};
+                                         font-size:11.5px;font-weight:600;padding:5px 12px;border-radius:20px;
+                                         white-space:nowrap;border:1px solid #cfe0ff;">
                               &#128222;&nbsp;${escapeHtml(phone)}
                             </span>
                           </td>`
@@ -279,19 +254,15 @@ function buildOwnerEmail(params: {
                   </td>
                 </tr>
               </table>
-
-              <!-- Service / Budget row -->
-              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"
-                style="margin-bottom:20px;">
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-bottom:20px;">
                 <tr>
                   <td style="width:50%;padding-right:8px;vertical-align:top;">
                     <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"
-                      style="background:${BRAND.bluePale};border-radius:10px;
-                             border:1px solid ${BRAND.blueBorder};border-left:4px solid ${BRAND.blue};">
+                      style="background:${BRAND.bluePale};border-radius:10px;border:1px solid ${BRAND.blueBorder};">
                       <tr>
                         <td style="padding:14px 16px;">
-                          <div style="font-size:9px;font-weight:800;letter-spacing:1.5px;
-                                      text-transform:uppercase;color:${BRAND.textMuted};margin-bottom:6px;">
+                          <div style="font-size:10px;font-weight:700;letter-spacing:1.1px;text-transform:uppercase;
+                                      color:${BRAND.textMuted};margin-bottom:6px;">
                             Service Requested
                           </div>
                           <div style="font-size:14px;font-weight:700;color:${BRAND.text};line-height:1.4;">
@@ -303,12 +274,11 @@ function buildOwnerEmail(params: {
                   </td>
                   <td style="width:50%;padding-left:8px;vertical-align:top;">
                     <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"
-                      style="background:${BRAND.bluePale};border-radius:10px;
-                             border:1px solid ${BRAND.blueBorder};border-left:4px solid ${BRAND.blueLight};">
+                      style="background:${BRAND.bluePale};border-radius:10px;border:1px solid ${BRAND.blueBorder};">
                       <tr>
                         <td style="padding:14px 16px;">
-                          <div style="font-size:9px;font-weight:800;letter-spacing:1.5px;
-                                      text-transform:uppercase;color:${BRAND.textMuted};margin-bottom:6px;">
+                          <div style="font-size:10px;font-weight:700;letter-spacing:1.1px;text-transform:uppercase;
+                                      color:${BRAND.textMuted};margin-bottom:6px;">
                             Budget Range
                           </div>
                           <div style="font-size:14px;font-weight:700;color:${BRAND.text};line-height:1.4;">
@@ -320,95 +290,61 @@ function buildOwnerEmail(params: {
                   </td>
                 </tr>
               </table>
-
-              <!-- Message block -->
-              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"
-                style="margin-bottom:28px;">
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-bottom:28px;">
                 <tr>
                   <td>
-                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"
-                      style="margin-bottom:10px;">
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-bottom:10px;">
                       <tr>
                         <td>
-                          <span style="font-size:9px;font-weight:800;letter-spacing:1.5px;
-                                       text-transform:uppercase;color:${BRAND.textMuted};">
-                            Their Message
+                          <span style="font-size:10px;font-weight:700;letter-spacing:1.1px;text-transform:uppercase;color:${BRAND.textMuted};">
+                            Customer Message
                           </span>
                         </td>
                         <td style="text-align:right;">
-                          <span style="font-size:11px;color:${BRAND.textLight};">
-                            ${message.length} characters
-                          </span>
+                          <span style="font-size:11px;color:${BRAND.textLight};">${message.length} characters</span>
                         </td>
                       </tr>
                     </table>
-                    <div style="background:#f7f9fd;border-radius:10px;
-                                border:1px solid #dde8f5;border-left:4px solid #c5d8fa;
-                                padding:20px 22px 6px;">
+                    <div style="background:#f8fafc;border-radius:10px;border:1px solid ${BRAND.divider};padding:20px 20px 6px;">
                       ${messageHtml}
                     </div>
                   </td>
                 </tr>
               </table>
-
-              <!-- Reply CTA -->
               <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
                 <tr>
                   <td align="center">
                     <a href="mailto:${escapeHtml(email)}?subject=${encodeURIComponent("Re: " + replySubject)}"
-                      style="display:inline-block;
-                             background:linear-gradient(135deg,${BRAND.blue} 0%,${BRAND.blueLight} 100%);
-                             color:#ffffff;font-size:14px;font-weight:700;
-                             text-decoration:none;padding:14px 40px;border-radius:8px;
-                             letter-spacing:0.3px;
-                             box-shadow:0 4px 16px rgba(26,86,219,0.28);">
-                      Reply to ${escapeHtml(firstName)} &nbsp;&#8594;
+                      style="display:inline-block;background:${BRAND.blue};color:#ffffff;font-size:14px;font-weight:700;
+                             text-decoration:none;padding:14px 36px;border-radius:8px;letter-spacing:0.2px;">
+                      Reply to ${escapeHtml(firstName)}
                     </a>
                   </td>
                 </tr>
               </table>
-
             </td>
           </tr>
-
-          <!-- FOOTER -->
           <tr>
-            <td style="background:#f5f8fd;padding:18px 36px 22px;
-                       border-top:1px solid #dde8f5;">
+            <td style="background:#f8fafc;padding:16px 28px 20px;border-top:1px solid ${BRAND.divider};">
               <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
                 <tr>
                   <td style="vertical-align:middle;">
                     <div style="font-size:13px;font-weight:700;color:${BRAND.text};">SlimCyberTech</div>
-                    <div style="font-size:11px;color:${BRAND.textMuted};margin-top:2px;">
-                      Arua, West Nile &middot; Uganda
-                    </div>
+                    <div style="font-size:11px;color:${BRAND.textMuted};margin-top:2px;">Arua, West Nile &middot; Uganda</div>
                   </td>
                   <td style="text-align:right;vertical-align:middle;">
-                    <div style="font-size:11px;color:${BRAND.textLight};line-height:1.65;">
-                      via&nbsp;
-                      <a href="https://slimcybertech.com"
-                        style="color:${BRAND.blue};text-decoration:none;font-weight:600;">
-                        slimcybertech.com
-                      </a>
-                    </div>
+                    <a href="https://slimcybertech.com" style="font-size:11px;color:${BRAND.blue};text-decoration:none;font-weight:600;">
+                      slimcybertech.com
+                    </a>
                   </td>
                 </tr>
               </table>
             </td>
           </tr>
-
         </table>
-
-        <!-- Disclaimer -->
-        <p style="margin:18px 0 0;font-size:11px;color:#8aa0b8;text-align:center;line-height:1.75;">
-          Automated notification from your website contact form.<br />
-          Use the reply button above or write directly to <strong>${escapeHtml(email)}</strong>.
-        </p>
-
       </td>
     </tr>
   </table>
-
 </body>
 </html>`;
 }
@@ -439,101 +375,75 @@ function buildConfirmationEmail(params: {
 <body style="margin:0;padding:0;background-color:${BRAND.bg};
              font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
              -webkit-font-smoothing:antialiased;">
-
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"
     style="background-color:${BRAND.bg};padding:40px 16px 56px;">
     <tr>
       <td align="center">
-
-        <!-- CARD -->
-        <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0"
-          style="max-width:600px;width:100%;border-radius:16px;overflow:hidden;
-                 box-shadow:0 8px 32px rgba(13,31,60,0.12);">
-
-          <!-- HEADER -->
+        <table role="presentation" width="620" cellpadding="0" cellspacing="0" border="0"
+          style="max-width:620px;width:100%;border-radius:14px;overflow:hidden;
+                 background:${BRAND.white};border:1px solid ${BRAND.divider};
+                 box-shadow:0 6px 20px rgba(15,23,42,0.05);">
           <tr>
-            <td style="background-color:${BRAND.navySoft};padding:26px 32px 24px;">
-              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+            <td style="height:4px;background:linear-gradient(90deg,${BRAND.accentGreen} 0%,${BRAND.blueLight} 100%);"></td>
+          </tr>
+          <tr>
+            <td style="padding:22px 28px;border-bottom:1px solid ${BRAND.divider};">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
                 <tr>
                   <td style="vertical-align:middle;">
                     ${logoHtml}
                   </td>
                   <td style="text-align:right;vertical-align:middle;">
-                    <span style="display:inline-block;
-                                 background:rgba(255,255,255,0.12);
-                                 color:#baf2df;
-                                 font-size:9px;font-weight:700;letter-spacing:2px;
-                                 text-transform:uppercase;
-                                 padding:5px 14px;border-radius:20px;
-                                 border:1px solid rgba(255,255,255,0.20);">
-                      &#10003;&nbsp; Received
+                    <span style="display:inline-block;background:#ecfdf5;color:#047857;
+                                 font-size:11px;font-weight:700;letter-spacing:0.4px;
+                                 padding:6px 12px;border-radius:999px;border:1px solid #bbf7d0;">
+                      Received
                     </span>
                   </td>
                 </tr>
               </table>
-
-              <div style="margin-top:22px;padding-top:20px;
-                          border-top:1px solid rgba(255,255,255,0.16);">
-                <h1 style="margin:0 0 8px;font-size:20px;font-weight:700;color:#ffffff;
-                           line-height:1.3;letter-spacing:-0.2px;">
-                  Thanks for reaching out, ${escapeHtml(firstName)}!
-                </h1>
-                <p style="margin:0;font-size:13px;color:#d0def7;line-height:1.6;">
-                  We have received your message and our team will respond shortly.
+              <div style="margin-top:14px;">
+                <div style="margin:0 0 4px;font-size:22px;font-weight:700;color:${BRAND.text};line-height:1.3;">
+                  Thanks for reaching out, ${escapeHtml(firstName)}.
+                </div>
+                <p style="margin:0;font-size:14px;color:${BRAND.textMuted};line-height:1.65;">
+                  We received your message and will send you a response within 1&ndash;2 business days.
                 </p>
               </div>
             </td>
           </tr>
-
-          <!-- ACCENT LINE (green tint for confirmation) -->
           <tr>
-            <td style="height:3px;
-                       background:linear-gradient(90deg,${BRAND.accentGreen} 0%,${BRAND.blueLight} 50%,${BRAND.accentGreen} 100%);">
-            </td>
-          </tr>
-
-          <!-- BODY -->
-          <tr>
-            <td style="background:${BRAND.white};padding:30px 36px 32px;">
-
-              <!-- What happens next -->
+            <td style="padding:26px 28px 30px;background:${BRAND.white};">
               <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"
-                style="background:${BRAND.bluePale};border-radius:12px;
-                       border:1px solid ${BRAND.blueBorder};
-                       border-left:4px solid ${BRAND.accentGreen};
-                       margin-bottom:22px;">
+                style="background:#f8fbff;border-radius:12px;border:1px solid ${BRAND.blueBorder};margin-bottom:20px;">
                 <tr>
-                  <td style="padding:18px 20px;">
-                    <div style="font-size:13px;font-weight:700;color:${BRAND.text};margin-bottom:6px;">
-                      What happens next?
-                    </div>
-                    <p style="margin:0;font-size:13.5px;color:${BRAND.textMuted};line-height:1.7;">
-                      Our team will review your request and reach out within
-                      <strong style="color:${BRAND.text};">1&ndash;2 business days</strong>.
-                      If your request is urgent, feel free to reply directly to this email.
+                  <td style="padding:18px 18px;">
+                    <div style="font-size:14px;font-weight:700;color:${BRAND.text};margin-bottom:10px;">What happens next</div>
+                    <p style="margin:0 0 8px;font-size:13px;color:${BRAND.textMuted};line-height:1.7;">
+                      1. We review your request details.
+                    </p>
+                    <p style="margin:0 0 8px;font-size:13px;color:${BRAND.textMuted};line-height:1.7;">
+                      2. We contact you with recommendations and next steps.
+                    </p>
+                    <p style="margin:0;font-size:13px;color:${BRAND.textMuted};line-height:1.7;">
+                      3. We align on timelines and begin implementation.
                     </p>
                   </td>
                 </tr>
               </table>
-
-              <!-- Summary of what they submitted -->
-              <div style="font-size:9px;font-weight:800;letter-spacing:1.5px;
-                          text-transform:uppercase;color:${BRAND.textMuted};margin-bottom:10px;">
-                Your Submission Summary
+              <div style="font-size:10px;font-weight:700;letter-spacing:1.1px;text-transform:uppercase;
+                          color:${BRAND.textMuted};margin-bottom:10px;">
+                Your Submission
               </div>
-
-              <!-- Service / Budget row -->
-              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"
-                style="margin-bottom:18px;">
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-bottom:18px;">
                 <tr>
                   <td style="width:50%;padding-right:8px;vertical-align:top;">
                     <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"
-                      style="background:${BRAND.bluePale};border-radius:10px;
-                             border:1px solid ${BRAND.blueBorder};border-left:4px solid ${BRAND.blue};">
+                      style="background:${BRAND.bluePale};border-radius:10px;border:1px solid ${BRAND.blueBorder};">
                       <tr>
                         <td style="padding:13px 15px;">
-                          <div style="font-size:9px;font-weight:800;letter-spacing:1.4px;
-                                      text-transform:uppercase;color:${BRAND.textMuted};margin-bottom:5px;">
+                          <div style="font-size:10px;font-weight:700;letter-spacing:1.1px;text-transform:uppercase;
+                                      color:${BRAND.textMuted};margin-bottom:5px;">
                             Service
                           </div>
                           <div style="font-size:14px;font-weight:700;color:${BRAND.text};line-height:1.4;">
@@ -545,12 +455,11 @@ function buildConfirmationEmail(params: {
                   </td>
                   <td style="width:50%;padding-left:8px;vertical-align:top;">
                     <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"
-                      style="background:${BRAND.bluePale};border-radius:10px;
-                             border:1px solid ${BRAND.blueBorder};border-left:4px solid ${BRAND.blueLight};">
+                      style="background:${BRAND.bluePale};border-radius:10px;border:1px solid ${BRAND.blueBorder};">
                       <tr>
                         <td style="padding:13px 15px;">
-                          <div style="font-size:9px;font-weight:800;letter-spacing:1.4px;
-                                      text-transform:uppercase;color:${BRAND.textMuted};margin-bottom:5px;">
+                          <div style="font-size:10px;font-weight:700;letter-spacing:1.1px;text-transform:uppercase;
+                                      color:${BRAND.textMuted};margin-bottom:5px;">
                             Budget
                           </div>
                           <div style="font-size:14px;font-weight:700;color:${BRAND.text};line-height:1.4;">
@@ -562,75 +471,51 @@ function buildConfirmationEmail(params: {
                   </td>
                 </tr>
               </table>
-
-              <!-- Their message (so they have a record) -->
-              <div style="font-size:9px;font-weight:800;letter-spacing:1.5px;
-                          text-transform:uppercase;color:${BRAND.textMuted};margin-bottom:10px;">
+              <div style="font-size:10px;font-weight:700;letter-spacing:1.1px;text-transform:uppercase;
+                          color:${BRAND.textMuted};margin-bottom:10px;">
                 Your Message
               </div>
-              <div style="background:#f7f9fd;border-radius:10px;
-                          border:1px solid #dde8f5;border-left:4px solid #c5d8fa;
-                          padding:20px 22px 6px;margin-bottom:28px;">
+              <div style="background:#f8fafc;border-radius:10px;border:1px solid ${BRAND.divider};
+                          padding:20px 20px 6px;margin-bottom:24px;">
                 ${messageHtml}
               </div>
-
-              <!-- Contact team CTA -->
               <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
                 <tr>
                   <td align="center">
                     <a href="mailto:${escapeHtml(ownerEmail)}"
-                      style="display:inline-block;
-                             background:linear-gradient(135deg,${BRAND.blue} 0%,${BRAND.blueLight} 100%);
-                             color:#ffffff;font-size:14px;font-weight:700;
-                             text-decoration:none;padding:14px 40px;border-radius:8px;
-                             letter-spacing:0.3px;
-                             box-shadow:0 4px 16px rgba(26,86,219,0.28);">
-                      Contact the Team &nbsp;&#8594;
+                      style="display:inline-block;background:${BRAND.blue};color:#ffffff;font-size:14px;font-weight:700;
+                             text-decoration:none;padding:14px 36px;border-radius:8px;letter-spacing:0.2px;">
+                      Reply to Our Team
                     </a>
                   </td>
                 </tr>
               </table>
-
             </td>
           </tr>
-
-          <!-- FOOTER -->
           <tr>
-            <td style="background:#f5f8fd;padding:18px 36px 22px;
-                       border-top:1px solid #dde8f5;">
+            <td style="background:#f8fafc;padding:16px 28px 20px;border-top:1px solid ${BRAND.divider};">
               <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
                 <tr>
                   <td style="vertical-align:middle;">
                     <div style="font-size:13px;font-weight:700;color:${BRAND.text};">SlimCyberTech</div>
-                    <div style="font-size:11px;color:${BRAND.textMuted};margin-top:2px;">
-                      Arua, West Nile &middot; Uganda
-                    </div>
+                    <div style="font-size:11px;color:${BRAND.textMuted};margin-top:2px;">Arua, West Nile &middot; Uganda</div>
                   </td>
                   <td style="text-align:right;vertical-align:middle;">
-                    <div style="font-size:11px;color:${BRAND.textLight};line-height:1.65;">
-                      <a href="https://slimcybertech.com"
-                        style="color:${BRAND.blue};text-decoration:none;font-weight:600;">
-                        slimcybertech.com
-                      </a>
-                    </div>
+                    <a href="https://slimcybertech.com" style="font-size:11px;color:${BRAND.blue};text-decoration:none;font-weight:600;">
+                      slimcybertech.com
+                    </a>
                   </td>
                 </tr>
               </table>
             </td>
           </tr>
-
         </table>
-
-        <!-- Disclaimer -->
-        <p style="margin:18px 0 0;font-size:11px;color:#8aa0b8;text-align:center;line-height:1.75;">
-          You received this confirmation because you submitted our contact form.<br />
-          If anything should be updated, simply reply and we will help.
+        <p style="margin:16px 0 0;font-size:11px;color:#8aa0b8;text-align:center;line-height:1.7;">
+          You received this email because you submitted our contact form.
         </p>
-
       </td>
     </tr>
   </table>
-
 </body>
 </html>`;
 }
@@ -680,17 +565,34 @@ export async function POST(request: Request) {
 
   // Build logo attachment once and share across both emails
   const logoAsset = getLogoAsset();
-  const logoHtml = logoAsset
+  const logoImageHtml = logoAsset
     ? `<img
          src="cid:${logoAsset.cid}"
-         alt="SlimCyberTech"
-         width="140"
-         style="display:block;border:0;width:140px;height:auto;max-height:44px;"
+         alt="SlimCyberTech logo"
+         width="38"
+         height="38"
+         style="display:block;border:0;width:38px;height:38px;"
        />`
-    : `<span style="font-size:19px;font-weight:800;color:#ffffff;letter-spacing:-0.3px;
-                    font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;">
-         Slim<span style="color:#4a8ef5;">Cyber</span>Tech
-       </span>`;
+    : `<div style="width:38px;height:38px;border-radius:8px;background:${BRAND.blue};
+                  color:#ffffff;text-align:center;line-height:38px;font-size:12px;
+                  font-weight:800;letter-spacing:0.5px;">
+         SCT
+       </div>`;
+  const logoHtml = `<table role="presentation" cellpadding="0" cellspacing="0" border="0">
+    <tr>
+      <td style="vertical-align:middle;padding-right:10px;">
+        ${logoImageHtml}
+      </td>
+      <td style="vertical-align:middle;">
+        <div style="font-size:18px;font-weight:800;color:${BRAND.text};line-height:1.1;">
+          SlimCyberTech
+        </div>
+        <div style="font-size:11px;color:${BRAND.textMuted};line-height:1.2;margin-top:2px;">
+          Secure. Build. Scale.
+        </div>
+      </td>
+    </tr>
+  </table>`;
 
   const transporter = nodemailer.createTransport({
     service: "gmail",
