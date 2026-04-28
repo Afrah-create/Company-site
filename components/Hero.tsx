@@ -121,6 +121,7 @@ export default function Hero() {
           placeholder="blur"
           blurDataURL="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxNicgaGVpZ2h0PSc5Jz48cmVjdCB3aWR0aD0nMTYnIGhlaWdodD0nOScgZmlsbD0nIzA0MGExNScvPjwvc3ZnPg=="
           className="object-cover"
+          style={{ opacity: "var(--hero-background-opacity)" }}
         />
       </div>
       <div className="absolute inset-0 -z-10" style={{ backgroundColor: "var(--image-overlay-strong)" }} />

@@ -102,7 +102,7 @@ export default function Footer() {
 
         <div className="mt-8 border-t border-[var(--border)] pt-5 text-center text-xs text-[var(--muted)] sm:mt-10 sm:flex sm:items-center sm:justify-between sm:text-left">
           <p>© {currentYear} SlimCyberTech. All Rights Reserved.</p>
-          <p className="mt-2 sm:mt-0">Built with ❤️ and Code</p>
+          <p className="mt-2 sm:mt-0">Building the future with code.</p>
         </div>
       </div>
     </footer>

@@ -16,6 +16,7 @@
   --grain-dot: #ffffff;
   --header-bg: rgba(10, 10, 10, 0.72);
   --header-mobile-bg: rgba(10, 10, 10, 0.96);
+  --hero-background-opacity: 0.7;
   --image-overlay-strong: rgba(0, 0, 0, 0.65);
   --image-overlay-medium: rgba(0, 0, 0, 0.5);
   --image-overlay-soft: rgba(0, 0, 0, 0.3);
@@ -42,6 +43,7 @@
   --grain-dot: #0f172a;
   --header-bg: rgba(247, 249, 252, 0.88);
   --header-mobile-bg: rgba(247, 249, 252, 0.97);
+  --hero-background-opacity: 0.7;
   --image-overlay-strong: rgba(255, 255, 255, 0.46);
   --image-overlay-medium: rgba(255, 255, 255, 0.32);
   --image-overlay-soft: rgba(255, 255, 255, 0.2);
