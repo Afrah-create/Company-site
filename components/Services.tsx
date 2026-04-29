@@ -132,7 +132,11 @@ export default function Services() {
   );
 
   return (
-    <section id="services" className="relative mx-auto mt-10 w-full max-w-6xl px-4 sm:px-6 md:mt-12 md:px-10">
+    <section
+      id="services"
+      aria-label="Our Services"
+      className="relative mx-auto mt-10 w-full max-w-6xl px-4 sm:px-6 md:mt-12 md:px-10"
+    >
       <div className="pointer-events-none absolute inset-0 -z-10 rounded-3xl bg-[radial-gradient(circle_at_20%_25%,rgba(0,198,255,0.08),transparent_45%),radial-gradient(circle_at_80%_75%,rgba(0,114,255,0.07),transparent_50%)]" />
 
       <motion.div

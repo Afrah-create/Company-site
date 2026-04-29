@@ -12,7 +12,7 @@ const rotatingText = [
   "Mobile Apps",
   "Tech Consulting",
 ];
-const heroHeading = "Building The Future with Code";
+const heroHeading = "Building The Future With Code";
 
 type Particle = {
   id: number;
@@ -110,6 +110,7 @@ export default function Hero() {
   return (
     <section
       id="hero"
+      aria-label="SlimCyberTech Hero"
       className="relative flex min-h-[94svh] items-center overflow-hidden pb-14 pt-24 sm:min-h-screen sm:pb-16 sm:pt-32"
     >
       <div className="absolute inset-0 -z-20">

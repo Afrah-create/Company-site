@@ -129,7 +129,10 @@ export default function Navbar() {
             : "border-b border-transparent bg-transparent"
         }`}
       >
-        <nav className="mx-auto flex h-18 w-full max-w-7xl items-center justify-between px-3 sm:h-20 sm:px-6 lg:px-10">
+        <nav
+          aria-label="Main navigation"
+          className="mx-auto flex h-18 w-full max-w-7xl items-center justify-between px-3 sm:h-20 sm:px-6 lg:px-10"
+        >
           <Link href="#hero" className="group flex min-w-0 items-center gap-2">
             <Image
               src="/images/Logo.jpeg"

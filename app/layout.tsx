@@ -1,5 +1,6 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Orbitron } from "next/font/google";
+import JsonLd from "@/components/JsonLd";
 import ScrollProgress from "@/components/ScrollProgress";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import "./globals.css";
@@ -18,38 +19,88 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://slimcybertech.com"),
-  icons: {
-    icon: "/images/Logo.jpeg",
-    shortcut: "/images/Logo.jpeg",
-    apple: "/images/Logo.jpeg",
+  title: {
+    default: "SlimCyberTech | Software Development & Technology - Kampala, Uganda",
+    template: "%s | SlimCyberTech",
   },
-  title: "SlimCyberTech | Software Development & Technology",
   description:
-    "SlimCyberTech the leading software company in West Nile delivers software development, technology consulting, cybersecurity, and web/mobile app solutions for modern businesses.",
+    "SlimCyberTech builds cutting-edge software, mobile apps, and cybersecurity solutions for businesses across Africa and beyond. Based in Kampala, Uganda.",
   keywords: [
+    "software development Uganda",
+    "web development Kampala",
+    "mobile app development Africa",
+    "cybersecurity Uganda",
+    "tech consulting Kampala",
+    "custom software Uganda",
+    "Next.js development",
     "SlimCyberTech",
-    "software development",
-    "technology consulting",
-    "cybersecurity",
-    "web development",
-    "mobile apps",
-    "West Nile software company",
   ],
+  alternates: {
+    canonical: "https://slimcybertech.com",
+  },
+  authors: [{ name: "SlimCyberTech", url: "https://slimcybertech.com" }],
+  creator: "SlimCyberTech",
+  publisher: "SlimCyberTech",
   openGraph: {
+    type: "website",
+    locale: "en_UG",
+    url: "https://slimcybertech.com",
+    siteName: "SlimCyberTech",
     title: "SlimCyberTech | Software Development & Technology",
     description:
-      "Building the Future With Code through secure, scalable, and strategy-led engineering.",
-    images: ["/og-image.svg"],
-    type: "website",
-    siteName: "SlimCyberTech",
+      "Cutting-edge software solutions, mobile apps, and cybersecurity services. Building the future with code - from Kampala, Uganda.",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "SlimCyberTech - Building the Future With Code",
+        type: "image/png",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
+    site: "@slimcybertech",
+    creator: "@slimcybertech",
     title: "SlimCyberTech | Software Development & Technology",
     description:
-      "Software development, cybersecurity, and technology consulting for ambitious teams.",
-    images: ["/og-image.svg"],
+      "Cutting-edge software, mobile apps, and cybersecurity - from Kampala, Uganda.",
+    images: ["/opengraph-image"],
   },
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
+    apple: "/apple-touch-icon.png",
+    shortcut: "/favicon-32x32.png",
+  },
+  manifest: "/site.webmanifest",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  verification: {
+    google: "REPLACE_WITH_GOOGLE_SEARCH_CONSOLE_TOKEN",
+  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: [
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+    { media: "(prefers-color-scheme: light)", color: "#0a0a0a" },
+  ],
 };
 
 export default function RootLayout({
@@ -71,6 +122,7 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full bg-[var(--bg)] text-[var(--white)] font-sans">
+        <JsonLd />
         <ThemeProvider>
           <ScrollProgress />
           {children}

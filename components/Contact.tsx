@@ -355,6 +355,7 @@ export default function Contact() {
   return (
     <section
       id="contact"
+      aria-label="Contact Us"
       className="relative mt-8 overflow-hidden bg-[var(--bg)] px-4 py-16 sm:mt-10 sm:px-5 md:mt-10 md:px-8 md:py-24 lg:mt-10"
       style={{
         backgroundImage: "radial-gradient(circle at 1px 1px, var(--grid-line) 1px, transparent 0)",

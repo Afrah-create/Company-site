@@ -153,6 +153,7 @@ export default function Testimonials() {
   return (
     <section
       id="testimonials"
+      aria-label="Client Testimonials"
       ref={sectionRef}
       className="relative mt-12 overflow-hidden bg-[var(--bg)] px-4 py-14 md:px-8 md:py-24"
       style={{
