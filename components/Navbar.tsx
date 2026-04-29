@@ -4,18 +4,28 @@ import Link from "next/link";
 import Image from "next/image";
 import { AnimatePresence, motion, type Variants } from "framer-motion";
 import { Menu, Moon, Sun, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type MouseEvent } from "react";
 import { useActiveSection } from "@/hooks/useActiveSection";
 import { useTheme } from "@/components/ThemeProvider";
 import { useScrollPosition } from "@/hooks/useScrollPosition";
 
-const navLinks = [
-  { label: "Home", href: "#hero" },
-  { label: "Services", href: "#services" },
-  { label: "About", href: "#about" },
-  { label: "Portfolio", href: "#portfolio" },
-  { label: "Contact", href: "#contact" },
+const navItems = [
+  { label: "Home", href: "#hero", section: "hero" },
+  { label: "Services", href: "#services", section: "services" },
+  { label: "About", href: "#about", section: "about" },
+  { label: "Portfolio", href: "#portfolio", section: "portfolio" },
+  { label: "Contact", href: "#contact", section: "contact" },
 ];
+
+const sectionLabelMap: Record<string, string> = {
+  hero: "Home",
+  services: "Services",
+  about: "About",
+  team: "About",
+  portfolio: "Portfolio",
+  testimonials: "Portfolio",
+  contact: "Contact",
+};
 
 const overlayVariants = {
   hidden: { opacity: 0 },
@@ -70,8 +80,25 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const activeSection = useActiveSection();
   const { theme, toggleTheme } = useTheme();
-  const activeLabel =
-    navLinks.find((item) => item.href.replace("#", "") === activeSection)?.label ?? "Home";
+  const activeLabel = sectionLabelMap[activeSection] ?? "Home";
+  const footerDelay = navItems.length * 0.07 + 0.1;
+  const scrollToHash = (href: string) => {
+    const element = document.querySelector(href);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+  const handleDelayedAnchorTap = (
+    event: MouseEvent<HTMLAnchorElement>,
+    href: string,
+    delayMs: number,
+  ) => {
+    event.preventDefault();
+    setIsOpen(false);
+    window.setTimeout(() => {
+      scrollToHash(href);
+    }, delayMs);
+  };
 
   useEffect(() => {
     if (!isOpen) return;
@@ -126,12 +153,12 @@ export default function Navbar() {
           </Link>
 
           <div className="hidden items-center gap-8 md:flex">
-            {navLinks.map((item) => (
+            {navItems.map((item) => (
               <Link
                 key={item.label}
                 href={item.href}
                 className={`group relative text-sm font-medium transition-colors hover:text-[var(--white)] ${
-                  activeSection === item.href.replace("#", "")
+                  activeSection === item.section
                     ? "text-[var(--white)]"
                     : "text-[var(--white)]/90"
                 }`}
@@ -139,7 +166,7 @@ export default function Navbar() {
                 {item.label}
                 <span
                   className={`absolute -bottom-1 left-0 h-[2px] w-full origin-left bg-[var(--cyan)] transition-transform duration-300 ease-out ${
-                    activeSection === item.href.replace("#", "")
+                    activeSection === item.section
                       ? "scale-x-100"
                       : "scale-x-0 group-hover:scale-x-100"
                   }`}
@@ -209,7 +236,7 @@ export default function Navbar() {
             />
 
             <motion.aside
-              className="absolute inset-y-0 right-0 flex w-full max-w-sm flex-col border-l border-[var(--border)] bg-[var(--header-mobile-bg)] shadow-2xl"
+              className="absolute top-0 right-0 z-50 flex h-screen min-h-[600px] w-full max-w-sm flex-col overflow-hidden border-l border-[#1e1e1e] bg-[#0f0f0f] [height:100dvh] shadow-2xl"
               variants={sheetVariants}
               initial="hidden"
               animate="visible"
@@ -218,8 +245,12 @@ export default function Navbar() {
               aria-modal="true"
               aria-label="Mobile navigation menu"
             >
-              <div className="flex items-center justify-between border-b border-[var(--border)] px-5 py-4">
-                <Link href="#hero" className="group flex min-w-0 items-center gap-2" onClick={() => setIsOpen(false)}>
+              <div className="flex flex-shrink-0 items-center justify-between border-b border-[#1e1e1e] px-6 py-5 landscape:py-3">
+                <Link
+                  href="#hero"
+                  className="group flex min-w-0 items-center gap-2"
+                  onClick={(event) => handleDelayedAnchorTap(event, "#hero", 350)}
+                >
                   <Image
                     src="/images/Logo.jpeg"
                     alt="SlimCyberTech logo"
@@ -243,23 +274,25 @@ export default function Navbar() {
                 </button>
               </div>
 
-              <div className="border-b border-[var(--border)] px-5 py-3">
-                <span className="rounded-full border border-[var(--cyan)]/35 bg-[var(--cyan)]/10 px-3 py-1 text-[10px] uppercase tracking-[0.12em] text-[var(--cyan)]">
-                  Now viewing: {activeLabel}
-                </span>
-              </div>
-
-              <motion.div className="flex-1 px-5 pb-4 pt-3" variants={overlayVariants}>
-                <div className="mb-3 text-[11px] uppercase tracking-[0.12em] text-[var(--white)]/60">Navigation</div>
+              <motion.div
+                className="drawer-scroll flex flex-1 flex-col gap-3 overflow-y-auto overscroll-contain px-6 py-6 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-[#222]"
+                variants={overlayVariants}
+              >
+                <div className="mb-1">
+                  <span className="rounded-full border border-[var(--cyan)]/35 bg-[var(--cyan)]/10 px-3 py-1 text-[10px] uppercase tracking-[0.12em] text-[var(--cyan)]">
+                    Now viewing: {activeLabel}
+                  </span>
+                </div>
+                <div className="mb-2 text-[11px] uppercase tracking-[0.12em] text-[var(--white)]/60">Navigation</div>
                 <div className="space-y-1">
-                  {navLinks.map((item) => {
-                    const isActive = activeSection === item.href.replace("#", "");
+                  {navItems.map((item) => {
+                    const isActive = item.label === activeLabel;
                     return (
-                      <motion.div key={item.label} variants={linkVariants}>
+                      <motion.div key={item.label} variants={linkVariants} whileTap={{ scale: 0.97 }}>
                         <Link
                           href={item.href}
-                          onClick={() => setIsOpen(false)}
-                          className={`flex items-center justify-between rounded-xl border px-4 py-3.5 text-base font-medium transition-colors ${
+                          onClick={(event) => handleDelayedAnchorTap(event, item.href, 350)}
+                          className={`flex min-h-16 items-center justify-between rounded-xl border px-4 py-3.5 text-base font-medium transition-colors active:scale-[0.98] landscape:text-sm ${
                             isActive
                               ? "border-[var(--cyan)]/55 bg-[var(--cyan)]/12 text-[var(--white)]"
                               : "border-[var(--border)] bg-[var(--surface)] text-[var(--white)]/90 hover:border-[var(--cyan)]/45 hover:text-[var(--white)]"
@@ -274,25 +307,38 @@ export default function Navbar() {
                 </div>
               </motion.div>
 
-              <motion.div variants={linkVariants} className="border-t border-[var(--border)] px-5 py-5">
-                <Link
+              <motion.div
+                className="relative flex flex-shrink-0 flex-col gap-4 border-t border-[#1e1e1e] bg-gradient-to-t from-[#0a0a0a] to-[#0f0f0f] px-6 py-5 landscape:py-3"
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                transition={{ duration: 0.3, delay: footerDelay }}
+              >
+                <div className="pointer-events-none absolute left-0 top-0 h-6 w-full bg-gradient-to-t from-[#0a0a0a] to-transparent" />
+                <motion.a
                   href="#contact"
-                  onClick={() => setIsOpen(false)}
-                  className="inline-flex w-full justify-center rounded-full bg-[var(--gradient)] p-[1px]"
+                  onClick={(event) => handleDelayedAnchorTap(event, "#contact", 300)}
+                  className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-[var(--gradient)] p-[1px] font-[var(--font-heading)]"
+                  whileTap={{ scale: 0.97 }}
                 >
                   <span className="w-full rounded-full bg-[var(--bg)] px-6 py-3 text-center text-base font-semibold text-[var(--white)]">
                     Get Started
                   </span>
-                </Link>
-                <div className="mt-4 rounded-xl border border-[var(--border)] bg-[var(--surface)] p-4">
-                  <p className="mb-1 text-[11px] uppercase tracking-[0.12em] text-[var(--white)]/55">Quick contact</p>
+                </motion.a>
+                <div className="rounded-xl border border-[#1e1e1e] bg-[#111] p-4">
+                  <p className="mb-1 text-xs uppercase tracking-wider text-[var(--white)]/55">Quick Contact</p>
                   <a
                     href="mailto:hello@slimcybertech.com"
-                    className="block text-sm font-medium text-[var(--white)]/90 hover:text-[var(--cyan)]"
+                    className="block truncate text-sm font-medium text-[var(--cyan)] hover:text-[var(--white)]"
                   >
                     hello@slimcybertech.com
                   </a>
-                  <p className="mt-1 text-xs text-[var(--white)]/65">We usually reply within 1-2 business days.</p>
+                  <a
+                    href="tel:+256772581510"
+                    className="mt-1 block truncate text-sm font-medium text-[var(--cyan)] hover:text-[var(--white)]"
+                  >
+                    +256 772 581510
+                  </a>
                 </div>
               </motion.div>
             </motion.aside>
