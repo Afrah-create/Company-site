@@ -155,7 +155,7 @@ export default function Testimonials() {
       id="testimonials"
       aria-label="Client Testimonials"
       ref={sectionRef}
-      className="relative mt-12 overflow-hidden bg-[var(--bg)] px-4 py-14 md:px-8 md:py-24"
+      className="relative mt-8 overflow-hidden bg-[var(--bg)] px-4 py-12 md:mt-12 md:px-8 md:py-12"
       style={{
         backgroundImage: "radial-gradient(circle at 1px 1px, var(--grid-line) 1px, transparent 0)",
         backgroundSize: "22px 22px",

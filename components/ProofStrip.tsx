@@ -12,7 +12,7 @@ const proofItems = [
 
 export default function ProofStrip() {
   return (
-    <section className="mx-auto mt-8 w-full max-w-6xl px-4 sm:px-6 md:px-10">
+    <section className="mx-auto mt-8 w-full max-w-6xl px-4 sm:px-6 md:mt-12 md:px-10">
       <motion.div
         variants={fadeUp}
         initial="hidden"

@@ -7,15 +7,14 @@ import {
   Briefcase,
   CheckCircle,
   ChevronDown,
-  CodeXml,
   DollarSign,
   Mail,
   MapPin,
+  MessageCircle,
   MessageSquare,
   Phone,
   Send,
   User,
-  Waypoints,
 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -35,10 +34,16 @@ type FormErrors = Partial<Record<keyof FormData, string>>;
 type FieldName = keyof FormData;
 
 const socials = [
-  { label: "GitHub", href: "https://github.com", icon: CodeXml },
-  { label: "LinkedIn", href: "https://linkedin.com", icon: Waypoints },
-  { label: "Twitter", href: "https://twitter.com", icon: MessageSquare },
-  { label: "Instagram", href: "https://instagram.com", icon: BadgeCheck },
+  {
+    label: "WhatsApp Channel",
+    href: "https://whatsapp.com/channel/0029Vb8BAyd0G0XYpCcddb3o",
+    icon: MessageCircle,
+  },
+  {
+    label: "Instagram",
+    href: "https://www.instagram.com/slimcybertech?igsh=ZzRscWRlNWlvdjZk",
+    icon: BadgeCheck,
+  },
 ];
 
 const subjects = [
@@ -357,7 +362,7 @@ export default function Contact() {
     <section
       id="contact"
       aria-label="Contact Us"
-      className="relative mt-8 overflow-hidden bg-[var(--bg)] px-4 py-16 sm:mt-10 sm:px-5 md:mt-10 md:px-8 md:py-24 lg:mt-10"
+      className="relative mt-8 overflow-hidden bg-[var(--bg)] px-4 py-12 sm:px-5 md:mt-6 md:px-8 md:py-14"
       style={{
         backgroundImage: "radial-gradient(circle at 1px 1px, var(--grid-line) 1px, transparent 0)",
         backgroundSize: "22px 22px",
@@ -418,7 +423,7 @@ export default function Contact() {
 
           <div className="mt-7 space-y-3">
             {[
-              { icon: MapPin, label: "Location", value: "Arua, West Nile" },
+              { icon: MapPin, label: "Location", value: "West Nile, Uganda" },
               {
                 icon: Mail,
                 label: "Email",

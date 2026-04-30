@@ -20,11 +20,11 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL("https://slimcybertech.com"),
   title: {
-    default: "SlimCyberTech | Software Development & Technology - Kampala, Uganda",
+    default: "SlimCyberTech | Software Development & Technology - West Nile, Uganda",
     template: "%s | SlimCyberTech",
   },
   description:
-    "SlimCyberTech builds cutting-edge software, mobile apps, and cybersecurity solutions for businesses across Africa and beyond. Based in Kampala, Uganda.",
+    "SlimCyberTech builds cutting-edge software, mobile apps, and cybersecurity solutions for businesses across Africa and beyond. Based in West Nile, Uganda.",
   keywords: [
     "software development Uganda",
     "web development Kampala",
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     siteName: "SlimCyberTech",
     title: "SlimCyberTech | Software Development & Technology",
     description:
-      "Cutting-edge software solutions, mobile apps, and cybersecurity services. Building the future with code - from Kampala, Uganda.",
+      "Cutting-edge software solutions, mobile apps, and cybersecurity services. Building the future with code - from West Nile, Uganda.",
     images: [
       {
         url: "/opengraph-image",
@@ -65,7 +65,7 @@ export const metadata: Metadata = {
     creator: "@slimcybertech",
     title: "SlimCyberTech | Software Development & Technology",
     description:
-      "Cutting-edge software, mobile apps, and cybersecurity - from Kampala, Uganda.",
+      "Cutting-edge software, mobile apps, and cybersecurity - from West Nile, Uganda.",
     images: ["/opengraph-image"],
   },
   icons: {

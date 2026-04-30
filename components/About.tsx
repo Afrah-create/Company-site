@@ -62,7 +62,7 @@ export default function About() {
     <section
       id="about"
       aria-label="About SlimCyberTech"
-      className="mx-auto mt-10 w-full max-w-6xl rounded-2xl bg-[var(--surface)] px-4 py-8 sm:px-6 sm:py-10 md:mt-12 md:px-10 md:py-12"
+      className="mx-auto mt-8 w-full max-w-6xl rounded-2xl bg-[var(--surface)] px-4 py-8 sm:px-6 sm:py-10 md:mt-12 md:px-10 md:py-12"
     >
       <div className="grid grid-cols-1 gap-8 sm:gap-10 lg:grid-cols-2 lg:gap-12">
         <motion.div

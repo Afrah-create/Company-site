@@ -10,7 +10,7 @@ import { fadeUp, staggerItem, VIEWPORT_ONCE } from "@/lib/motion";
 const team = [
   {
     name: "Lema Aaron",
-    role: "CEO & Software Engineer",
+    role: "Software Engineer",
     image: "/images/Lema.jpeg",
     alt: "Lema Aaron portrait",
     specialties: ["Leadership", "Software Engineering"],
@@ -134,7 +134,7 @@ export default function Team() {
   );
 
   return (
-    <section id="team" className="mx-auto mt-10 w-full max-w-6xl px-4 sm:px-6 md:px-10">
+    <section id="team" className="mx-auto mt-8 w-full max-w-6xl px-4 sm:px-6 md:mt-12 md:px-10">
       <motion.div
         className="text-center"
         variants={fadeUp}

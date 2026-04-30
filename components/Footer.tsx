@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { CodeXml, MessageCircle, Waypoints } from "lucide-react";
+import { BadgeCheck, MessageCircle } from "lucide-react";
 
 const quickLinks = [
   { label: "Home", href: "#hero" },
@@ -25,16 +25,23 @@ const managedWebsites = [
 ];
 
 const socialLinks = [
-  { label: "GitHub", href: "https://github.com", icon: CodeXml },
-  { label: "LinkedIn", href: "https://linkedin.com", icon: Waypoints },
-  { label: "Twitter", href: "https://twitter.com", icon: MessageCircle },
+  {
+    label: "WhatsApp Channel",
+    href: "https://whatsapp.com/channel/0029Vb8BAyd0G0XYpCcddb3o",
+    icon: MessageCircle,
+  },
+  {
+    label: "Instagram",
+    href: "https://www.instagram.com/slimcybertech?igsh=ZzRscWRlNWlvdjZk",
+    icon: BadgeCheck,
+  },
 ];
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer role="contentinfo" className="relative mt-10 bg-[var(--card-bg-strong)]">
+    <footer role="contentinfo" className="relative mt-8 bg-[var(--card-bg-strong)] md:mt-12">
       <div className="h-px w-full bg-[var(--gradient)]" />
 
       <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 sm:py-12 md:px-10">
@@ -87,7 +94,7 @@ export default function Footer() {
               <li>hello@slimcybertech.com</li>
               <li>info@slimcybertech.com</li>
               <li>+256 772 581510</li>
-              <li>WestNile, Uganda</li>
+              <li>West Nile, Uganda</li>
             </ul>
 
             <div className="mt-5 flex items-center gap-3">

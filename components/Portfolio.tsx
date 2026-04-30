@@ -98,7 +98,7 @@ export default function Portfolio() {
     <section
       id="portfolio"
       aria-label="Our Portfolio"
-      className="mx-auto mt-10 w-full max-w-6xl px-4 sm:mt-8 sm:px-6 md:px-10"
+      className="mx-auto mt-8 w-full max-w-6xl px-4 sm:px-6 md:mt-12 md:px-10"
     >
       <motion.div
         className="text-center"

@@ -12,12 +12,12 @@ export default function JsonLd() {
       height: 400,
     },
     description:
-      "SlimCyberTech is a software engineering company based in Kampala, Uganda, specializing in custom software development, mobile apps, cybersecurity, and tech consulting.",
+      "SlimCyberTech is a software engineering company based in West Nile, Uganda, specializing in custom software development, mobile apps, cybersecurity, and tech consulting.",
     foundingDate: "2020",
     founders: [{ "@type": "Person", name: "SlimCyberTech Team" }],
     address: {
       "@type": "PostalAddress",
-      addressLocality: "Kampala",
+      addressLocality: "West Nile",
       addressCountry: "UG",
     },
     contactPoint: [
@@ -35,9 +35,8 @@ export default function JsonLd() {
       },
     ],
     sameAs: [
-      "https://twitter.com/slimcybertech",
-      "https://linkedin.com/company/slimcybertech",
-      "https://github.com/slimcybertech",
+      "https://whatsapp.com/channel/0029Vb8BAyd0G0XYpCcddb3o",
+      "https://www.instagram.com/slimcybertech?igsh=ZzRscWRlNWlvdjZk",
     ],
   };
 
@@ -72,9 +71,9 @@ export default function JsonLd() {
     email: "info@slimcybertech.com",
     address: {
       "@type": "PostalAddress",
-      streetAddress: "Kampala",
-      addressLocality: "Kampala",
-      addressRegion: "Central Region",
+      streetAddress: "West Nile",
+      addressLocality: "West Nile",
+      addressRegion: "Northern Region",
       addressCountry: "UG",
     },
     geo: {
