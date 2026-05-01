@@ -224,7 +224,7 @@ export default function Navbar() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            className="fixed inset-0 z-[70] md:hidden"
+            className="fixed inset-0 z-[120] md:hidden"
             variants={backdropVariants}
             initial="hidden"
             animate="visible"
@@ -234,12 +234,17 @@ export default function Navbar() {
             <button
               type="button"
               aria-label="Close menu backdrop"
-              className="absolute inset-0 bg-black/45 backdrop-blur-[1px]"
+              className="absolute inset-0 backdrop-blur-[1px]"
+              style={{ backgroundColor: "var(--mobile-drawer-backdrop)" }}
               onClick={() => setIsOpen(false)}
             />
 
             <motion.aside
-              className="absolute top-0 right-0 z-50 flex h-screen min-h-[600px] w-full max-w-sm flex-col overflow-hidden border-l border-[#1e1e1e] bg-[#0f0f0f] [height:100dvh] shadow-2xl"
+              className="absolute top-0 right-0 z-[121] flex h-screen min-h-[600px] w-full max-w-sm flex-col overflow-hidden border-l [height:100dvh] shadow-2xl"
+              style={{
+                borderColor: "var(--mobile-drawer-border)",
+                backgroundColor: "var(--mobile-drawer-bg)",
+              }}
               variants={sheetVariants}
               initial="hidden"
               animate="visible"
@@ -248,7 +253,10 @@ export default function Navbar() {
               aria-modal="true"
               aria-label="Mobile navigation menu"
             >
-              <div className="flex flex-shrink-0 items-center justify-between border-b border-[#1e1e1e] px-6 py-5 landscape:py-3">
+              <div
+                className="flex flex-shrink-0 items-center justify-between border-b px-6 py-5 landscape:py-3"
+                style={{ borderColor: "var(--mobile-drawer-border)" }}
+              >
                 <Link
                   href="#hero"
                   className="group flex min-w-0 items-center gap-2"
@@ -286,7 +294,12 @@ export default function Navbar() {
                     Now viewing: {activeLabel}
                   </span>
                 </div>
-                <div className="mb-2 text-[11px] uppercase tracking-[0.12em] text-[var(--white)]/60">Navigation</div>
+                <div
+                  className="mb-2 text-[11px] uppercase tracking-[0.12em]"
+                  style={{ color: "var(--mobile-drawer-muted-text)" }}
+                >
+                  Navigation
+                </div>
                 <div className="space-y-1">
                   {navItems.map((item) => {
                     const isActive = item.label === activeLabel;
@@ -311,13 +324,14 @@ export default function Navbar() {
               </motion.div>
 
               <motion.div
-                className="relative flex flex-shrink-0 flex-col gap-4 border-t border-[#1e1e1e] bg-gradient-to-t from-[#0a0a0a] to-[#0f0f0f] px-6 py-5 landscape:py-3"
+                className="relative flex flex-shrink-0 flex-col gap-4 border-t bg-gradient-to-t from-[var(--mobile-drawer-footer-from)] to-[var(--mobile-drawer-footer-to)] px-6 pb-[calc(1.25rem+env(safe-area-inset-bottom)+4rem)] pt-5 landscape:py-3"
+                style={{ borderColor: "var(--mobile-drawer-border)" }}
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 10 }}
                 transition={{ duration: 0.3, delay: footerDelay }}
               >
-                <div className="pointer-events-none absolute left-0 top-0 h-6 w-full bg-gradient-to-t from-[#0a0a0a] to-transparent" />
+                <div className="pointer-events-none absolute left-0 top-0 h-6 w-full bg-gradient-to-t from-[var(--mobile-drawer-footer-from)] to-transparent" />
                 <motion.a
                   href="#contact"
                   onClick={(event) => handleDelayedAnchorTap(event, "#contact", 300)}
@@ -328,8 +342,16 @@ export default function Navbar() {
                     Get Started
                   </span>
                 </motion.a>
-                <div className="rounded-xl border border-[#1e1e1e] bg-[#111] p-4">
-                  <p className="mb-1 text-xs uppercase tracking-wider text-[var(--white)]/55">Quick Contact</p>
+                <div
+                  className="rounded-xl border p-4"
+                  style={{
+                    borderColor: "var(--mobile-drawer-card-border)",
+                    backgroundColor: "var(--mobile-drawer-card-bg)",
+                  }}
+                >
+                  <p className="mb-1 text-xs uppercase tracking-wider" style={{ color: "var(--mobile-drawer-muted-text)" }}>
+                    Quick Contact
+                  </p>
                   <a
                     href="mailto:info@slimcybertech.com"
                     className="block truncate text-sm font-medium text-[var(--cyan)] hover:text-[var(--white)]"

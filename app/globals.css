@@ -16,6 +16,14 @@
   --grain-dot: #ffffff;
   --header-bg: rgba(10, 10, 10, 0.72);
   --header-mobile-bg: rgba(10, 10, 10, 0.96);
+  --mobile-drawer-bg: #0f0f0f;
+  --mobile-drawer-border: #1e1e1e;
+  --mobile-drawer-footer-from: #0a0a0a;
+  --mobile-drawer-footer-to: #0f0f0f;
+  --mobile-drawer-card-bg: #111111;
+  --mobile-drawer-card-border: #1e1e1e;
+  --mobile-drawer-muted-text: rgba(255, 255, 255, 0.55);
+  --mobile-drawer-backdrop: rgba(0, 0, 0, 0.45);
   --mobile-active-bg: rgba(0, 198, 255, 0.12);
   --mobile-active-border: rgba(0, 198, 255, 0.55);
   --hero-background-opacity: 0.7;
@@ -45,6 +53,14 @@
   --grain-dot: #0f172a;
   --header-bg: rgba(247, 249, 252, 0.88);
   --header-mobile-bg: rgba(247, 249, 252, 0.97);
+  --mobile-drawer-bg: #f7f9fc;
+  --mobile-drawer-border: #dbe3ee;
+  --mobile-drawer-footer-from: #eaf1fb;
+  --mobile-drawer-footer-to: #f7f9fc;
+  --mobile-drawer-card-bg: #ffffff;
+  --mobile-drawer-card-border: #dbe3ee;
+  --mobile-drawer-muted-text: rgba(15, 23, 42, 0.62);
+  --mobile-drawer-backdrop: rgba(15, 23, 42, 0.25);
   --mobile-active-bg: rgba(0, 114, 255, 0.2);
   --mobile-active-border: rgba(0, 114, 255, 0.62);
   --hero-background-opacity: 0.5;
@@ -138,12 +154,12 @@ h6 {
 }
 
 .drawer-scroll::-webkit-scrollbar-thumb {
-  background: #222;
+  background: color-mix(in srgb, var(--mobile-drawer-border) 82%, transparent);
   border-radius: 2px;
 }
 
 .drawer-scroll::-webkit-scrollbar-thumb:hover {
-  background: #00c6ff44;
+  background: color-mix(in srgb, var(--cyan) 28%, transparent);
 }
 
 @keyframes grainShift {
