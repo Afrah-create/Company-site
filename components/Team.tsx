@@ -28,7 +28,7 @@ const team: TeamMember[] = [
   {
     name: "Sebabe Swaleh",
     role: "Senior Software Engineer",
-    image: "/images/Sebabe.jpg",
+    image: "/images/Sebabe.jpeg",
     alt: "Sebabe Swaleh",
     specialties: ["Backend Systems", "Web Applications"],
   },
