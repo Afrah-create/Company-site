@@ -2,56 +2,16 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUp } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useScrollProgress } from "@/hooks/useScrollProgress";
 
 const CIRCLE_RADIUS = 22;
 const CIRCUMFERENCE = 2 * Math.PI * CIRCLE_RADIUS;
 
-const sectionMap: { id: string; label: string }[] = [
-  { id: "hero", label: "Hero" },
-  { id: "services", label: "Services" },
-  { id: "about", label: "About" },
-  { id: "portfolio", label: "Portfolio" },
-  { id: "testimonials", label: "Testimonials" },
-  { id: "contact", label: "Contact" },
-];
-
 export default function ScrollProgress() {
   const scrollPercent = useScrollProgress();
   const [isHovered, setIsHovered] = useState(false);
-  const [currentSection, setCurrentSection] = useState("Hero");
   const displayPercent = Math.max(0, Math.min(100, scrollPercent));
-
-  useEffect(() => {
-    const sectionElements = sectionMap
-      .map((section) => ({
-        ...section,
-        element: document.getElementById(section.id),
-      }))
-      .filter((section) => section.element) as Array<{ id: string; label: string; element: HTMLElement }>;
-
-    if (!sectionElements.length) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const activeEntries = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-
-        if (!activeEntries.length) return;
-
-        const bestMatch = sectionElements.find((section) => section.element === activeEntries[0].target);
-        if (bestMatch) {
-          setCurrentSection(bestMatch.label);
-        }
-      },
-      { threshold: 0.3 },
-    );
-
-    sectionElements.forEach((section) => observer.observe(section.element));
-    return () => observer.disconnect();
-  }, []);
 
   const strokeDashoffset = useMemo(
     () => CIRCUMFERENCE - (displayPercent / 100) * CIRCUMFERENCE,
@@ -83,22 +43,9 @@ export default function ScrollProgress() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, y: 20 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="fixed bottom-4 right-4 z-[9998] flex items-center gap-2 md:bottom-6 md:right-6"
+            className="fixed bottom-4 right-4 z-[9998] hidden md:bottom-6 md:right-6 md:block"
             style={{ willChange: "transform" }}
           >
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentSection}
-                initial={{ x: 10, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                exit={{ x: 6, opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                className="hidden rounded-full border border-[var(--border)] bg-[var(--card-bg-strong)] px-3 py-1 text-xs font-heading text-[var(--white)] md:flex"
-              >
-                {currentSection}
-              </motion.div>
-            </AnimatePresence>
-
             <motion.button
               type="button"
               onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}

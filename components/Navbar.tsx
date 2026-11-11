@@ -2,373 +2,286 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { AnimatePresence, motion, type Variants } from "framer-motion";
-import { Menu, Moon, Sun, X } from "lucide-react";
-import { useEffect, useState, type MouseEvent } from "react";
-import { useActiveSection } from "@/hooks/useActiveSection";
+import { Moon, Sun } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { useTheme } from "@/components/ThemeProvider";
 import { useScrollPosition } from "@/hooks/useScrollPosition";
+import { BOOK_DEMO_HREF } from "@/lib/contact";
+import { NAV_ITEMS, isNavActive } from "@/lib/nav";
 
-const navItems = [
-  { label: "Home", href: "#hero", section: "hero" },
-  { label: "Services", href: "#services", section: "services" },
-  { label: "About", href: "#about", section: "about" },
-  { label: "Portfolio", href: "#portfolio", section: "portfolio" },
-  { label: "Contact", href: "#contact", section: "contact" },
-];
-
-const sectionLabelMap: Record<string, string> = {
-  hero: "Home",
-  services: "Services",
-  about: "About",
-  team: "About",
-  portfolio: "Portfolio",
-  testimonials: "Portfolio",
-  contact: "Contact",
-};
-
-const overlayVariants = {
+const panelVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
     transition: {
+      duration: 0.22,
       when: "beforeChildren",
-      staggerChildren: 0.08,
+      staggerChildren: 0.055,
     },
   },
   exit: {
     opacity: 0,
-    transition: { when: "afterChildren", staggerChildren: 0.06, staggerDirection: -1 },
+    transition: { duration: 0.18, when: "afterChildren", staggerChildren: 0.04, staggerDirection: -1 },
   },
 };
 
-const linkVariants = {
-  hidden: { opacity: 0, y: 22 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.35 } },
-  exit: { opacity: 0, y: 14, transition: { duration: 0.2 } },
+const linkVariants: Variants = {
+  hidden: { opacity: 0, y: 16 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.32, ease: [0.22, 1, 0.36, 1] } },
+  exit: { opacity: 0, y: 8, transition: { duration: 0.16 } },
 };
 
-const backdropVariants = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { duration: 0.2 } },
-  exit: { opacity: 0, transition: { duration: 0.15 } },
-};
-
-const sheetVariants: Variants = {
-  hidden: { x: "100%", opacity: 0.98 },
-  visible: {
-    x: 0,
-    opacity: 1,
-    transition: {
-      type: "spring",
-      stiffness: 360,
-      damping: 34,
-      mass: 0.8,
-      when: "beforeChildren",
-      staggerChildren: 0.06,
-    },
-  },
-  exit: {
-    x: "100%",
-    opacity: 0.98,
-    transition: { duration: 0.22, ease: "easeInOut", when: "afterChildren" },
-  },
-};
+const FOCUSABLE_SELECTOR =
+  'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])';
 
 export default function Navbar() {
+  const pathname = usePathname();
   const isScrolled = useScrollPosition(24);
   const [isOpen, setIsOpen] = useState(false);
-  const activeSection = useActiveSection();
   const { theme, toggleTheme } = useTheme();
-  const activeLabel = sectionLabelMap[activeSection] ?? "Home";
-  const footerDelay = navItems.length * 0.07 + 0.1;
-  const scrollToHash = (href: string) => {
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-  };
-  const handleDelayedAnchorTap = (
-    event: MouseEvent<HTMLAnchorElement>,
-    href: string,
-    delayMs: number,
-  ) => {
-    event.preventDefault();
-    setIsOpen(false);
-    window.setTimeout(() => {
-      scrollToHash(href);
-    }, delayMs);
-  };
+  const sheetRef = useRef<HTMLDivElement | null>(null);
+  const menuButtonRef = useRef<HTMLButtonElement | null>(null);
+  const wasOpenRef = useRef(false);
 
   useEffect(() => {
-    if (!isOpen) return;
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setIsOpen(false);
-      }
-    };
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
+    setIsOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (wasOpenRef.current && !isOpen) {
+      menuButtonRef.current?.focus();
+    }
+    wasOpenRef.current = isOpen;
   }, [isOpen]);
 
   useEffect(() => {
     if (!isOpen) return;
+
+    const sheet = sheetRef.current;
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    document.body.setAttribute("data-nav-open", "true");
+
+    const getFocusable = () => {
+      const fromSheet = sheet
+        ? Array.from(sheet.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR))
+        : [];
+      const button = menuButtonRef.current;
+      return [button, ...fromSheet].filter(
+        (element): element is HTMLElement =>
+          element != null && element.tabIndex !== -1 && !element.hasAttribute("disabled"),
+      );
+    };
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        setIsOpen(false);
+        return;
+      }
+
+      if (event.key !== "Tab") return;
+
+      const items = getFocusable();
+      if (items.length === 0) return;
+
+      const first = items[0];
+      const last = items[items.length - 1];
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
     return () => {
       document.body.style.overflow = previousOverflow;
+      document.body.removeAttribute("data-nav-open");
+      window.removeEventListener("keydown", onKeyDown);
     };
   }, [isOpen]);
 
   return (
     <>
       <header
-        className={`fixed inset-x-0 top-0 z-[60] pt-[env(safe-area-inset-top)] transition-all duration-300 ${
-          isScrolled
-            ? "border-b border-[var(--cyan)]/55 bg-[var(--header-bg)] backdrop-blur-md"
-            : "border-b border-transparent bg-transparent"
+        className={`pointer-events-none fixed inset-x-0 top-0 px-3 pt-[calc(0.7rem+env(safe-area-inset-top))] sm:px-4 lg:px-6 ${
+          isOpen ? "z-[10030]" : "z-[60]"
         }`}
       >
         <nav
           aria-label="Main navigation"
-          className="mx-auto flex min-h-[4.25rem] w-full max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:min-h-[5rem] sm:px-6 sm:py-0 lg:px-10"
+          className={`pointer-events-auto relative mx-auto flex h-14 w-full max-w-6xl items-center justify-between gap-2 rounded-full border px-2 shadow-[var(--nav-pill-shadow)] backdrop-blur-xl transition-[background-color,border-color,box-shadow] duration-300 sm:h-16 sm:gap-3 sm:px-3 lg:px-5 ${
+            isScrolled || isOpen
+              ? "border-[var(--nav-pill-border)] bg-[var(--nav-pill-bg-scrolled)]"
+              : "border-[var(--nav-pill-border)] bg-[var(--nav-pill-bg)]"
+          }`}
         >
-          <Link href="#hero" className="group flex min-w-0 flex-1 items-center gap-2.5 sm:flex-initial sm:gap-3">
+          <Link href="/" className="group flex min-w-0 shrink items-center gap-1.5 sm:gap-2.5">
             <Image
               src="/images/Logo.jpeg"
               alt="SlimCyberTech logo"
-              width={48}
-              height={48}
+              width={40}
+              height={40}
               priority
-              className="h-10 w-10 shrink-0 rounded-lg object-cover sm:h-11 sm:w-11 md:h-10 md:w-10"
+              className="h-8 w-8 shrink-0 rounded-lg object-cover sm:h-10 sm:w-10"
             />
-            <span className="min-w-0 leading-tight sm:whitespace-nowrap">
-              <span className="text-base font-semibold tracking-[0.02em] text-[var(--white)] sm:text-lg">
+            <span className="min-w-0 truncate leading-tight whitespace-nowrap">
+              <span className="text-[13px] font-semibold tracking-[0.01em] text-[var(--white)] sm:text-[0.95rem]">
                 Slim
               </span>
-              <span className="text-base font-semibold tracking-[0.02em] text-[var(--cyan)] sm:text-lg">
+              <span className="text-[13px] font-semibold tracking-[0.01em] text-[var(--cyan)] sm:text-[0.95rem]">
                 Cyber
               </span>
-              <span className="text-base font-semibold tracking-[0.02em] text-[var(--blue)] sm:text-lg">
+              <span className="text-[13px] font-semibold tracking-[0.01em] text-[var(--blue)] sm:text-[0.95rem]">
                 Tech
               </span>
             </span>
           </Link>
 
-          <div className="hidden items-center gap-8 md:flex">
-            {navItems.map((item) => (
-              <Link
-                key={item.label}
-                href={item.href}
-                className={`group relative text-sm font-medium transition-colors hover:text-[var(--white)] ${
-                  activeSection === item.section
-                    ? "text-[var(--white)]"
-                    : "text-[var(--white)]/90"
-                }`}
-              >
-                {item.label}
-                <span
-                  className={`absolute -bottom-1 left-0 h-[2px] w-full origin-left bg-[var(--cyan)] transition-transform duration-300 ease-out ${
-                    activeSection === item.section
-                      ? "scale-x-100"
-                      : "scale-x-0 group-hover:scale-x-100"
+          <div className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 items-center gap-1 lg:flex">
+            {NAV_ITEMS.map((item) => {
+              const active = isNavActive(item.href, pathname);
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  aria-current={active ? "page" : undefined}
+                  className={`group relative rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors ${
+                    active
+                      ? "text-[var(--white)]"
+                      : "text-[var(--muted)] hover:text-[var(--white)]"
                   }`}
-                />
-              </Link>
-            ))}
+                >
+                  {item.label}
+                  <span
+                    className={`absolute inset-x-3 -bottom-0.5 h-[2px] origin-left rounded-full bg-[var(--cyan)] transition-transform duration-300 ease-out ${
+                      active ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+                    }`}
+                  />
+                </Link>
+              );
+            })}
           </div>
 
-          <div className="hidden items-center gap-3 md:flex">
+          <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
             <button
               type="button"
               aria-label="Toggle theme"
               onClick={toggleTheme}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)] text-[var(--white)] transition-colors hover:border-[var(--cyan)]"
+              className="inline-flex h-11 w-11 min-h-[44px] min-w-[44px] items-center justify-center rounded-full text-[var(--white)] transition-colors hover:bg-[var(--surface2)]"
             >
               {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </button>
-            <span className="rounded-full border border-[var(--cyan)]/40 bg-[var(--cyan)]/10 px-3 py-1 text-[10px] uppercase tracking-[0.12em] text-[var(--cyan)]">
-              {activeLabel}
-            </span>
             <Link
-              href="#contact"
-              className="group inline-flex rounded-full bg-[var(--gradient)] p-[1px] transition-transform duration-300 hover:-translate-y-0.5"
+              href={BOOK_DEMO_HREF}
+              className="hidden min-h-10 items-center justify-center rounded-full bg-[var(--white)] px-4 py-2 text-sm font-semibold text-[var(--bg)] transition-opacity hover:opacity-90 lg:inline-flex"
             >
-              <span className="inline-flex items-center rounded-full bg-[var(--bg)] px-5 py-2 text-sm font-semibold text-[var(--white)] transition-all duration-300 group-hover:bg-transparent group-hover:text-[var(--white)]">
-                Get Started
-              </span>
+              Book a demo
             </Link>
-          </div>
-
-          <div className="flex shrink-0 items-center gap-2 md:hidden">
             <button
-              type="button"
-              aria-label="Toggle theme"
-              onClick={toggleTheme}
-              className="inline-flex h-11 min-h-[44px] w-11 min-w-[44px] items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)] text-[var(--white)] active:scale-[0.97]"
-            >
-              {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-            </button>
-            <button
+              ref={menuButtonRef}
               type="button"
               aria-label={isOpen ? "Close menu" : "Open menu"}
-              className="inline-flex h-11 min-h-[44px] w-11 min-w-[44px] items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)] text-[var(--white)] active:scale-[0.97]"
+              aria-expanded={isOpen}
+              aria-controls="mobile-navigation"
+              className="inline-flex h-11 min-h-[44px] w-11 min-w-[44px] items-center justify-center rounded-full text-[var(--white)] active:scale-[0.97] lg:hidden"
               onClick={() => setIsOpen((prev) => !prev)}
             >
-              {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              <span className="relative block h-3.5 w-[18px]" aria-hidden="true">
+                <span
+                  className={`absolute left-0 h-[1.5px] w-full rounded-full bg-current transition-transform duration-300 ease-out ${
+                    isOpen ? "top-[6px] rotate-45" : "top-0"
+                  }`}
+                />
+                <span
+                  className={`absolute left-0 top-[6px] h-[1.5px] w-full rounded-full bg-current transition-opacity duration-200 ${
+                    isOpen ? "opacity-0" : "opacity-100"
+                  }`}
+                />
+                <span
+                  className={`absolute left-0 h-[1.5px] w-full rounded-full bg-current transition-transform duration-300 ease-out ${
+                    isOpen ? "top-[6px] -rotate-45" : "top-[12px]"
+                  }`}
+                />
+              </span>
             </button>
           </div>
         </nav>
       </header>
 
       <AnimatePresence>
-        {isOpen && (
+        {isOpen ? (
           <motion.div
-            className="fixed inset-0 z-[120] md:hidden"
-            variants={backdropVariants}
+            id="mobile-navigation"
+            ref={sheetRef}
+            className="fixed inset-0 z-[10020] flex flex-col bg-[var(--header-mobile-bg)] backdrop-blur-xl lg:hidden"
+            variants={panelVariants}
             initial="hidden"
             animate="visible"
             exit="exit"
-            aria-hidden={!isOpen}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Mobile navigation menu"
           >
-            <button
-              type="button"
-              aria-label="Close menu backdrop"
-              className="absolute inset-0 backdrop-blur-[1px]"
-              style={{ backgroundColor: "var(--mobile-drawer-backdrop)" }}
-              onClick={() => setIsOpen(false)}
-            />
+            <div className="flex h-full flex-col items-center justify-center overflow-y-auto px-6 pt-[calc(6.25rem+env(safe-area-inset-top))] pb-[calc(1.75rem+env(safe-area-inset-bottom))]">
+              <nav className="flex flex-col items-center gap-1">
+                {NAV_ITEMS.map((item) => {
+                  const isActive = isNavActive(item.href, pathname);
+                  return (
+                    <motion.div key={item.href} variants={linkVariants} className="w-full">
+                      <Link
+                        href={item.href}
+                        aria-current={isActive ? "page" : undefined}
+                        onClick={() => {
+                          if (isActive) setIsOpen(false);
+                        }}
+                        className={`relative flex min-h-12 items-center justify-center px-4 py-2.5 text-center font-heading text-[1.65rem] tracking-[-0.03em] transition-colors sm:min-h-14 sm:text-3xl ${
+                          isActive
+                            ? "text-[var(--white)]"
+                            : "text-[var(--muted)] hover:text-[var(--white)]"
+                        }`}
+                      >
+                        {item.label}
+                        {isActive ? (
+                          <span className="absolute bottom-1 left-1/2 h-[2px] w-8 -translate-x-1/2 rounded-full bg-[var(--cyan)]" />
+                        ) : null}
+                      </Link>
+                    </motion.div>
+                  );
+                })}
+              </nav>
 
-            <motion.aside
-              className="absolute top-0 right-0 z-[121] flex h-screen min-h-[600px] w-full max-w-sm flex-col overflow-hidden border-l [height:100dvh] shadow-2xl"
-              style={{
-                borderColor: "var(--mobile-drawer-border)",
-                backgroundColor: "var(--mobile-drawer-bg)",
-              }}
-              variants={sheetVariants}
-              initial="hidden"
-              animate="visible"
-              exit="exit"
-              role="dialog"
-              aria-modal="true"
-              aria-label="Mobile navigation menu"
-            >
-              <div
-                className="flex flex-shrink-0 items-center justify-between border-b px-6 py-5 landscape:py-3"
-                style={{ borderColor: "var(--mobile-drawer-border)" }}
+              <motion.div
+                variants={linkVariants}
+                className="mt-10 flex flex-col items-center gap-4 text-center"
               >
                 <Link
-                  href="#hero"
-                  className="group flex min-w-0 items-center gap-2"
-                  onClick={(event) => handleDelayedAnchorTap(event, "#hero", 350)}
+                  href={BOOK_DEMO_HREF}
+                  className="inline-flex min-h-12 min-w-[12.5rem] items-center justify-center rounded-full bg-[var(--white)] px-8 text-sm font-semibold text-[var(--bg)]"
                 >
-                  <Image
-                    src="/images/Logo.jpeg"
-                    alt="SlimCyberTech logo"
-                    width={44}
-                    height={44}
-                    className="h-11 w-11 rounded-lg object-cover"
-                  />
-                  <span className="min-w-0 leading-tight">
-                    <span className="text-base font-semibold tracking-[0.02em] text-[var(--white)]">Slim</span>
-                    <span className="text-base font-semibold tracking-[0.02em] text-[var(--cyan)]">Cyber</span>
-                    <span className="text-base font-semibold tracking-[0.02em] text-[var(--blue)]">Tech</span>
-                  </span>
+                  Book a demo
                 </Link>
-                <button
-                  type="button"
-                  aria-label="Close menu"
-                  className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)] text-[var(--white)]"
-                  onClick={() => setIsOpen(false)}
-                >
-                  <X className="h-5 w-5" />
-                </button>
-              </div>
-
-              <motion.div
-                className="drawer-scroll flex flex-1 flex-col gap-3 overflow-y-auto overscroll-contain px-6 py-6 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-[#222]"
-                variants={overlayVariants}
-              >
-                <div className="mb-1">
-                  <span className="rounded-full border border-[var(--cyan)]/35 bg-[var(--cyan)]/10 px-3 py-1 text-[10px] uppercase tracking-[0.12em] text-[var(--cyan)]">
-                    Now viewing: {activeLabel}
-                  </span>
-                </div>
-                <div
-                  className="mb-2 text-[11px] uppercase tracking-[0.12em]"
-                  style={{ color: "var(--mobile-drawer-muted-text)" }}
-                >
-                  Navigation
-                </div>
-                <div className="space-y-1">
-                  {navItems.map((item) => {
-                    const isActive = item.label === activeLabel;
-                    return (
-                      <motion.div key={item.label} variants={linkVariants} whileTap={{ scale: 0.97 }}>
-                        <Link
-                          href={item.href}
-                          onClick={(event) => handleDelayedAnchorTap(event, item.href, 350)}
-                          className={`flex min-h-16 items-center justify-between rounded-xl border px-4 py-3.5 text-base font-medium transition-colors active:scale-[0.98] landscape:text-sm ${
-                            isActive
-                              ? "border-[var(--mobile-active-border)] bg-[var(--mobile-active-bg)] text-[var(--white)]"
-                              : "border-[var(--border)] bg-[var(--surface)] text-[var(--white)]/90 hover:border-[var(--cyan)]/45 hover:text-[var(--white)]"
-                          }`}
-                        >
-                          <span>{item.label}</span>
-                          {isActive ? <span className="h-2 w-2 rounded-full bg-[var(--cyan)]" /> : null}
-                        </Link>
-                      </motion.div>
-                    );
-                  })}
-                </div>
-              </motion.div>
-
-              <motion.div
-                className="relative flex flex-shrink-0 flex-col gap-4 border-t bg-gradient-to-t from-[var(--mobile-drawer-footer-from)] to-[var(--mobile-drawer-footer-to)] px-6 pb-[calc(1.25rem+env(safe-area-inset-bottom)+4rem)] pt-5 landscape:py-3"
-                style={{ borderColor: "var(--mobile-drawer-border)" }}
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 10 }}
-                transition={{ duration: 0.3, delay: footerDelay }}
-              >
-                <div className="pointer-events-none absolute left-0 top-0 h-6 w-full bg-gradient-to-t from-[var(--mobile-drawer-footer-from)] to-transparent" />
-                <motion.a
-                  href="#contact"
-                  onClick={(event) => handleDelayedAnchorTap(event, "#contact", 300)}
-                  className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-[var(--gradient)] p-[1px] font-[var(--font-heading)]"
-                  whileTap={{ scale: 0.97 }}
-                >
-                  <span className="w-full rounded-full bg-[var(--bg)] px-6 py-3 text-center text-base font-semibold text-[var(--white)]">
-                    Get Started
-                  </span>
-                </motion.a>
-                <div
-                  className="rounded-xl border p-4"
-                  style={{
-                    borderColor: "var(--mobile-drawer-card-border)",
-                    backgroundColor: "var(--mobile-drawer-card-bg)",
-                  }}
-                >
-                  <p className="mb-1 text-xs uppercase tracking-wider" style={{ color: "var(--mobile-drawer-muted-text)" }}>
-                    Quick Contact
-                  </p>
-                  <a
-                    href="mailto:info@slimcybertech.com"
-                    className="block truncate text-sm font-medium text-[var(--cyan)] hover:text-[var(--white)]"
-                  >
+                <p className="flex flex-col items-center gap-1 text-sm text-[var(--muted)] sm:flex-row sm:gap-3">
+                  <a href="mailto:info@slimcybertech.com" className="hover:text-[var(--cyan)]">
                     info@slimcybertech.com
                   </a>
-                  <a
-                    href="tel:+256772581510"
-                    className="mt-1 block truncate text-sm font-medium text-[var(--cyan)] hover:text-[var(--white)]"
-                  >
+                  <span className="hidden sm:inline" aria-hidden="true">
+                    ·
+                  </span>
+                  <a href="tel:+256772581510" className="hover:text-[var(--cyan)]">
                     +256 772 581510
                   </a>
-                </div>
+                </p>
               </motion.div>
-            </motion.aside>
+            </div>
           </motion.div>
-        )}
+        ) : null}
       </AnimatePresence>
     </>
   );

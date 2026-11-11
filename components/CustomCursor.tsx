@@ -9,7 +9,8 @@ export default function CustomCursor() {
 
   useEffect(() => {
     const coarsePointer = window.matchMedia("(pointer: coarse)").matches;
-    if (coarsePointer) return;
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (coarsePointer || reducedMotion) return;
     setEnabled(true);
 
     const onMove = (event: MouseEvent) => {

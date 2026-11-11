@@ -3,22 +3,18 @@
 import { AnimatePresence, motion } from "framer-motion";
 import {
   AlertCircle,
-  BadgeCheck,
-  Briefcase,
   CheckCircle,
-  ChevronDown,
-  DollarSign,
+  Loader2,
   Mail,
   MapPin,
   MessageCircle,
-  MessageSquare,
   Phone,
   Send,
-  User,
 } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { slideInLeft, slideInRight, staggerItem, VIEWPORT_ONCE } from "@/lib/motion";
+import { useSearchParams } from "next/navigation";
+import { FormEvent, useEffect, useId, useRef, useState } from "react";
+import { CONTACT_SUBJECTS, isContactSubject } from "@/lib/contact";
 
 type FormData = {
   firstName: string;
@@ -33,93 +29,74 @@ type FormData = {
 type FormErrors = Partial<Record<keyof FormData, string>>;
 type FieldName = keyof FormData;
 
-const socials = [
-  {
-    label: "WhatsApp Channel",
-    href: "https://whatsapp.com/channel/0029Vb8BAyd0G0XYpCcddb3o",
-    icon: MessageCircle,
-  },
-  {
-    label: "Instagram",
-    href: "https://www.instagram.com/slimcybertech?igsh=ZzRscWRlNWlvdjZk",
-    icon: BadgeCheck,
-  },
-];
+const INSTAGRAM_HREF =
+  "https://www.instagram.com/slimcybertech?igsh=ZzRscWRlNWlvdjZk";
+const WHATSAPP_CHANNEL_HREF =
+  "https://whatsapp.com/channel/0029Vb8BAyd0G0XYpCcddb3o";
+const WHATSAPP_HREF = "https://wa.me/256772581510";
 
-const subjects = [
-  "Select a Service...",
-  "Software Development",
-  "Mobile App Development",
-  "Cybersecurity",
-  "Data Analysis",
-  "Cloud & DevOps",
-  "UI/UX Design",
-  "Tech Consulting",
-  "Other",
-];
-
-const budgets = [
-  "Select Budget Range...",
-  "Under UGX 250,000",
-  "UGX 250,000 - UGX 550,000",
-  "UGX 550,000 - UGX 750,000",
-  "UGX 1000,000+",
-  "Let's Discuss",
-];
-
-const requiredFields: FieldName[] = ["firstName", "lastName", "email", "subject", "message"];
-
-const fieldIcons: Record<FieldName, React.ComponentType<{ className?: string }>> = {
-  firstName: User,
-  lastName: User,
-  email: Mail,
-  phone: Phone,
-  subject: Briefcase,
-  budget: DollarSign,
-  message: MessageSquare,
+const emptyForm: FormData = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  phone: "",
+  subject: "",
+  budget: "",
+  message: "",
 };
 
 const fieldLabels: Record<FieldName, string> = {
-  firstName: "First Name",
-  lastName: "Last Name",
+  firstName: "First name",
+  lastName: "Last name",
   email: "Email",
   phone: "Phone",
   subject: "Subject",
-  budget: "Budget Range",
+  budget: "Budget range",
   message: "Message",
 };
 
-const fieldTypeMap: Partial<Record<FieldName, string>> = {
-  firstName: "text",
-  lastName: "text",
-  email: "email",
-  phone: "tel",
-};
+const requiredFields: FieldName[] = ["firstName", "lastName", "email", "subject", "message"];
+
+const budgets = [
+  "Under UGX 250,000",
+  "250k-550k",
+  "550k-750k",
+  // TODO: No 750k–1,000,000 band — team to decide whether to add it. Do not fill the gap silently.
+  "1,000,000+",
+  "Not sure yet",
+];
+
+const inputClass =
+  "min-h-11 w-full rounded-[10px] border bg-[var(--bg)] px-4 text-base text-[var(--white)] outline-none transition-colors placeholder:text-[var(--muted)] focus:border-[var(--cyan)] focus:shadow-[0_0_0_3px_rgba(0,198,255,0.12)]";
+
+function InstagramIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
+      <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" strokeWidth="1.8" />
+      <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.8" />
+      <circle cx="17.4" cy="6.6" r="1" fill="currentColor" />
+    </svg>
+  );
+}
 
 export default function Contact() {
-  const [formData, setFormData] = useState<FormData>({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    subject: "",
-    budget: "",
-    message: "",
-  });
+  const searchParams = useSearchParams();
+  const formId = useId();
+  const submittingRef = useRef(false);
+
+  const [formData, setFormData] = useState<FormData>(emptyForm);
+  const [honeypot, setHoneypot] = useState("");
   const [errors, setErrors] = useState<FormErrors>({});
-  const [focusedField, setFocusedField] = useState<FieldName | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const [charCount, setCharCount] = useState(0);
-  const [showToast, setShowToast] = useState(false);
-  const [completionPercent, setCompletionPercent] = useState(0);
-  const [isTypingMessage, setIsTypingMessage] = useState(false);
-  const [isShaking, setIsShaking] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
-  const typingTimeout = useRef<number | null>(null);
-  const resetTimeout = useRef<number | null>(null);
-  const toastTimeout = useRef<number | null>(null);
+  useEffect(() => {
+    const requested = searchParams.get("subject");
+    if (requested && isContactSubject(requested)) {
+      setFormData((prev) => ({ ...prev, subject: requested }));
+    }
+  }, [searchParams]);
 
   const validateField = (field: FieldName, value: string): string => {
     const trimmed = value.trim();
@@ -132,15 +109,13 @@ export default function Contact() {
 
     if (field === "email") {
       if (!trimmed) return "Email is required";
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(trimmed)) return "Please enter a valid email address";
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) return "Please enter a valid email address";
       return "";
     }
 
     if (field === "phone") {
       if (!trimmed) return "";
-      const phoneRegex = /^[+]?[\d\s\-()]{7,20}$/;
-      if (!phoneRegex.test(trimmed)) return "Please enter a valid phone number";
+      if (!/^[+]?[\d\s\-()]{7,20}$/.test(trimmed)) return "Please enter a valid phone number";
       return "";
     }
 
@@ -160,437 +135,356 @@ export default function Contact() {
   };
 
   const validateAll = (): FormErrors => {
-    const newErrors: FormErrors = {};
+    const next: FormErrors = {};
     (Object.keys(formData) as FieldName[]).forEach((field) => {
       const error = validateField(field, formData[field]);
-      if (error) newErrors[field] = error;
+      if (error) next[field] = error;
     });
-    return newErrors;
+    return next;
   };
 
   const updateField = (field: FieldName, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
-    if (field === "message") {
-      setCharCount(value.length);
-      setIsTypingMessage(true);
-      if (typingTimeout.current) window.clearTimeout(typingTimeout.current);
-      typingTimeout.current = window.setTimeout(() => {
-        setIsTypingMessage(false);
-      }, 1500);
+    if (errors[field]) {
+      const nextError = validateField(field, value);
+      setErrors((prev) => ({ ...prev, [field]: nextError || undefined }));
     }
   };
 
   const handleBlur = (field: FieldName) => {
     const error = validateField(field, formData[field]);
     setErrors((prev) => ({ ...prev, [field]: error || undefined }));
-    setFocusedField((prev) => (prev === field ? null : prev));
   };
 
-  const handleSubmit = async () => {
-    const newErrors = validateAll();
-    setErrors(newErrors);
-    setSubmitError(null);
+  const describedBy = (field: FieldName, extra?: string) => {
+    const ids = [
+      errors[field] ? `${formId}-${field}-error` : null,
+      extra,
+    ].filter(Boolean);
+    return ids.length ? ids.join(" ") : undefined;
+  };
 
-    if (Object.keys(newErrors).length > 0) {
-      setIsShaking(true);
-      window.setTimeout(() => setIsShaking(false), 380);
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (submittingRef.current || isSubmitting) return;
+
+    setSubmitError(null);
+    setIsSuccess(false);
+
+    const nextErrors = validateAll();
+    setErrors(nextErrors);
+    if (Object.keys(nextErrors).length > 0) {
+      const firstInvalid = requiredFields.find((field) => nextErrors[field]);
+      if (firstInvalid) {
+        document.getElementById(`${formId}-${firstInvalid}`)?.focus();
+      }
       return;
     }
 
+    if (honeypot.trim()) {
+      setIsSuccess(true);
+      return;
+    }
+
+    submittingRef.current = true;
     setIsSubmitting(true);
-    setIsSuccess(false);
 
     try {
       const response = await fetch("/api/contact", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
       const payload = (await response.json().catch(() => null)) as { error?: string } | null;
-
       if (!response.ok) {
         throw new Error(payload?.error || "Unable to send your message right now.");
       }
 
       setIsSuccess(true);
-      setShowToast(true);
-
-      if (resetTimeout.current) window.clearTimeout(resetTimeout.current);
-      if (toastTimeout.current) window.clearTimeout(toastTimeout.current);
-
-      resetTimeout.current = window.setTimeout(() => {
-        setIsSuccess(false);
-        setFormData({
-          firstName: "",
-          lastName: "",
-          email: "",
-          phone: "",
-          subject: "",
-          budget: "",
-          message: "",
-        });
-        setCharCount(0);
-        setErrors({});
-      }, 3000);
-
-      toastTimeout.current = window.setTimeout(() => {
-        setShowToast(false);
-      }, 4000);
+      setFormData(emptyForm);
+      setErrors({});
     } catch (error) {
-      setSubmitError(error instanceof Error ? error.message : "Unable to send your message right now.");
+      setSubmitError(
+        error instanceof Error ? error.message : "Unable to send your message right now.",
+      );
     } finally {
+      submittingRef.current = false;
       setIsSubmitting(false);
     }
   };
 
-  useEffect(() => {
-    const completedRequired = requiredFields.filter((field) => formData[field].trim().length > 0).length;
-    setCompletionPercent(Math.round((completedRequired / requiredFields.length) * 100));
-  }, [formData]);
+  const charCount = formData.message.length;
+  const countTone =
+    charCount > 500 ? "text-red-400" : charCount >= 400 ? "text-[var(--cyan)]" : "text-[var(--muted)]";
 
-  useEffect(() => {
-    return () => {
-      if (typingTimeout.current) window.clearTimeout(typingTimeout.current);
-      if (resetTimeout.current) window.clearTimeout(resetTimeout.current);
-      if (toastTimeout.current) window.clearTimeout(toastTimeout.current);
-    };
-  }, []);
-
-  const messageCountClass = useMemo(() => {
-    if (charCount > 500) return "text-red-400";
-    if (charCount >= 400) return "text-[var(--cyan)]";
-    return "text-[var(--muted)]";
-  }, [charCount]);
-
-  const fieldBaseClasses =
-    "peer w-full rounded-[10px] border bg-[var(--bg)] px-4 py-[15px] text-sm text-[var(--white)] outline-none transition-all duration-200 placeholder:text-[var(--muted)]";
-
-  const renderField = (field: FieldName, isTextarea = false, isSelect = false, options: string[] = []) => {
-    const Icon = fieldIcons[field];
-    const hasValue = formData[field].trim().length > 0;
-    const isFocused = focusedField === field;
-    const hasError = Boolean(errors[field]);
-    const showFloating = isSelect || isFocused || hasValue;
-
-    const borderClass = hasError ? "border-[#ef4444]" : "border-[var(--border)]";
-    const focusClass = hasError
-      ? "focus:border-[#ef4444] focus:shadow-[0_0_0_3px_rgba(239,68,68,0.1)]"
-      : "focus:border-[var(--cyan)] focus:shadow-[0_0_0_3px_rgba(0,198,255,0.1)]";
-
-    return (
-      <div className="relative">
-        <div className="relative overflow-visible">
-          {isTextarea ? (
-            <textarea
-              value={formData[field]}
-              onChange={(event) => updateField(field, event.target.value)}
-              onFocus={() => setFocusedField(field)}
-              onBlur={() => handleBlur(field)}
-              rows={6}
-              className={`${fieldBaseClasses} min-h-[140px] resize-y pt-5 ${borderClass} ${focusClass}`}
-              placeholder=""
-            />
-          ) : isSelect ? (
-            <div className="relative">
-              <select
-                value={formData[field]}
-                onChange={(event) => updateField(field, event.target.value)}
-                onFocus={() => setFocusedField(field)}
-                onBlur={() => handleBlur(field)}
-                className={`${fieldBaseClasses} appearance-none pt-5 pr-10 ${borderClass} ${focusClass}`}
-              >
-                {options.map((option, index) => (
-                  <option
-                    key={`${field}-option-${option}`}
-                    value={index === 0 ? "" : option}
-                    className="bg-[var(--surface)] text-[var(--white)]"
-                  >
-                    {option}
-                  </option>
-                ))}
-              </select>
-              <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--muted-soft)]" />
-            </div>
-          ) : (
-            <input
-              type={fieldTypeMap[field] || "text"}
-              value={formData[field]}
-              onChange={(event) => updateField(field, event.target.value)}
-              onFocus={() => setFocusedField(field)}
-              onBlur={() => handleBlur(field)}
-              className={`${fieldBaseClasses} ${borderClass} ${focusClass}`}
-              placeholder=""
-            />
-          )}
-
-          <label
-            className={`pointer-events-none absolute left-4 z-10 flex items-center gap-1.5 text-xs transition-all duration-200 ${
-              showFloating
-                ? "-top-3 translate-y-0 rounded bg-[var(--card-bg)] px-1.5 text-[11px] text-[var(--cyan)]"
-                : "top-1/2 -translate-y-1/2 text-[var(--muted-soft)]"
-            }`}
-          >
-            {showFloating && <Icon className="h-3.5 w-3.5" />}
-            {fieldLabels[field]}
-          </label>
-
-          <span className="pointer-events-none absolute inset-0 rounded-[10px] bg-[radial-gradient(circle_at_var(--x,50%)_var(--y,50%),rgba(0,198,255,0.08),transparent_45%)] opacity-0 transition-opacity duration-300 peer-focus:opacity-100" />
-        </div>
-
-        <AnimatePresence>
-          {hasError && (
-            <motion.p
-              initial={{ opacity: 0, y: -4 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -4 }}
-              transition={{ duration: 0.18 }}
-              className="mt-1.5 flex items-center gap-1 text-xs text-red-400"
-            >
-              <AlertCircle className="h-3.5 w-3.5" />
-              {errors[field]}
-            </motion.p>
-          )}
-        </AnimatePresence>
-      </div>
-    );
-  };
+  const renderInput = (field: FieldName, type: string, autoComplete: string) => (
+    <div>
+      <label htmlFor={`${formId}-${field}`} className="mb-1.5 block text-sm font-medium text-[var(--white)]">
+        {fieldLabels[field]}
+        {requiredFields.includes(field) ? <span className="text-[var(--cyan)]"> *</span> : null}
+      </label>
+      <input
+        id={`${formId}-${field}`}
+        name={field}
+        type={type}
+        autoComplete={autoComplete}
+        value={formData[field]}
+        onChange={(event) => updateField(field, event.target.value)}
+        onBlur={() => handleBlur(field)}
+        aria-invalid={Boolean(errors[field])}
+        aria-describedby={describedBy(field)}
+        disabled={isSubmitting}
+        className={`${inputClass} ${errors[field] ? "border-[#ef4444]" : "border-[var(--border)]"}`}
+      />
+      {errors[field] ? (
+        <p
+          id={`${formId}-${field}-error`}
+          role="alert"
+          className="mt-1.5 flex items-center gap-1 text-xs text-red-400"
+        >
+          <AlertCircle className="h-3.5 w-3.5 shrink-0" />
+          {errors[field]}
+        </p>
+      ) : null}
+    </div>
+  );
 
   return (
     <section
       id="contact"
-      aria-label="Contact Us"
-      className="relative mt-8 overflow-hidden bg-[var(--bg)] px-4 py-12 sm:px-5 md:mt-6 md:px-8 md:py-14"
-      style={{
-        backgroundImage: "radial-gradient(circle at 1px 1px, var(--grid-line) 1px, transparent 0)",
-        backgroundSize: "22px 22px",
-      }}
+      aria-label="Contact"
+      className="relative mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 md:px-10 md:py-12"
     >
-      <div className="absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,var(--cyan),transparent)]" />
-      <div className="pointer-events-none absolute left-[-12%] top-1/2 h-[360px] w-[360px] -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(0,198,255,0.08),rgba(0,114,255,0.04),transparent_70%)] blur-3xl md:h-[520px] md:w-[520px]" />
-      <p
-        className="pointer-events-none absolute inset-x-0 -top-5 hidden select-none text-center font-heading text-[84px] leading-none tracking-[0.14em] md:block lg:text-[102px]"
-        style={{ color: "color-mix(in srgb, var(--white) 8%, transparent)" }}
-      >
-        CONTACT
+      <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--cyan)]">
+        Contact
+      </p>
+      <h1 className="mt-3 max-w-[18ch] text-3xl leading-tight text-[var(--white)] sm:max-w-none sm:text-5xl">
+        Get in touch
+      </h1>
+      <p className="mt-4 max-w-2xl text-sm leading-7 text-[var(--muted)] sm:text-base sm:leading-8">
+        Write to us and we will reply within a day.
       </p>
 
-      <AnimatePresence>
-        {showToast && (
-          <motion.div
-            initial={{ y: -100, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: -100, opacity: 0 }}
-            transition={{ duration: 0.28, ease: "easeOut" }}
-            className="fixed left-4 right-4 top-5 z-[120] mx-auto flex w-full max-w-md items-center gap-2 rounded-xl border border-[#1f3f2a] border-l-4 border-l-[#10b981] bg-[var(--card-bg)] px-4 py-3 text-sm text-[var(--white)] shadow-xl"
-          >
-            <CheckCircle className="h-4 w-4 text-[#10b981]" />
-            We&apos;ll be in touch within 24 hours!
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <div className="relative mx-auto grid w-full max-w-6xl grid-cols-1 gap-8 md:grid-cols-[45%_55%] md:gap-10">
-        <motion.div
-          variants={slideInLeft}
-          initial="hidden"
-          whileInView="visible"
-          viewport={VIEWPORT_ONCE}
-          className="relative z-10 text-center md:text-left"
-        >
-          <div className="flex items-center justify-center gap-3 md:justify-start">
-            <span className="h-px w-12 bg-[var(--cyan)]/80" />
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--cyan)]">
-              GET IN TOUCH
-            </p>
-          </div>
-
-          <h2 className="mt-5 font-heading text-2xl leading-tight text-[var(--white)] sm:text-3xl md:text-4xl">
-            Let&apos;s Build Something
-            <br />
-            <span className="bg-[linear-gradient(90deg,var(--cyan),var(--blue))] bg-clip-text text-transparent">
-              Extraordinary
-            </span>{" "}
-            Together
-          </h2>
-
-          <p className="mx-auto mt-5 max-w-xl text-sm leading-7 text-[var(--muted-strong)] md:mx-0 md:text-base">
-            Have a project in mind? We&apos;d love to hear about it. Send us a message and
-            we&apos;ll get back to you within 24 hours.
-          </p>
-
-          <div className="mt-7 space-y-3">
-            {[
-              { icon: MapPin, label: "Location", value: "West Nile, Uganda" },
-              {
-                icon: Mail,
-                label: "Email",
-                value: "info@slimcybertech.com",
-              },
-              { icon: Phone, label: "Phone", value: "+256 772 581510" },
-            ].map((item, index) => (
-              <motion.div
-                key={item.label}
-                variants={staggerItem}
-                custom={index}
-                initial="hidden"
-                whileInView="visible"
-                viewport={VIEWPORT_ONCE}
-                className="group relative overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--card-bg-strong)] p-3 sm:p-4 md:p-4"
-              >
-                <span className="absolute left-0 top-0 h-full w-1 origin-top scale-y-0 bg-[var(--gradient)] transition-transform duration-300 group-hover:scale-y-100" />
-                <div className="flex items-center gap-3">
-                  <div className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--gradient)]">
-                    <item.icon className="h-4 w-4 text-white" />
-                  </div>
-                  <div>
-                    <p className="text-[10px] uppercase tracking-[0.16em] text-[var(--muted-soft)]">
-                      {item.label}
-                    </p>
-                    <p className="break-all text-sm text-[var(--white)]">{item.value}</p>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-
-          <div className="mt-7">
-            <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted-strong)]">Follow Us</p>
-            <div className="mt-3 flex items-center justify-center gap-3 md:justify-start">
-              {socials.map((social) => (
-                <Link
-                  key={social.label}
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={social.label}
-                  className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card-bg-strong)] text-[var(--muted-soft)] transition-all duration-300 hover:scale-110 hover:border-[var(--cyan)] hover:text-[var(--cyan)] hover:shadow-[0_0_16px_rgba(0,198,255,0.25)]"
-                >
-                  <social.icon className="h-4 w-4" />
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          <div className="mt-7 flex justify-center md:justify-start">
-            <span className="inline-flex items-center gap-2 rounded-full border border-[#1a3a1a] bg-[var(--card-bg-strong)] px-3 py-1.5 text-xs text-green-400">
-              <span className="h-2 w-2 rounded-full bg-green-400 animate-pulse" />
-              Available for new projects
-            </span>
-          </div>
-        </motion.div>
-
-        <motion.div
-          variants={slideInRight}
-          initial="hidden"
-          whileInView="visible"
-          viewport={VIEWPORT_ONCE}
-          animate={isShaking ? { x: [0, -8, 8, -8, 0] } : { x: 0 }}
-          className="relative z-10"
-        >
-          <div className="overflow-hidden rounded-[20px] border border-[var(--border)] bg-[var(--card-bg)] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)] transition-colors duration-300 hover:border-[var(--cyan)]/30 sm:p-5 md:p-10">
-            <div className="mb-5">
-              <div className="mb-2 flex items-center justify-between text-xs text-[var(--muted-soft)]">
-                <span>Form completion</span>
-                <span className="text-[var(--cyan)]">{completionPercent}%</span>
-              </div>
-              <div className="h-1.5 w-full overflow-hidden rounded-full bg-[var(--track-muted)]">
-                <motion.div
-                  animate={{ width: `${completionPercent}%` }}
-                  transition={{ duration: 0.3 }}
-                  className="h-full bg-[var(--gradient)]"
-                />
-              </div>
-            </div>
-
-            <h3 className="font-heading text-xl text-[var(--white)]">Send Us A Message</h3>
-            <div className="mt-2 h-[2px] w-10 bg-[var(--gradient)]" />
-
-            <div className="mt-6 space-y-4">
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                {renderField("firstName")}
-                {renderField("lastName")}
-              </div>
-
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                {renderField("email")}
-                {renderField("phone")}
-              </div>
-
-              {renderField("subject", false, true, subjects)}
-              {renderField("budget", false, true, budgets)}
-
+      <div className="mt-10 grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-start lg:gap-10">
+        <aside className="rounded-2xl border border-[var(--border)] bg-[var(--card-bg)] p-5 sm:p-6">
+          <h2 className="font-heading text-xl text-[var(--white)]">Details</h2>
+          <ul className="mt-5 space-y-4 text-sm">
+            <li className="flex items-start gap-3">
+              <Mail className="mt-0.5 h-4 w-4 shrink-0 text-[var(--cyan)]" aria-hidden="true" />
               <div>
-                {renderField("message", true)}
-                <div className={`mt-1 text-right text-xs ${messageCountClass}`}>
-                  {charCount} / 500
-                </div>
-
-                <AnimatePresence>
-                  {isTypingMessage && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 6 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 6 }}
-                      className="mt-2 flex items-center gap-2 text-xs text-[var(--muted)]"
-                    >
-                      <span className="flex items-center gap-1">
-                        <span className="h-1.5 w-1.5 rounded-full bg-[var(--cyan)] animate-bounce [animation-delay:0ms]" />
-                        <span className="h-1.5 w-1.5 rounded-full bg-[var(--cyan)] animate-bounce [animation-delay:120ms]" />
-                        <span className="h-1.5 w-1.5 rounded-full bg-[var(--cyan)] animate-bounce [animation-delay:240ms]" />
-                      </span>
-                      SlimCyberTech is ready to hear your idea...
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                <p className="text-[11px] uppercase tracking-[0.14em] text-[var(--muted)]">Email</p>
+                <a
+                  href="mailto:info@slimcybertech.com"
+                  className="break-all text-[var(--white)] hover:text-[var(--cyan)]"
+                >
+                  info@slimcybertech.com
+                </a>
               </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <Phone className="mt-0.5 h-4 w-4 shrink-0 text-[var(--cyan)]" aria-hidden="true" />
+              <div>
+                <p className="text-[11px] uppercase tracking-[0.14em] text-[var(--muted)]">Phone</p>
+                <a href="tel:+256772581510" className="text-[var(--white)] hover:text-[var(--cyan)]">
+                  +256 772 581510
+                </a>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[var(--cyan)]" aria-hidden="true" />
+              <div>
+                <p className="text-[11px] uppercase tracking-[0.14em] text-[var(--muted)]">Location</p>
+                <p className="text-[var(--white)]">West Nile, Uganda</p>
+              </div>
+            </li>
+          </ul>
 
-              <motion.button
-                type="button"
-                onClick={handleSubmit}
-                disabled={isSubmitting}
-                whileHover={!isSubmitting ? { scale: 1.02 } : undefined}
-                whileTap={!isSubmitting ? { scale: 0.99 } : undefined}
-                className={`relative inline-flex h-[52px] w-full items-center justify-center overflow-hidden rounded-[10px] px-4 font-heading text-sm font-semibold text-white transition-all ${
-                  isSuccess
-                    ? "bg-[linear-gradient(135deg,#10b981,#059669)]"
-                    : "bg-[linear-gradient(135deg,#00c6ff,#0072ff)]"
-                } disabled:cursor-not-allowed disabled:opacity-80`}
-                style={{
-                  boxShadow: isSubmitting
-                    ? "none"
-                    : "0 8px 30px rgba(0, 198, 255, 0.15)",
-                }}
-              >
-                <motion.span
-                  className="pointer-events-none absolute inset-y-0 left-[-35%] w-[30%] bg-[linear-gradient(120deg,transparent,rgba(255,255,255,0.35),transparent)]"
-                  animate={{ x: ["0%", "380%"] }}
-                  transition={{ duration: 1.2, repeat: Infinity, repeatDelay: 3, ease: "easeInOut" }}
-                />
+          <a
+            href={WHATSAPP_HREF}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-6 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full bg-[var(--gradient)] px-5 text-sm font-semibold text-white"
+          >
+            <MessageCircle className="h-4 w-4" aria-hidden="true" />
+            WhatsApp
+          </a>
 
-                {isSubmitting ? (
-                  <span className="h-5 w-5 animate-spin rounded-full border-2 border-white/35 border-t-white" />
-                ) : isSuccess ? (
-                  <span className="inline-flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4" />
-                    Message Sent!
-                  </span>
-                ) : (
-                  <span className="inline-flex items-center gap-2">
-                    Send Message
-                    <motion.span whileHover={{ x: 4 }}>
-                      <Send className="h-4 w-4" />
-                    </motion.span>
-                  </span>
-                )}
-              </motion.button>
+          <p className="mt-4 text-sm text-[var(--muted)]">We usually reply within a day.</p>
 
-              {submitError && <p className="text-sm text-red-400">{submitError}</p>}
-            </div>
+          <div className="mt-6 flex flex-wrap gap-2">
+            <Link
+              href={WHATSAPP_CHANNEL_HREF}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="WhatsApp Channel"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[var(--border)] text-[var(--white)] hover:border-[var(--cyan)] hover:text-[var(--cyan)]"
+            >
+              <MessageCircle className="h-4 w-4" />
+            </Link>
+            <Link
+              href={INSTAGRAM_HREF}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[var(--border)] text-[var(--white)] hover:border-[var(--cyan)] hover:text-[var(--cyan)]"
+            >
+              <InstagramIcon className="h-4 w-4" />
+            </Link>
           </div>
-        </motion.div>
+        </aside>
+
+        <div className="rounded-2xl border border-[var(--border)] bg-[var(--card-bg)] p-5 sm:p-6 md:p-8">
+          <h2 className="font-heading text-xl text-[var(--white)]">Send a message</h2>
+
+          <AnimatePresence>
+            {isSuccess ? (
+              <motion.p
+                initial={{ opacity: 0, y: -6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -6 }}
+                role="status"
+                className="mt-4 flex items-center gap-2 rounded-xl border border-[#1f3f2a] bg-[var(--surface)] px-4 py-3 text-sm text-[var(--white)]"
+              >
+                <CheckCircle className="h-4 w-4 shrink-0 text-[#10b981]" />
+                Message sent. We will reply within a day.
+              </motion.p>
+            ) : null}
+          </AnimatePresence>
+
+          {submitError ? (
+            <p
+              role="alert"
+              className="mt-4 flex items-center gap-2 rounded-xl border border-red-500/40 bg-[var(--surface)] px-4 py-3 text-sm text-red-400"
+            >
+              <AlertCircle className="h-4 w-4 shrink-0" />
+              {submitError}
+            </p>
+          ) : null}
+
+          <form className="relative mt-6 space-y-4" onSubmit={handleSubmit} noValidate>
+            <div className="absolute left-[-10000px] top-auto h-px w-px overflow-hidden" aria-hidden="true">
+              <label htmlFor={`${formId}-company`}>Company</label>
+              <input
+                id={`${formId}-company`}
+                name="company"
+                tabIndex={-1}
+                autoComplete="off"
+                value={honeypot}
+                onChange={(event) => setHoneypot(event.target.value)}
+              />
+            </div>
+
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              {renderInput("firstName", "text", "given-name")}
+              {renderInput("lastName", "text", "family-name")}
+            </div>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              {renderInput("email", "email", "email")}
+              {renderInput("phone", "tel", "tel")}
+            </div>
+
+            <div>
+              <label htmlFor={`${formId}-subject`} className="mb-1.5 block text-sm font-medium text-[var(--white)]">
+                Subject <span className="text-[var(--cyan)]">*</span>
+              </label>
+              <select
+                id={`${formId}-subject`}
+                name="subject"
+                value={formData.subject}
+                onChange={(event) => updateField("subject", event.target.value)}
+                onBlur={() => handleBlur("subject")}
+                aria-invalid={Boolean(errors.subject)}
+                aria-describedby={describedBy("subject")}
+                disabled={isSubmitting}
+                className={`${inputClass} appearance-none ${errors.subject ? "border-[#ef4444]" : "border-[var(--border)]"}`}
+              >
+                <option value="">Select a service…</option>
+                {CONTACT_SUBJECTS.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+              {errors.subject ? (
+                <p id={`${formId}-subject-error`} role="alert" className="mt-1.5 flex items-center gap-1 text-xs text-red-400">
+                  <AlertCircle className="h-3.5 w-3.5 shrink-0" />
+                  {errors.subject}
+                </p>
+              ) : null}
+            </div>
+
+            <div>
+              <label htmlFor={`${formId}-budget`} className="mb-1.5 block text-sm font-medium text-[var(--white)]">
+                Budget range
+              </label>
+              <select
+                id={`${formId}-budget`}
+                name="budget"
+                value={formData.budget}
+                onChange={(event) => updateField("budget", event.target.value)}
+                disabled={isSubmitting}
+                className={`${inputClass} appearance-none border-[var(--border)]`}
+              >
+                <option value="">Select budget range…</option>
+                {budgets.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label htmlFor={`${formId}-message`} className="mb-1.5 block text-sm font-medium text-[var(--white)]">
+                Message <span className="text-[var(--cyan)]">*</span>
+              </label>
+              <textarea
+                id={`${formId}-message`}
+                name="message"
+                rows={6}
+                value={formData.message}
+                onChange={(event) => updateField("message", event.target.value)}
+                onBlur={() => handleBlur("message")}
+                aria-invalid={Boolean(errors.message)}
+                aria-describedby={describedBy("message", `${formId}-message-count`)}
+                disabled={isSubmitting}
+                className={`${inputClass} min-h-[140px] resize-y py-3 ${errors.message ? "border-[#ef4444]" : "border-[var(--border)]"}`}
+              />
+              <div className="mt-1.5 flex items-start justify-between gap-3">
+                {errors.message ? (
+                  <p id={`${formId}-message-error`} role="alert" className="flex items-center gap-1 text-xs text-red-400">
+                    <AlertCircle className="h-3.5 w-3.5 shrink-0" />
+                    {errors.message}
+                  </p>
+                ) : (
+                  <span />
+                )}
+                <p id={`${formId}-message-count`} className={`shrink-0 text-xs ${countTone}`}>
+                  {charCount} / 500
+                </p>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-[var(--gradient)] px-4 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-80"
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+                  Sending…
+                </>
+              ) : (
+                <>
+                  Send message
+                  <Send className="h-4 w-4" aria-hidden="true" />
+                </>
+              )}
+            </button>
+          </form>
+        </div>
       </div>
     </section>
   );

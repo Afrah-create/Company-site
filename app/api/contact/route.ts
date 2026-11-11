@@ -172,7 +172,7 @@ function buildOwnerEmail(params: {
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>New Inquiry — SlimCyberTech</title>
+  <title>New inquiry from the website</title>
 </head>
 <body style="margin:0;padding:0;background-color:${BRAND.bg};
              font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
@@ -370,7 +370,7 @@ function buildConfirmationEmail(params: {
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>We got your message — SlimCyberTech</title>
+  <title>We got your message</title>
 </head>
 <body style="margin:0;padding:0;background-color:${BRAND.bg};
              font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
@@ -404,10 +404,10 @@ function buildConfirmationEmail(params: {
               </table>
               <div style="margin-top:14px;">
                 <div style="margin:0 0 4px;font-size:22px;font-weight:700;color:${BRAND.text};line-height:1.3;">
-                  Thanks for reaching out, ${escapeHtml(firstName)}.
+                  Thanks for writing, ${escapeHtml(firstName)}.
                 </div>
                 <p style="margin:0;font-size:14px;color:${BRAND.textMuted};line-height:1.65;">
-                  We received your message and will send you a response within 1&ndash;2 business days.
+                  We have your message and will reply within a day.
                 </p>
               </div>
             </td>
@@ -602,7 +602,7 @@ export async function POST(request: Request) {
     },
   });
 
-  const replySubject = `${subject || "Website Inquiry"} — ${firstName} ${lastName}`.trim();
+  const replySubject = `${subject || "Website inquiry"} / ${firstName} ${lastName}`.trim();
 
   // Plain-text fallback (always include for spam-score reasons)
   const ownerTextBody = [
@@ -619,9 +619,7 @@ export async function POST(request: Request) {
   const confirmationTextBody = [
     `Hi ${firstName},`,
     "",
-    "Thanks for getting in touch with SlimCyberTech!",
-    "",
-    "We received your message and will review it shortly. Our team typically responds within 1-2 business days.",
+    "Thanks for writing. We have your message and will reply within a day.",
     "",
     `Service: ${subject}`,
     `Budget: ${budget || "Not specified"}`,
@@ -629,9 +627,9 @@ export async function POST(request: Request) {
     "--- Your Message ---",
     message,
     "",
-    "If you have any urgent questions, feel free to reply to this email.",
+    "If something is urgent, reply to this email.",
     "",
-    "— The SlimCyberTech Team",
+    "SlimCyberTech",
   ].join("\n");
 
   const ownerHtml = buildOwnerEmail({
@@ -681,7 +679,7 @@ export async function POST(request: Request) {
         from: `SlimCyberTech <${gmailUser}>`,
         to: email,
         replyTo: recipients[0] || gmailUser,
-        subject: "We got your message — SlimCyberTech",
+        subject: "We got your message",
         text: confirmationTextBody,
         html: confirmationHtml,
         attachments: logoAsset

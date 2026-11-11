@@ -1,7 +1,15 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Orbitron } from "next/font/google";
+import AmbientBackground from "@/components/AmbientBackground";
+import CustomCursor from "@/components/CustomCursor";
+import FloatingChatButton from "@/components/FloatingChatButton";
+import Footer from "@/components/Footer";
 import JsonLd from "@/components/JsonLd";
+import MotionRoot from "@/components/MotionRoot";
+import Navbar from "@/components/Navbar";
+import RouteTransition from "@/components/RouteTransition";
 import ScrollProgress from "@/components/ScrollProgress";
+import SessionLoader from "@/components/SessionLoader";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import "./globals.css";
 
@@ -24,7 +32,7 @@ export const metadata: Metadata = {
     template: "%s | SlimCyberTech",
   },
   description:
-    "SlimCyberTech builds cutting-edge software, mobile apps, and cybersecurity solutions for businesses across Africa and beyond. Based in West Nile, Uganda.",
+    "SlimCyberTech builds software, mobile apps, and security work from West Nile, Uganda, for organisations in Africa and beyond.",
   keywords: [
     "software development Uganda",
     "web development Kampala",
@@ -36,7 +44,7 @@ export const metadata: Metadata = {
     "SlimCyberTech",
   ],
   alternates: {
-    canonical: "https://slimcybertech.com",
+    canonical: "./",
   },
   authors: [{ name: "SlimCyberTech", url: "https://slimcybertech.com" }],
   creator: "SlimCyberTech",
@@ -48,13 +56,13 @@ export const metadata: Metadata = {
     siteName: "SlimCyberTech",
     title: "SlimCyberTech | Software Development & Technology",
     description:
-      "Cutting-edge software solutions, mobile apps, and cybersecurity services. Building the future with code - from West Nile, Uganda.",
+      "Software, mobile apps, and security work from West Nile, Uganda.",
     images: [
       {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "SlimCyberTech - Building the Future With Code",
+        alt: "SlimCyberTech, West Nile, Uganda",
         type: "image/png",
       },
     ],
@@ -65,7 +73,7 @@ export const metadata: Metadata = {
     creator: "@slimcybertech",
     title: "SlimCyberTech | Software Development & Technology",
     description:
-      "Cutting-edge software, mobile apps, and cybersecurity - from West Nile, Uganda.",
+      "Software, mobile apps, and security work from West Nile, Uganda.",
     images: ["/opengraph-image"],
   },
   icons: {
@@ -87,9 +95,7 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  verification: {
-    google: "REPLACE_WITH_GOOGLE_SEARCH_CONSOLE_TOKEN",
-  },
+  // TODO: Add Google Search Console verification token when available.
 };
 
 export const viewport: Viewport = {
@@ -123,8 +129,20 @@ export default function RootLayout({
       <body className="min-h-full bg-[var(--bg)] text-[var(--white)] font-sans">
         <JsonLd />
         <ThemeProvider>
-          <ScrollProgress />
-          {children}
+          <MotionRoot>
+            <a href="#main-content" className="skip-to-content">
+              Skip to content
+            </a>
+            <AmbientBackground />
+            <SessionLoader />
+            <RouteTransition />
+            <ScrollProgress />
+            <Navbar />
+            <div id="main-content">{children}</div>
+            <Footer />
+            <FloatingChatButton />
+            <CustomCursor />
+          </MotionRoot>
         </ThemeProvider>
       </body>
     </html>

@@ -1,4 +1,10 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Page not found",
+  robots: { index: false, follow: false },
+};
 
 export default function NotFound() {
   return (
@@ -16,7 +22,7 @@ export default function NotFound() {
 
         <Link
           href="/"
-          className="mt-8 inline-flex rounded-full bg-[var(--gradient)] px-6 py-2.5 text-sm font-semibold text-[var(--white)]"
+          className="mt-8 inline-flex min-h-11 items-center rounded-full bg-[var(--gradient)] px-6 py-2.5 text-sm font-semibold text-[var(--white)]"
         >
           Go Home
         </Link>
