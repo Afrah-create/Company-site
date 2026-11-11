@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Orbitron } from "next/font/google";
+import localFont from "next/font/local";
 import AmbientBackground from "@/components/AmbientBackground";
 import CustomCursor from "@/components/CustomCursor";
 import FloatingChatButton from "@/components/FloatingChatButton";
@@ -13,16 +13,25 @@ import SessionLoader from "@/components/SessionLoader";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import "./globals.css";
 
-const orbitron = Orbitron({
+const orbitron = localFont({
+  src: [
+    { path: "./fonts/orbitron-latin-500-normal.woff2", weight: "500", style: "normal" },
+    { path: "./fonts/orbitron-latin-700-normal.woff2", weight: "700", style: "normal" },
+    { path: "./fonts/orbitron-latin-800-normal.woff2", weight: "800", style: "normal" },
+  ],
   variable: "--font-heading",
-  subsets: ["latin"],
-  weight: ["500", "700", "800"],
+  display: "swap",
 });
 
-const inter = Inter({
+const inter = localFont({
+  src: [
+    { path: "./fonts/inter-latin-400-normal.woff2", weight: "400", style: "normal" },
+    { path: "./fonts/inter-latin-500-normal.woff2", weight: "500", style: "normal" },
+    { path: "./fonts/inter-latin-600-normal.woff2", weight: "600", style: "normal" },
+    { path: "./fonts/inter-latin-700-normal.woff2", weight: "700", style: "normal" },
+  ],
   variable: "--font-body",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
