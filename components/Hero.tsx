@@ -22,7 +22,7 @@ export default function Hero() {
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--cyan)] opacity-40 motion-reduce:animate-none" />
             <span className="relative inline-flex h-2 w-2 rounded-full bg-[var(--cyan)]" />
           </span>
-          From West Nile
+          Building the future with code
         </p>
 
         <h1 className="mt-6 max-w-[14ch] text-balance font-heading text-[clamp(2rem,11vw,4.5rem)] font-bold leading-[1.05] tracking-[-0.03em] sm:mt-8 sm:max-w-none">

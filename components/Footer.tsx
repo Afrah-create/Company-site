@@ -29,7 +29,7 @@ export default function Footer() {
       <div className="h-px w-full bg-[var(--gradient)]" />
 
       <div className="mx-auto w-full max-w-6xl px-4 py-10 pb-24 sm:px-6 sm:py-12 md:px-10 md:pb-12">
-        <div className="mb-8 sm:mb-10">
+        <div className="mb-8 text-center sm:mb-10 sm:text-left">
           <Link href="/" className="inline-flex items-center gap-2">
             <Image
               src="/images/Slim.jpeg"
@@ -39,15 +39,15 @@ export default function Footer() {
               className="h-8 w-auto object-contain sm:h-10"
             />
           </Link>
-          <p className="mt-3 max-w-md text-sm text-[var(--muted)]">
+          <p className="mx-auto mt-3 max-w-md text-sm text-[var(--muted)] sm:mx-0">
             Software from West Nile, Uganda.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-6 sm:gap-8 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-x-4 gap-y-8 sm:gap-x-8 lg:grid-cols-4">
           <div>
-            <h4 className="font-heading text-lg text-[var(--white)]">Sitemap</h4>
-            <ul className="mt-4 space-y-2 text-sm text-[var(--muted)]">
+            <h4 className="font-heading text-base text-[var(--white)] sm:text-lg">Sitemap</h4>
+            <ul className="mt-3 space-y-2 text-sm text-[var(--muted)] sm:mt-4">
               {NAV_ITEMS.map((item) => (
                 <li key={item.href}>
                   <Link href={item.href} className="transition-colors hover:text-[var(--cyan)]">
@@ -59,8 +59,8 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="font-heading text-lg text-[var(--white)]">Services</h4>
-            <ul className="mt-4 space-y-2 text-sm text-[var(--muted)]">
+            <h4 className="font-heading text-base text-[var(--white)] sm:text-lg">Services</h4>
+            <ul className="mt-3 space-y-2 text-sm text-[var(--muted)] sm:mt-4">
               {SERVICE_LINKS.map((item) => (
                 <li key={item.label}>
                   <Link href={item.href} className="transition-colors hover:text-[var(--cyan)]">
@@ -72,10 +72,13 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="font-heading text-lg text-[var(--white)]">Contact Info</h4>
-            <ul className="mt-4 space-y-2 text-sm text-[var(--muted)]">
+            <h4 className="font-heading text-base text-[var(--white)] sm:text-lg">Contact Info</h4>
+            <ul className="mt-3 space-y-2 text-sm text-[var(--muted)] sm:mt-4">
               <li>
-                <a href="mailto:info@slimcybertech.com" className="transition-colors hover:text-[var(--cyan)]">
+                <a
+                  href="mailto:info@slimcybertech.com"
+                  className="break-words transition-colors hover:text-[var(--cyan)]"
+                >
                   info@slimcybertech.com
                 </a>
               </li>
@@ -104,8 +107,8 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="font-heading text-lg text-[var(--white)]">Managed Websites</h4>
-            <ul className="mt-4 space-y-2 text-sm text-[var(--muted)]">
+            <h4 className="font-heading text-base text-[var(--white)] sm:text-lg">Managed Websites</h4>
+            <ul className="mt-3 space-y-2 break-words text-sm text-[var(--muted)] sm:mt-4">
               {managedWebsites.map((site) => (
                 <li key={site.href}>
                   <Link

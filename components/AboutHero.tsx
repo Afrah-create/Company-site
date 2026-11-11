@@ -28,7 +28,7 @@ export default function AboutHero() {
         <h2 className="font-heading text-2xl font-semibold text-[var(--cyan)] sm:text-[1.75rem]">
           Our story
         </h2>
-        <div className="mt-5 max-w-3xl space-y-6 text-left text-[0.95rem] leading-8 text-[var(--muted)] sm:text-base sm:leading-8">
+        <div className="mt-5 max-w-3xl space-y-6 text-justify text-[0.95rem] leading-8 text-[var(--muted)] hyphens-auto [text-align-last:left] sm:text-base sm:leading-8">
           <p>
             SlimCyberTech is a software company based in West Nile, Uganda. We build web platforms,
             mobile apps, and security work for organisations that need software they can keep
