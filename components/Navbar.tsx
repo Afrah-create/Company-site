@@ -180,7 +180,7 @@ export default function Navbar() {
             </button>
             <Link
               href={BOOK_DEMO_HREF}
-              className="hidden min-h-10 items-center justify-center rounded-full bg-[var(--white)] px-4 py-2 text-sm font-semibold text-[var(--bg)] transition-opacity hover:opacity-90 lg:inline-flex"
+              className="btn-cta hidden min-h-10 items-center justify-center rounded-full px-4 py-2 text-sm font-semibold transition-opacity hover:opacity-90 lg:inline-flex"
             >
               Book a demo
             </Link>
@@ -263,7 +263,7 @@ export default function Navbar() {
               >
                 <Link
                   href={BOOK_DEMO_HREF}
-                  className="inline-flex min-h-12 min-w-[12.5rem] items-center justify-center rounded-full bg-[var(--white)] px-8 text-sm font-semibold text-[var(--bg)]"
+                  className="btn-cta inline-flex min-h-12 min-w-[12.5rem] items-center justify-center rounded-full px-8 text-sm font-semibold transition-opacity hover:opacity-90"
                 >
                   Book a demo
                 </Link>

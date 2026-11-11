@@ -37,7 +37,7 @@ export default function Hero() {
         </p>
 
         <div className="mt-8 flex w-full max-w-sm flex-col gap-3 sm:mt-9 sm:max-w-none sm:flex-row sm:justify-center sm:gap-4">
-          <BookDemoButton className="inline-flex min-h-11 w-full items-center justify-center rounded-full bg-[var(--white)] px-8 py-3.5 text-base font-semibold text-[var(--bg)] transition-opacity hover:opacity-90 sm:w-auto" />
+          <BookDemoButton className="btn-cta inline-flex min-h-11 w-full items-center justify-center rounded-full px-8 py-3.5 text-base font-semibold transition-opacity hover:opacity-90 sm:w-auto" />
           <Link
             href="/projects"
             className="inline-flex min-h-11 w-full items-center justify-center rounded-full border border-[var(--border)] bg-transparent px-8 py-3.5 text-base font-semibold text-[var(--white)] transition-colors hover:border-[var(--cyan)]/55 sm:w-auto"

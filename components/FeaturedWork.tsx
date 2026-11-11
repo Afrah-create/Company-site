@@ -40,7 +40,7 @@ export default function FeaturedWork() {
             }
             actions={
               <>
-                <BookDemoButton className="inline-flex min-h-11 w-full items-center justify-center rounded-full bg-[var(--gradient)] px-6 py-2.5 text-sm font-semibold text-white sm:w-auto" />
+                <BookDemoButton className="btn-cta inline-flex min-h-11 w-full items-center justify-center rounded-full px-6 py-2.5 text-sm font-semibold transition-opacity hover:opacity-90 sm:w-auto" />
                 <Link
                   href={`/projects/${project.slug}`}
                   className="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--cyan)]"

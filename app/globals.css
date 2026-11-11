@@ -43,6 +43,8 @@
   --muted-strong: #888888;
   --track-muted: rgba(255, 255, 255, 0.15);
   --dot-inactive: rgba(255, 255, 255, 0.3);
+  --cta-bg: #ffffff;
+  --cta-fg: #0a0a0a;
 }
 
 :root[data-theme="light"] {
@@ -84,6 +86,8 @@
   --muted-strong: #374151;
   --track-muted: rgba(15, 23, 42, 0.16);
   --dot-inactive: rgba(15, 23, 42, 0.24);
+  --cta-bg: linear-gradient(135deg, #00c6ff, #0072ff);
+  --cta-fg: #0f172a;
 }
 
 * {
@@ -242,6 +246,11 @@ textarea:focus-visible {
   80% {
     transform: translate(-1px, -1px);
   }
+}
+
+.btn-cta {
+  background: var(--cta-bg);
+  color: var(--cta-fg);
 }
 
 .skip-to-content {

@@ -11,7 +11,7 @@ export default function BookDemoButton({ className }: BookDemoButtonProps) {
       href={BOOK_DEMO_HREF}
       className={
         className ??
-        "inline-flex min-h-11 items-center justify-center rounded-full bg-[var(--gradient)] px-6 py-2.5 text-sm font-semibold text-white"
+        "btn-cta inline-flex min-h-11 items-center justify-center rounded-full px-6 py-2.5 text-sm font-semibold transition-opacity hover:opacity-90"
       }
     >
       Book a demo
