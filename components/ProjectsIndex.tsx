@@ -100,7 +100,7 @@ export default function ProjectsIndex({
                     description={project.summary}
                     hoverEyebrow={hover.eyebrow}
                     hoverBody={hover.body}
-                    chips={project.features ?? project.stack}
+                    chips={project.features}
                     badge={
                       showStatusBadge(project) ? (
                         <StatusBadge status={project.status} tone="onSurface" />

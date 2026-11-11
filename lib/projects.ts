@@ -28,6 +28,7 @@ export type Project = {
   stack: string[];
   heroImage: string;
   gallery: string[];
+  galleryCaptions?: string[];
   imageAlt: string;
   summary: string;
   challenge: string;
@@ -50,6 +51,7 @@ const PROJECTS: Project[] = [
     liveUrl: "https://giftfoundationarua.org",
     // TODO: Stack: to be confirmed from the live site. Do not invent one.
     stack: [],
+    // TODO: Replace gallery images with real screenshots of giftfoundationarua.org.
     heroImage: "/images/projects/gift-foundation-arua/hero.png",
     gallery: [
       "/images/projects/gift-foundation-arua/gallery-1.png",
@@ -74,6 +76,7 @@ const PROJECTS: Project[] = [
     liveUrl: "https://aringass.com",
     // TODO: Stack: to be confirmed from the live site. Do not invent one.
     stack: [],
+    // TODO: Replace gallery images with real screenshots of aringass.com.
     heroImage: "/images/projects/aringa-ss/hero.png",
     gallery: [
       "/images/projects/aringa-ss/gallery-1.png",
@@ -95,14 +98,16 @@ const PROJECTS: Project[] = [
     status: "in-development",
     category: "Transport",
     stack: ["Flutter", "Firebase"],
-    heroImage: "/images/projects/nilego/hero.jpeg",
+    heroImage: "/images/projects/nilego/ui-1.png",
     gallery: [
-      "/images/projects/nilego/gallery-1.png",
-      "/images/projects/nilego/gallery-2.png",
+      "/images/projects/nilego/ui-1.png",
+      "/images/projects/nilego/ui-2.png",
+      "/images/projects/nilego/ui-3.png",
     ],
+    galleryCaptions: ["Rider booking", "Active trip", "Dispatch"],
     imageAlt: "NileGo ride booking product still",
     summary:
-      "Ride booking for boda and car in West Nile towns. A rider asks for a trip, a driver accepts, and both can see how the trip is going. Flutter and Firebase.",
+      "Ride booking for boda and car in West Nile towns. A rider asks for a trip, a driver accepts, and both can see how the trip is going.",
     challenge: "",
     solution: "",
     results: ["Built for West Nile towns", "Rider and driver flows", "Boda and car"],
@@ -118,14 +123,16 @@ const PROJECTS: Project[] = [
     status: "in-development",
     category: "Education",
     stack: ["Next.js", "PostgreSQL"],
-    heroImage: "/images/projects/slimschool/hero.jpeg",
+    heroImage: "/images/projects/slimschool/ui-1.png",
     gallery: [
-      "/images/projects/slimschool/gallery-1.png",
-      "/images/projects/slimschool/gallery-2.png",
+      "/images/projects/slimschool/ui-1.png",
+      "/images/projects/slimschool/ui-2.png",
+      "/images/projects/slimschool/ui-3.png",
     ],
+    galleryCaptions: ["School overview", "Gradebook", "Parent view"],
     imageAlt: "SlimSchool management product still",
     summary:
-      "School records for admissions, attendance, grades, fees, and reports. One student file instead of five. Next.js and PostgreSQL.",
+      "School records for admissions, attendance, grades, fees, and reports. One student file instead of five.",
     challenge: "",
     solution: "",
     results: ["Admissions through reports", "One student record", "Fees and grades"],
@@ -141,14 +148,16 @@ const PROJECTS: Project[] = [
     status: "in-development",
     category: "Healthcare",
     stack: ["Next.js", "PostgreSQL"],
-    heroImage: "/images/projects/hospital-management-system/hero.jpeg",
+    heroImage: "/images/projects/hospital-management-system/ui-1.png",
     gallery: [
-      "/images/projects/hospital-management-system/gallery-1.png",
-      "/images/projects/hospital-management-system/gallery-2.png",
+      "/images/projects/hospital-management-system/ui-1.png",
+      "/images/projects/hospital-management-system/ui-2.png",
+      "/images/projects/hospital-management-system/ui-3.png",
     ],
+    galleryCaptions: ["Reception", "Patient record", "Pharmacy stock"],
     imageAlt: "Hospital management product still",
     summary:
-      "Patients, appointments, pharmacy, billing, and reports on the same visit record. Next.js and PostgreSQL.",
+      "Patients, appointments, pharmacy, billing, and reports on the same visit record.",
     challenge: "",
     solution: "",
     // TODO: Old placeholder "300% faster reporting" is unverified — do not publish as a result.
@@ -165,14 +174,16 @@ const PROJECTS: Project[] = [
     status: "in-development",
     category: "Agriculture",
     stack: ["Next.js", "PostgreSQL"],
-    heroImage: "/images/projects/cucocare/hero.jpeg",
+    heroImage: "/images/projects/cucocare/ui-1.png",
     gallery: [
-      "/images/projects/cucocare/gallery-1.png",
-      "/images/projects/cucocare/gallery-2.png",
+      "/images/projects/cucocare/ui-1.png",
+      "/images/projects/cucocare/ui-2.png",
+      "/images/projects/cucocare/ui-3.png",
     ],
+    galleryCaptions: ["Farm dashboard", "Health schedule", "Farm analytics"],
     imageAlt: "CucoCare poultry management product still",
     summary:
-      "Poultry records: flock health, feed, eggs, and vaccination dates in one log. Next.js and PostgreSQL.",
+      "Poultry records: flock health, feed, eggs, and vaccination dates in one log.",
     challenge: "",
     solution: "",
     results: ["Flock and feed in one log", "Vaccination schedule", "Egg production"],
@@ -188,11 +199,13 @@ const PROJECTS: Project[] = [
     status: "concept",
     category: "Cybersecurity",
     stack: ["Next.js", "Python"],
-    heroImage: "/images/projects/security-audit-dashboard/hero.png",
+    heroImage: "/images/projects/security-audit-dashboard/ui-1.png",
     gallery: [
-      "/images/projects/security-audit-dashboard/gallery-1.png",
-      "/images/projects/security-audit-dashboard/gallery-2.png",
+      "/images/projects/security-audit-dashboard/ui-1.png",
+      "/images/projects/security-audit-dashboard/ui-2.png",
+      "/images/projects/security-audit-dashboard/ui-3.png",
     ],
+    galleryCaptions: ["Risk overview", "Findings", "Asset map"],
     imageAlt: "Concept still for a security audit dashboard",
     summary:
       "A dashboard idea for security findings. Who owns it, how serious it is, when it is due, and whether it is still open.",
@@ -211,11 +224,13 @@ const PROJECTS: Project[] = [
     status: "concept",
     category: "Web Apps",
     stack: ["React", "Node.js", "PostgreSQL"],
-    heroImage: "/images/projects/e-commerce-platform/hero.png",
+    heroImage: "/images/projects/e-commerce-platform/ui-1.png",
     gallery: [
-      "/images/projects/e-commerce-platform/gallery-1.jpeg",
-      "/images/projects/e-commerce-platform/gallery-2.png",
+      "/images/projects/e-commerce-platform/ui-1.png",
+      "/images/projects/e-commerce-platform/ui-2.png",
+      "/images/projects/e-commerce-platform/ui-3.png",
     ],
+    galleryCaptions: ["Storefront", "Checkout", "Seller dashboard"],
     imageAlt: "Concept still for an e-commerce storefront",
     summary:
       "A storefront idea: catalogue, checkout, and order admin, with stock sitting next to the orders.",
@@ -234,11 +249,13 @@ const PROJECTS: Project[] = [
     status: "concept",
     category: "Mobile",
     stack: ["Flutter", "Firebase"],
-    heroImage: "/images/projects/banking-mobile-app/hero.png",
+    heroImage: "/images/projects/banking-mobile-app/ui-1.png",
     gallery: [
-      "/images/projects/banking-mobile-app/gallery-1.png",
-      "/images/projects/banking-mobile-app/gallery-2.png",
+      "/images/projects/banking-mobile-app/ui-1.png",
+      "/images/projects/banking-mobile-app/ui-2.png",
+      "/images/projects/banking-mobile-app/ui-3.png",
     ],
+    galleryCaptions: ["Home and send", "Security settings", "Transaction monitoring"],
     imageAlt: "Concept still for a mobile banking interface",
     summary:
       "A mobile banking idea. Balance, transfer, and a session lock, so the branch ledger can sit on a phone.",
@@ -257,11 +274,13 @@ const PROJECTS: Project[] = [
     status: "concept",
     category: "Consulting",
     stack: ["Docker", "Kubernetes", "CI/CD"],
-    heroImage: "/images/projects/devops-pipeline-tool/hero.png",
+    heroImage: "/images/projects/devops-pipeline-tool/ui-1.png",
     gallery: [
-      "/images/projects/devops-pipeline-tool/gallery-1.png",
-      "/images/projects/devops-pipeline-tool/gallery-2.png",
+      "/images/projects/devops-pipeline-tool/ui-1.png",
+      "/images/projects/devops-pipeline-tool/ui-2.png",
+      "/images/projects/devops-pipeline-tool/ui-3.png",
     ],
+    galleryCaptions: ["Pipeline", "Deployments", "Logs"],
     imageAlt: "Concept still for a deployment pipeline console",
     summary:
       "A console idea for deploys. Build, health check, and a way back if the release goes wrong.",
@@ -280,11 +299,13 @@ const PROJECTS: Project[] = [
     status: "concept",
     category: "Consulting",
     stack: ["Next.js", "Framer Motion"],
-    heroImage: "/images/projects/corporate-website-redesign/hero.png",
+    heroImage: "/images/projects/corporate-website-redesign/ui-1.png",
     gallery: [
-      "/images/projects/corporate-website-redesign/gallery-1.jpeg",
-      "/images/projects/corporate-website-redesign/gallery-2.png",
+      "/images/projects/corporate-website-redesign/ui-1.png",
+      "/images/projects/corporate-website-redesign/ui-2.png",
+      "/images/projects/corporate-website-redesign/ui-3.png",
     ],
+    galleryCaptions: ["Before and after", "Design system", "Responsive set"],
     imageAlt: "Concept still for a corporate website redesign",
     summary:
       "A company site idea with fewer pages, a work index, and a contact path that stays within one tap.",

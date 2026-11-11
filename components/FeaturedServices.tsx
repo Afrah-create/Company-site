@@ -22,6 +22,7 @@ export default function FeaturedServices() {
             href={`/services#${service.id}`}
             imageSrc={service.image}
             imageAlt={service.imageAlt}
+            imageLayout="compact"
             eyebrow={service.category}
             title={service.title}
             description={service.summary}

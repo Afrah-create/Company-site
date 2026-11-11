@@ -21,6 +21,7 @@ export default function ServiceCard({
       href={discussHref}
       imageSrc={service.image}
       imageAlt={service.imageAlt}
+      imageLayout="compact"
       eyebrow={service.category}
       title={service.title}
       titleAs="h2"

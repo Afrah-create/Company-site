@@ -35,8 +35,8 @@ export const SERVICES: Service[] = [
       "Architecture",
       "Maintenance",
     ],
-    image: "/images/Gemini_Generated_Image_jlls3xjlls3xjlls.png",
-    imageAlt: "Engineering workstation with code and a product preview",
+    image: "/images/services/software-development/ui-1.png",
+    imageAlt: "Web platform console with apps, APIs, and releases",
     icon: "software",
   },
   {
@@ -48,8 +48,8 @@ export const SERVICES: Service[] = [
     description:
       "We build for phones people already own. Flutter when a shared codebase makes sense, native work when it does not.",
     capabilities: ["iOS and Android", "Flutter", "Testing"],
-    image: "/images/Gemini_Generated_Image_f151z2f151z2f151.png",
-    imageAlt: "Several mobile app screens on phones",
+    image: "/images/services/mobile-development/ui-1.png",
+    imageAlt: "Phone app home and job tracking screens",
     icon: "mobile",
   },
   {
@@ -61,8 +61,8 @@ export const SERVICES: Service[] = [
     description:
       "Reviews of how a product is put together and where it is exposed. We tell you what to fix first, then help you fix it.",
     capabilities: ["Reviews", "Hardening", "Follow-up"],
-    image: "/images/Gemini_Generated_Image_d67n9jd67n9jd67n.png",
-    imageAlt: "Laptop terminal used for system setup and review",
+    image: "/images/services/cybersecurity/ui-1.png",
+    imageAlt: "Security review board with findings and what to fix first",
     icon: "security",
   },
   {
@@ -74,8 +74,8 @@ export const SERVICES: Service[] = [
     description:
       "We pull the numbers you already have into reports people can use. Less copying between spreadsheets.",
     capabilities: ["Dashboards", "Reports", "KPI tracking"],
-    image: "/images/Gemini_Generated_Image_j5kqdlj5kqdlj5kq.png",
-    imageAlt: "Wide monitor showing a business analytics dashboard",
+    image: "/images/services/data-analysis/ui-1.png",
+    imageAlt: "Operations dashboard with collections, cases, and reports",
     icon: "data",
   },
   {
@@ -87,8 +87,8 @@ export const SERVICES: Service[] = [
     description:
       "We set up hosting and the path from code to a live server. Deploys should be boring. You should be able to see if the thing is up.",
     capabilities: ["Cloud setup", "CI/CD", "Monitoring"],
-    image: "/images/Gemini_Generated_Image_7jhpez7jhpez7jhp.png",
-    imageAlt: "Desk with system and cloud architecture on a monitor",
+    image: "/images/services/cloud-devops/ui-1.png",
+    imageAlt: "Hosting console with deploys, environments, and uptime",
     icon: "cloud",
   },
   {
@@ -100,8 +100,8 @@ export const SERVICES: Service[] = [
     description:
       "Layout, type, and flow so a visitor can tell what to do next. We design for the phones people around here actually hold.",
     capabilities: ["User flows", "Design systems", "Phone-first layouts"],
-    image: "/images/Gemini_Generated_Image_lrj1vslrj1vslrj1.png",
-    imageAlt: "Product landing screens and a design workspace",
+    image: "/images/services/ui-ux-design/ui-1.png",
+    imageAlt: "Design board and a phone-first booking screen",
     icon: "design",
   },
   {
@@ -113,8 +113,8 @@ export const SERVICES: Service[] = [
     description:
       "Sometimes the work is deciding, not writing code yet. We sit with you on architecture, order of work, and what your team can take on.",
     capabilities: ["Architecture", "Planning", "Team training"],
-    image: "/images/Gemini_Generated_Image_v9nafhv9nafhv9na.png",
-    imageAlt: "Consultant reviewing a project dashboard",
+    image: "/images/services/tech-consulting/ui-1.png",
+    imageAlt: "Work plan showing what to build now, next, and later",
     icon: "consulting",
   },
 ];

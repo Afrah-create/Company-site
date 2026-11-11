@@ -125,33 +125,18 @@ export default function ProjectDetailPage({ params }: PageProps) {
       </header>
 
       <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 md:px-10">
-        <dl className="grid grid-cols-2 gap-4 rounded-2xl border border-[var(--border)] bg-[var(--card-bg)] p-5 sm:grid-cols-4">
-          {facts.map((fact) => (
-            <div key={fact.label}>
-              <dt className="text-[11px] uppercase tracking-[0.14em] text-[var(--muted)]">
-                {fact.label}
-              </dt>
-              <dd className="mt-1 text-sm text-[var(--white)]">{fact.value}</dd>
-            </div>
-          ))}
-          <div>
-            <dt className="text-[11px] uppercase tracking-[0.14em] text-[var(--muted)]">Stack</dt>
-            <dd className="mt-2 flex flex-wrap gap-1.5">
-              {project.stack.length > 0 ? (
-                project.stack.map((item) => (
-                  <span
-                    key={item}
-                    className="rounded-full border border-[var(--border)] px-2 py-0.5 text-[11px] text-[var(--white)]"
-                  >
-                    {item}
-                  </span>
-                ))
-              ) : (
-                <span className="text-sm text-[var(--muted)]">To be confirmed</span>
-              )}
-            </dd>
-          </div>
-        </dl>
+        {facts.length > 0 ? (
+          <dl className="grid grid-cols-2 gap-4 rounded-2xl border border-[var(--border)] bg-[var(--card-bg)] p-5 sm:grid-cols-3">
+            {facts.map((fact) => (
+              <div key={fact.label}>
+                <dt className="text-[11px] uppercase tracking-[0.14em] text-[var(--muted)]">
+                  {fact.label}
+                </dt>
+                <dd className="mt-1 text-sm text-[var(--white)]">{fact.value}</dd>
+              </div>
+            ))}
+          </dl>
+        ) : null}
 
         {project.features && project.features.length > 0 ? (
           <div className="mt-14">
@@ -218,16 +203,21 @@ export default function ProjectDetailPage({ params }: PageProps) {
         {project.gallery.length > 0 ? (
           <div className="mt-16 grid grid-cols-1 gap-6 md:grid-cols-2">
             {project.gallery.map((src, index) => (
-              <div key={src} className="group mx-auto w-full max-w-[34rem]">
+              <figure key={`${src}-${index}`} className="group mx-auto w-full max-w-[34rem]">
                 <FeaturedRevealImage
                   src={src}
-                  alt={`${project.name} ${index + 1}`}
+                  alt={project.galleryCaptions?.[index] ?? `${project.name} ${index + 1}`}
                   sizes="(min-width: 768px) 34rem, 100vw"
                   aspect="16 / 10"
                   direction={index % 2 === 0 ? "left" : "right"}
                   fit="portrait"
                 />
-              </div>
+                {project.galleryCaptions?.[index] ? (
+                  <figcaption className="mt-3 text-xs text-[var(--muted)]">
+                    {project.galleryCaptions[index]}
+                  </figcaption>
+                ) : null}
+              </figure>
             ))}
           </div>
         ) : null}
@@ -265,7 +255,7 @@ export default function ProjectDetailPage({ params }: PageProps) {
                   description={item.summary}
                   hoverEyebrow={getProjectHoverCopy(item).eyebrow}
                   hoverBody={getProjectHoverCopy(item).body}
-                  chips={item.features ?? item.stack}
+                  chips={item.features}
                   badge={
                     showStatusBadge(item) ? (
                       <StatusBadge status={item.status} tone="onSurface" />
