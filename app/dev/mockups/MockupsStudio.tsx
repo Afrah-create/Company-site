@@ -2,12 +2,15 @@
 
 import { useState } from "react";
 import MockupStage from "@/components/mockups/MockupStage";
-import { BankingAdmin, BankingPair, BankingSecurity } from "@/components/mockups/banking";
+import { AfriResQAssigned, AfriResQDispatch, AfriResQReport } from "@/components/mockups/afriresq";
 import { CommerceCheckout, CommerceSeller, CommerceStorefront } from "@/components/mockups/commerce";
 import { CorporateBeforeAfter, CorporateDesignSystem, CorporateResponsive } from "@/components/mockups/corporate";
 import { CucoCareAnalytics, CucoCareDashboard, CucoCareSchedule } from "@/components/mockups/cucocare";
+import { CyberSaccoHome, CyberSaccoLoan, CyberSaccoOffice } from "@/components/mockups/cybersacco";
 import { DevOpsDeploys, DevOpsLogs, DevOpsPipeline } from "@/components/mockups/devops";
+import { NileBusOperator, NileBusSeats, NileBusTicket } from "@/components/mockups/enilebus";
 import { HospitalOverview, HospitalPharmacy, HospitalRecord } from "@/components/mockups/hospital";
+import { NileClinicConsult, NileClinicDesk, NileClinicPhone } from "@/components/mockups/nileclinicplus";
 import { NileGoBooking, NileGoDispatch, NileGoTrip } from "@/components/mockups/nilego";
 import { SecurityFindings, SecurityGraph, SecurityOverview } from "@/components/mockups/security";
 import {
@@ -20,29 +23,42 @@ import {
   ServiceSoftware,
 } from "@/components/mockups/services";
 import { SlimSchoolDashboard, SlimSchoolGradebook, SlimSchoolParent } from "@/components/mockups/slimschool";
+import { VoxaConversation, VoxaLanguages, VoxaPhone } from "@/components/mockups/voxa";
 
 const STAGES = [
   { slug: "nilego", n: 1, node: <NileGoBooking /> },
   { slug: "nilego", n: 2, node: <NileGoTrip /> },
   { slug: "nilego", n: 3, node: <NileGoDispatch /> },
-  { slug: "slimschool", n: 1, node: <SlimSchoolDashboard /> },
-  { slug: "slimschool", n: 2, node: <SlimSchoolGradebook /> },
-  { slug: "slimschool", n: 3, node: <SlimSchoolParent /> },
+  { slug: "schoolmanage", n: 1, node: <SlimSchoolDashboard /> },
+  { slug: "schoolmanage", n: 2, node: <SlimSchoolGradebook /> },
+  { slug: "schoolmanage", n: 3, node: <SlimSchoolParent /> },
   { slug: "hospital-management-system", n: 1, node: <HospitalOverview /> },
   { slug: "hospital-management-system", n: 2, node: <HospitalRecord /> },
   { slug: "hospital-management-system", n: 3, node: <HospitalPharmacy /> },
   { slug: "cucocare", n: 1, node: <CucoCareDashboard /> },
   { slug: "cucocare", n: 2, node: <CucoCareSchedule /> },
   { slug: "cucocare", n: 3, node: <CucoCareAnalytics /> },
-  { slug: "security-audit-dashboard", n: 1, node: <SecurityOverview /> },
-  { slug: "security-audit-dashboard", n: 2, node: <SecurityFindings /> },
-  { slug: "security-audit-dashboard", n: 3, node: <SecurityGraph /> },
+  { slug: "nileclinicplus", n: 1, node: <NileClinicDesk /> },
+  { slug: "nileclinicplus", n: 2, node: <NileClinicConsult /> },
+  { slug: "nileclinicplus", n: 3, node: <NileClinicPhone /> },
+  { slug: "afriresq", n: 1, node: <AfriResQReport /> },
+  { slug: "afriresq", n: 2, node: <AfriResQAssigned /> },
+  { slug: "afriresq", n: 3, node: <AfriResQDispatch /> },
+  { slug: "cyberbook", n: 1, node: <SecurityOverview /> },
+  { slug: "cyberbook", n: 2, node: <SecurityFindings /> },
+  { slug: "cyberbook", n: 3, node: <SecurityGraph /> },
+  { slug: "voxa-ai", n: 1, node: <VoxaConversation /> },
+  { slug: "voxa-ai", n: 2, node: <VoxaPhone /> },
+  { slug: "voxa-ai", n: 3, node: <VoxaLanguages /> },
+  { slug: "e-nilebus", n: 1, node: <NileBusSeats /> },
+  { slug: "e-nilebus", n: 2, node: <NileBusTicket /> },
+  { slug: "e-nilebus", n: 3, node: <NileBusOperator /> },
+  { slug: "cybersacco", n: 1, node: <CyberSaccoHome /> },
+  { slug: "cybersacco", n: 2, node: <CyberSaccoLoan /> },
+  { slug: "cybersacco", n: 3, node: <CyberSaccoOffice /> },
   { slug: "e-commerce-platform", n: 1, node: <CommerceStorefront /> },
   { slug: "e-commerce-platform", n: 2, node: <CommerceCheckout /> },
   { slug: "e-commerce-platform", n: 3, node: <CommerceSeller /> },
-  { slug: "banking-mobile-app", n: 1, node: <BankingPair /> },
-  { slug: "banking-mobile-app", n: 2, node: <BankingSecurity /> },
-  { slug: "banking-mobile-app", n: 3, node: <BankingAdmin /> },
   { slug: "devops-pipeline-tool", n: 1, node: <DevOpsPipeline /> },
   { slug: "devops-pipeline-tool", n: 2, node: <DevOpsDeploys /> },
   { slug: "devops-pipeline-tool", n: 3, node: <DevOpsLogs /> },

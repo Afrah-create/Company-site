@@ -1,5 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  async redirects() {
+    return [
+      {
+        source: "/projects/slimschool",
+        destination: "/projects/schoolmanage",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {

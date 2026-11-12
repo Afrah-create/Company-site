@@ -6,6 +6,8 @@ import { NAV_ITEMS, SERVICE_LINKS } from "@/lib/nav";
 const managedWebsites = [
   { label: "giftfoundationarua.org", href: "https://giftfoundationarua.org" },
   { label: "aringass.com", href: "https://aringass.com" },
+  { label: "greengoldperks.com", href: "https://www.greengoldperks.com" },
+  { label: "elroyskilledservices.com", href: "https://elroyskilledservices.com" },
 ];
 
 const socialLinks = [

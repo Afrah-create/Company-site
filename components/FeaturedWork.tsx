@@ -41,6 +41,16 @@ export default function FeaturedWork() {
             actions={
               <>
                 <BookDemoButton className="btn-cta inline-flex min-h-11 w-full items-center justify-center rounded-full px-6 py-2.5 text-sm font-semibold transition-opacity hover:opacity-90 sm:w-auto" />
+                {project.liveUrl ? (
+                  <Link
+                    href={project.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--cyan)]"
+                  >
+                    Visit live site
+                  </Link>
+                ) : null}
                 <Link
                   href={`/projects/${project.slug}`}
                   className="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--cyan)]"

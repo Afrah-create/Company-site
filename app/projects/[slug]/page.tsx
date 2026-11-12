@@ -60,7 +60,7 @@ export default function ProjectDetailPage({ params }: PageProps) {
 
   const related = getRelatedProjects(project.slug, 2);
   const { previous, next } = getAdjacentProjects(project.slug);
-  const isLive = project.status === "live" && Boolean(project.liveUrl);
+  const isLive = Boolean(project.liveUrl);
   const hover = getProjectHoverCopy(project);
   const facts = [
     project.client ? { label: "Client", value: project.client } : null,

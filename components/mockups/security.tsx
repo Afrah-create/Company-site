@@ -11,15 +11,15 @@ import {
 
 export function SecurityOverview() {
   return (
-    <DeviceFrame variant="browser" url="audit.security.local">
+    <DeviceFrame variant="browser" url="app.cyberbook.local">
       <AppShell
-        product="Audit"
+        product="CyberBook"
         nav={[
           { label: "Overview", active: true },
           { label: "Findings" },
           { label: "Assets" },
         ]}
-        title="Security overview"
+        title="Risk overview"
       >
         <div className="grid h-full grid-cols-12 gap-3">
           <div className="col-span-3 flex items-center justify-center rounded-2xl border border-[var(--mk-border)] bg-[var(--mk-surface)] p-4">
@@ -72,9 +72,9 @@ export function SecurityOverview() {
 
 export function SecurityFindings() {
   return (
-    <DeviceFrame variant="browser" url="audit.security.local/findings">
+    <DeviceFrame variant="browser" url="app.cyberbook.local/findings">
       <AppShell
-        product="Audit"
+        product="CyberBook"
         nav={[{ label: "Overview" }, { label: "Findings", active: true }]}
         title="Findings"
       >
@@ -114,9 +114,9 @@ export function SecurityFindings() {
 
 export function SecurityGraph() {
   return (
-    <DeviceFrame variant="browser" url="audit.security.local/assets">
+    <DeviceFrame variant="browser" url="app.cyberbook.local/assets">
       <AppShell
-        product="Audit"
+        product="CyberBook"
         nav={[{ label: "Findings" }, { label: "Assets", active: true }]}
         title="Asset map"
       >

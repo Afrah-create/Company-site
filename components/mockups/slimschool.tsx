@@ -12,9 +12,9 @@ import {
 
 export function SlimSchoolDashboard() {
   return (
-    <DeviceFrame variant="browser" url="admin.slimschool.local">
+    <DeviceFrame variant="browser" url="admin.schoolmanage.local">
       <AppShell
-        product="SlimSchool"
+        product="SchoolManage"
         nav={[
           { label: "Overview", active: true },
           { label: "Students" },
@@ -81,9 +81,9 @@ export function SlimSchoolDashboard() {
 
 export function SlimSchoolGradebook() {
   return (
-    <DeviceFrame variant="browser" url="admin.slimschool.local/grades">
+    <DeviceFrame variant="browser" url="admin.schoolmanage.local/grades">
       <AppShell
-        product="SlimSchool"
+        product="SchoolManage"
         nav={[
           { label: "Overview" },
           { label: "Gradebook", active: true },
@@ -96,6 +96,7 @@ export function SlimSchoolGradebook() {
           <div className="flex items-center justify-between">
             <div className="flex gap-2">
               <Badge tone="cyan">S.2 East</Badge>
+              <Badge>O-Level CBC</Badge>
               <Badge>Term 2</Badge>
             </div>
             <div className="rounded-full bg-[linear-gradient(135deg,var(--mk-cyan),var(--mk-blue))] px-4 py-2 text-[12px] font-semibold text-white">
@@ -127,36 +128,44 @@ function grade(value: string) {
 export function SlimSchoolParent() {
   return (
     <DeviceFrame variant="phone">
-      <PhoneHeader title="Parent view" subtitle="Student A · S.2 East" />
+      <PhoneHeader title="Class teacher" subtitle="S.2 East · Today" />
       <div className="flex min-h-0 flex-1 flex-col gap-3 px-3 pb-3">
         <div className="rounded-2xl border border-[var(--mk-border)] bg-[var(--mk-surface)] p-3">
           <p className="text-[11px] uppercase tracking-[0.12em] text-[var(--mk-muted)]">
-            Attendance streak
+            Attendance today
           </p>
-          <p className="mt-1 font-heading text-3xl font-bold">12 days</p>
+          <p className="mt-1 font-heading text-3xl font-bold">38 / 42</p>
           <div className="mt-2">
-            <ProgressBar value={86} />
+            <ProgressBar value={90} />
           </div>
         </div>
         <div className="rounded-2xl border border-[var(--mk-border)] bg-[var(--mk-surface)] p-3">
           <p className="text-[11px] uppercase tracking-[0.12em] text-[var(--mk-muted)]">
-            Latest results
+            Class list
           </p>
-          <div className="mt-2 flex flex-wrap gap-1.5">
-            <Badge tone="ok">Math A</Badge>
-            <Badge tone="cyan">English B+</Badge>
-            <Badge tone="ok">Science A</Badge>
-          </div>
+          <ul className="mt-2 space-y-2 text-[13px]">
+            <li className="flex justify-between">
+              <span>Student A</span>
+              <Badge tone="ok">In</Badge>
+            </li>
+            <li className="flex justify-between">
+              <span>Student B</span>
+              <Badge tone="ok">In</Badge>
+            </li>
+            <li className="flex justify-between">
+              <span>Student C</span>
+              <Badge tone="warn">Late</Badge>
+            </li>
+            <li className="flex justify-between">
+              <span>Student D</span>
+              <Badge tone="bad">Out</Badge>
+            </li>
+          </ul>
         </div>
         <div className="rounded-2xl border border-[var(--mk-border)] bg-[var(--mk-surface)] p-3">
-          <p className="text-[11px] uppercase tracking-[0.12em] text-[var(--mk-muted)]">Fee balance</p>
-          <p className="mt-1 font-heading text-2xl font-bold">UGX 85,000</p>
-          <p className="text-[12px] text-[var(--mk-muted)]">Due 15 Jun</p>
-        </div>
-        <div className="rounded-2xl border border-[var(--mk-border)] bg-[var(--mk-surface)] p-3">
-          <p className="text-[11px] uppercase tracking-[0.12em] text-[var(--mk-muted)]">Notices</p>
-          <p className="mt-1 text-[13px]">Visitation day · Saturday 9:00</p>
-          <p className="text-[13px] text-[var(--mk-muted)]">Bring report card slip</p>
+          <p className="text-[11px] uppercase tracking-[0.12em] text-[var(--mk-muted)]">Next</p>
+          <p className="mt-1 text-[13px]">Submit attendance before 10:00</p>
+          <p className="text-[13px] text-[var(--mk-muted)]">Headteacher review is open</p>
         </div>
       </div>
     </DeviceFrame>
