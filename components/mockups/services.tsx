@@ -341,6 +341,70 @@ export function ServiceDesign() {
   );
 }
 
+export function ServiceAI() {
+  return (
+    <DeviceFrame variant="browser" url="assist.desk.local">
+      <AppShell
+        product="Assist"
+        nav={[
+          { label: "Chat", active: true },
+          { label: "Files" },
+          { label: "Languages" },
+        ]}
+        title="Ask the records"
+        right={<Badge tone="cyan">Sample</Badge>}
+      >
+        <div className="grid h-full grid-cols-12 gap-3">
+          <div className="col-span-7 flex flex-col gap-3">
+            <div className="flex-1 space-y-2 rounded-2xl border border-[var(--mk-border)] bg-[var(--mk-surface)] p-4 text-[13px] leading-6">
+              <p className="text-[11px] uppercase tracking-[0.12em] text-[var(--mk-muted)]">
+                You
+              </p>
+              <p>What does Student A still owe this term?</p>
+              <p className="pt-3 text-[11px] uppercase tracking-[0.12em] text-[var(--mk-muted)]">
+                Assist
+              </p>
+              <p>
+                Fee balance is UGX 85,000. Last receipt was 12 May. This is a sample answer from
+                the school file, not a live student.
+              </p>
+            </div>
+            <div className="rounded-2xl border border-[var(--mk-border)] bg-[var(--mk-surface)] px-4 py-3">
+              <PrimaryButton>Ask</PrimaryButton>
+            </div>
+          </div>
+          <div className="col-span-5 flex flex-col gap-3">
+            <div className="rounded-2xl border border-[var(--mk-border)] bg-[var(--mk-surface)] p-4">
+              <p className="text-[11px] uppercase tracking-[0.12em] text-[var(--mk-muted)]">
+                Draft from a file
+              </p>
+              <p className="mt-2 text-[13px] leading-6">
+                Notice to parent · fee reminder. Edit before you send. The model does not send
+                mail on its own.
+              </p>
+              <div className="mt-3">
+                <Badge tone="ok">Needs a person</Badge>
+              </div>
+            </div>
+            <div className="flex-1 rounded-2xl border border-[var(--mk-border)] bg-[var(--mk-surface)] p-4">
+              <p className="text-[11px] uppercase tracking-[0.12em] text-[var(--mk-muted)]">
+                Language
+              </p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <Badge tone="cyan">English</Badge>
+                <Badge>Language B</Badge>
+              </div>
+              <p className="mt-3 text-[13px] leading-6">
+                Same thread, two languages. Sample translation only.
+              </p>
+            </div>
+          </div>
+        </div>
+      </AppShell>
+    </DeviceFrame>
+  );
+}
+
 export function ServiceConsulting() {
   return (
     <DeviceFrame variant="browser" url="plan.consult.local">

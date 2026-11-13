@@ -14,6 +14,7 @@ import { NileClinicConsult, NileClinicDesk, NileClinicPhone } from "@/components
 import { NileGoBooking, NileGoDispatch, NileGoTrip } from "@/components/mockups/nilego";
 import { SecurityFindings, SecurityGraph, SecurityOverview } from "@/components/mockups/security";
 import {
+  ServiceAI,
   ServiceCloud,
   ServiceConsulting,
   ServiceData,
@@ -67,6 +68,7 @@ const STAGES = [
   { slug: "corporate-website-redesign", n: 3, node: <CorporateResponsive /> },
   { slug: "service-software-development", n: 1, node: <ServiceSoftware /> },
   { slug: "service-mobile-development", n: 1, node: <ServiceMobile /> },
+  { slug: "service-ai", n: 1, node: <ServiceAI /> },
   { slug: "service-cybersecurity", n: 1, node: <ServiceSecurity /> },
   { slug: "service-data-analysis", n: 1, node: <ServiceData /> },
   { slug: "service-cloud-devops", n: 1, node: <ServiceCloud /> },

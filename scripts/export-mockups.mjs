@@ -43,9 +43,20 @@ async function ensureServer() {
   return child;
 }
 
+async function launchBrowser() {
+  try {
+    return await chromium.launch();
+  } catch {
+    return await chromium.launch({
+      executablePath: "/usr/bin/google-chrome",
+      args: ["--no-sandbox", "--disable-dev-shm-usage"],
+    });
+  }
+}
+
 async function main() {
   const started = await ensureServer();
-  const browser = await chromium.launch();
+  const browser = await launchBrowser();
   const page = await browser.newPage({
     viewport: { width: 1720, height: 1100 },
     deviceScaleFactor: 2,
@@ -66,12 +77,14 @@ async function main() {
   await page.waitForSelector('[id^="mockup-"]');
 
   const ids = await page.$$eval('[id^="mockup-"]', (nodes) => nodes.map((node) => node.id));
+  const only = process.argv.slice(2);
   const written = [];
 
   for (const id of ids) {
     const match = id.match(/^mockup-(.+)-(\d+)$/);
     if (!match) continue;
     const [, slug, n] = match;
+    if (only.length && !only.includes(slug)) continue;
     const isService = slug.startsWith("service-");
     const folder = isService ? slug.slice("service-".length) : slug;
     const dir = path.join(isService ? SERVICES_ROOT : PROJECTS_ROOT, folder);

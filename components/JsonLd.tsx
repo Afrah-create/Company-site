@@ -14,7 +14,7 @@ export default function JsonLd() {
       url: LOGO,
     },
     description:
-      "SlimCyberTech is a software company in West Nile, Uganda. Web, mobile, security, and consulting.",
+      "SlimCyberTech is a software company in West Nile, Uganda. Web, mobile, AI, security, and consulting.",
     foundingDate: "2020",
     address: {
       "@type": "PostalAddress",
@@ -90,6 +90,7 @@ export default function JsonLd() {
       itemListElement: [
         { "@type": "Offer", itemOffered: { "@type": "Service", name: "Software Development" } },
         { "@type": "Offer", itemOffered: { "@type": "Service", name: "Mobile App Development" } },
+        { "@type": "Offer", itemOffered: { "@type": "Service", name: "AI" } },
         { "@type": "Offer", itemOffered: { "@type": "Service", name: "Cybersecurity" } },
         { "@type": "Offer", itemOffered: { "@type": "Service", name: "Data Analysis" } },
         { "@type": "Offer", itemOffered: { "@type": "Service", name: "Cloud & DevOps" } },

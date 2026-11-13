@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     absolute: "SlimCyberTech | Software Development & Technology - West Nile, Uganda",
   },
   description:
-    "SlimCyberTech builds software, mobile apps, and security work from West Nile, Uganda, for organisations in Africa and beyond.",
+    "SlimCyberTech builds software, mobile apps, AI, and security work from West Nile, Uganda, for organisations in Africa and beyond.",
   alternates: { canonical: "https://slimcybertech.com" },
   openGraph: {
     url: "https://slimcybertech.com",

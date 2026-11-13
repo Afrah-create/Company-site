@@ -18,7 +18,7 @@ export default function AboutHero() {
             <span className="text-[var(--blue)]">Tech</span>
           </h1>
           <p className="mt-4 max-w-xl text-pretty text-base leading-7 text-[var(--muted)] sm:mt-5 sm:text-lg sm:leading-8">
-            A software company in West Nile, Uganda. Web, mobile, and security work for
+            A software company in West Nile, Uganda. Web, mobile, AI, and security work for
             organisations in Africa and beyond.
           </p>
         </div>

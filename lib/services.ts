@@ -5,7 +5,8 @@ export type ServiceIcon =
   | "data"
   | "cloud"
   | "design"
-  | "consulting";
+  | "consulting"
+  | "ai";
 
 export type Service = {
   id: string;
@@ -51,6 +52,19 @@ export const SERVICES: Service[] = [
     image: "/images/services/mobile-development/ui-1.png",
     imageAlt: "Phone app home and job tracking screens",
     icon: "mobile",
+  },
+  {
+    id: "ai",
+    title: "AI",
+    subject: "AI",
+    category: "Product",
+    summary: "Language tools and other AI pieces inside the product, when they save someone a step.",
+    description:
+      "We add AI where it helps: translation, a chat that can see your own records, or a draft from files you already have. We tell you what it can and cannot do. It is not a person, and we do not sell it as one.",
+    capabilities: ["Language tools", "Chat in the product", "Drafts from your files"],
+    image: "/images/services/ai/ui-1.png",
+    imageAlt: "AI desk with a records chat, a draft, and a language pair",
+    icon: "ai",
   },
   {
     id: "cybersecurity",

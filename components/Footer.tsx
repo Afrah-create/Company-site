@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { BadgeCheck, MessageCircle } from "lucide-react";
-import { NAV_ITEMS, SERVICE_LINKS } from "@/lib/nav";
+import { LEGAL_LINKS, NAV_ITEMS, SERVICE_LINKS } from "@/lib/nav";
 
 const managedWebsites = [
   { label: "giftfoundationarua.org", href: "https://giftfoundationarua.org" },
@@ -129,7 +129,18 @@ export default function Footer() {
 
         <div className="mt-8 border-t border-[var(--border)] pt-5 text-center text-xs text-[var(--muted)] sm:mt-10 sm:flex sm:items-center sm:justify-between sm:text-left">
           <p>© {currentYear} SlimCyberTech. All Rights Reserved.</p>
-          <p className="mt-2 sm:mt-0">From West Nile.</p>
+          <p className="mt-2 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 sm:mt-0 sm:justify-end">
+            {LEGAL_LINKS.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="transition-colors hover:text-[var(--cyan)]"
+              >
+                {item.label}
+              </Link>
+            ))}
+            <span>From West Nile.</span>
+          </p>
         </div>
       </div>
     </footer>

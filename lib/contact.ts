@@ -1,6 +1,7 @@
 export const CONTACT_SUBJECTS = [
   "Software Development",
   "Mobile App Development",
+  "AI",
   "Cybersecurity",
   "Data Analysis",
   "Cloud & DevOps",

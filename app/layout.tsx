@@ -41,11 +41,12 @@ export const metadata: Metadata = {
     template: "%s | SlimCyberTech",
   },
   description:
-    "SlimCyberTech builds software, mobile apps, and security work from West Nile, Uganda, for organisations in Africa and beyond.",
+    "SlimCyberTech builds software, mobile apps, AI, and security work from West Nile, Uganda, for organisations in Africa and beyond.",
   keywords: [
     "software development Uganda",
     "web development Kampala",
     "mobile app development Africa",
+    "AI development Uganda",
     "cybersecurity Uganda",
     "tech consulting Kampala",
     "custom software Uganda",
@@ -65,7 +66,7 @@ export const metadata: Metadata = {
     siteName: "SlimCyberTech",
     title: "SlimCyberTech | Software Development & Technology",
     description:
-      "Software, mobile apps, and security work from West Nile, Uganda.",
+      "Software, mobile apps, AI, and security work from West Nile, Uganda.",
     images: [
       {
         url: "/opengraph-image",
@@ -82,7 +83,7 @@ export const metadata: Metadata = {
     creator: "@slimcybertech",
     title: "SlimCyberTech | Software Development & Technology",
     description:
-      "Software, mobile apps, and security work from West Nile, Uganda.",
+      "Software, mobile apps, AI, and security work from West Nile, Uganda.",
     images: ["/opengraph-image"],
   },
   icons: {
