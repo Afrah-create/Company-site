@@ -111,7 +111,7 @@ export default function PrivacyPage() {
                   this is sent to SlimCyberTech as a tracking profile.
                 </p>
                 <p>
-                  You can remove it by clearing this site's data in your browser. The site will
+                  You can remove it by clearing this site&apos;s data in your browser. The site will
                   then use default settings until you choose again.
                 </p>
               </>
@@ -143,7 +143,7 @@ export default function PrivacyPage() {
             body: (
               <p>
                 slimcybertech.com does not issue user accounts. Applications delivered to a school,
-                clinic, or other organisation store data under that organisation's control, not
+                clinic, or other organisation store data under that organisation&apos;s control, not
                 under this policy.
               </p>
             ),

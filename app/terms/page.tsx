@@ -48,7 +48,7 @@ export default function TermsPage() {
             body: (
               <>
                 <p>
-                  The site presents SlimCyberTech's work and provides a way to contact us. It is
+                  The site presents SlimCyberTech&apos;s work and provides a way to contact us. It is
                   not a store, a user account, or a contract for software development.
                 </p>
                 <p>
