@@ -382,6 +382,16 @@ body[data-nav-open="true"] {
   animation-play-state: paused;
 }
 
+@keyframes legal-orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.legal-orbit {
+  animation: legal-orbit 18s linear infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -389,7 +399,8 @@ body[data-nav-open="true"] {
 
   body::before,
   .glitch-404,
-  .tech-marquee-track {
+  .tech-marquee-track,
+  .legal-orbit {
     animation: none;
   }
 

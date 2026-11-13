@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import AmbientBackground from "@/components/AmbientBackground";
+import CookieNotice from "@/components/CookieNotice";
 import CustomCursor from "@/components/CustomCursor";
 import FloatingChatButton from "@/components/FloatingChatButton";
 import Footer from "@/components/Footer";
@@ -150,6 +151,7 @@ export default function RootLayout({
             <Navbar />
             <div id="main-content">{children}</div>
             <Footer />
+            <CookieNotice />
             <FloatingChatButton />
             <CustomCursor />
           </MotionRoot>
